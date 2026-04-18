@@ -15,14 +15,9 @@ MonoBehaviour:
   _monsterName: Monstre
   _startingHP: 30
   _deck:
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
-  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
   - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
   - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
-  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
-  - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
   _bossPassive: {fileID: 0}

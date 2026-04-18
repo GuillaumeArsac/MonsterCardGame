@@ -42,7 +42,7 @@ namespace MonsterCardGame.Gameplay.Cards
         [SerializeField, Tooltip("Valeur X du mot-clé Rituel(X). Ignoré si Rituel absent.")]
         private int _ritualValue;
 
-        [Header("Combat — Alliés uniquement")]
+        [Header("Combat")]
         [SerializeField, Tooltip("Points d'attaque")]
         private int _attack;
 
@@ -50,29 +50,30 @@ namespace MonsterCardGame.Gameplay.Cards
         private int _defense;
 
         // Propriétés publiques
-        public string     CardName      => _cardName;
-        public Region     Region        => _region;
-        public Sprite     Artwork       => _artwork;
-        public string     Description   => _description;
-        public int        ManaCost      => _manaCost;
-        public int        ManaGenerated => _manaGenerated;
-        public CardType   CardType      => _cardType;
-        public CardRarity Rarity        => _rarity;
+        public string CardName => _cardName;
+
+        public Region Region => _region;
+        public Sprite Artwork => _artwork;
+        public string Description => _description;
+        public int ManaCost => _manaCost;
+        public int ManaGenerated => _manaGenerated;
+        public CardType CardType => _cardType;
+        public CardRarity Rarity => _rarity;
         public IReadOnlyList<Keyword> Keywords => _keywords;
-        public int        RitualValue   => _ritualValue;
-        public int        Attack        => _attack;
-        public int        Defense       => _defense;
+        public int RitualValue => _ritualValue;
+        public int Attack => _attack;
+        public int Defense => _defense;
 
         public bool HasKeyword(Keyword keyword) => _keywords != null && _keywords.Contains(keyword);
 
         /// <summary>Poids de la carte dans le deck, dérivé de sa rareté.</summary>
         public int Weight => _rarity switch
         {
-            CardRarity.Commune    => GameRules.WeightCommon,
-            CardRarity.Rare       => GameRules.WeightRare,
+            CardRarity.Commune => GameRules.WeightCommon,
+            CardRarity.Rare => GameRules.WeightRare,
             CardRarity.Legendaire => GameRules.WeightLegendary,
-            CardRarity.Unique     => GameRules.WeightUnique,
-            _                     => 0
+            CardRarity.Unique => GameRules.WeightUnique,
+            _ => 0
         };
     }
 }

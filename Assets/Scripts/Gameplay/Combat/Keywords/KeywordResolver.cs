@@ -8,6 +8,10 @@ namespace MonsterCardGame.Gameplay.Combat.Keywords
     {
         public bool CanTarget(AlliedInstance attacker, AlliedInstance target)
         {
+            // Les équipements ne peuvent pas être ciblés
+            if (target.Data.CardType == CardType.Equipement)
+                return false;
+
             bool targetHasVol = target.Data.HasKeyword(Keyword.Vol);
             bool attackerHasVol = attacker.Data.HasKeyword(Keyword.Vol);
             bool attackerHasPortee = attacker.Data.HasKeyword(Keyword.Portee);
@@ -23,13 +27,13 @@ namespace MonsterCardGame.Gameplay.Combat.Keywords
         {
             if (allies == null || allies.Count == 0) return null;
 
-            // Provocation : cible prioritaire
+            // Provocation : cible prioritaire (jamais un équipement)
             foreach (var ally in allies)
-                if (ally.Data.HasKeyword(Keyword.Provocation))
+                if (ally.Data.HasKeyword(Keyword.Provocation) && ally.Data.CardType != CardType.Equipement)
                     return ally;
 
-            // Sinon premier allié vivant
-            return allies.First();
+            // Sinon premier allié non-équipement
+            return allies.FirstOrDefault(a => a.Data.CardType != CardType.Equipement);
         }
 
         public bool CanBeBlocked(AlliedInstance source)

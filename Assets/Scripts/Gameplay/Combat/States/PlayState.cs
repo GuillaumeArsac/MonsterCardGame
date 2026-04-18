@@ -70,8 +70,10 @@ namespace MonsterCardGame.Gameplay.Combat.States
                     break;
 
                 case CardType.Equipement:
-                    ctx.PlayerCemetery.Add(card); // cimetière après usage
-                    Core.GameLog.Info("PlayState", $"Équipement joué : {card.CardName} → cimetière");
+                    var equipment = new AlliedInstance(card);
+                    equipment.SetSleeping(false);
+                    ctx.PlayerAllies.Add(equipment);
+                    Core.GameLog.Info("PlayState", $"Équipement joué : {card.CardName} → terrain");
                     break;
             }
 
@@ -107,7 +109,9 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
             if (tgtDmg > atkDef)
                 Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
-            else
+            else if (attacker.Data.CardType == CardType.Equipement && attacker.SpendCharge())
+                Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
+            else if (attacker.Data.CardType != CardType.Equipement)
                 attacker.SetSleeping(true);
 
             CheckCombatEnd(ctx);
@@ -132,7 +136,10 @@ namespace MonsterCardGame.Gameplay.Combat.States
             }
 
             ctx.MonsterHP -= attacker.ATK;
-            attacker.SetSleeping(true);
+            if (attacker.Data.CardType == CardType.Equipement && attacker.SpendCharge())
+                Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
+            else if (attacker.Data.CardType != CardType.Equipement)
+                attacker.SetSleeping(true);
             Core.GameLog.Info("PlayState",
                 $"{attacker.Data.CardName} attaque le monstre pour {attacker.ATK} dégâts. PV monstre : {ctx.MonsterHP}");
 

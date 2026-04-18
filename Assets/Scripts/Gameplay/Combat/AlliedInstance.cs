@@ -19,5 +19,12 @@ namespace MonsterCardGame.Gameplay.Combat
         }
 
         public void SetSleeping(bool sleeping) => IsSleeping = sleeping;
+
+        /// <summary>Réduit les charges (DEF) de 1. Retourne true si l'équipement est épuisé (DEF ≤ 0).</summary>
+        public bool SpendCharge()
+        {
+            DEF--;
+            return DEF <= 0;
+        }
     }
 }

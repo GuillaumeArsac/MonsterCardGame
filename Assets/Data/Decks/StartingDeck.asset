@@ -14,14 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Deck.DeckData
   _cards:
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
-  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
-  - {fileID: 11400000, guid: cccc97b288bd0444e8eba42a3e29571a, type: 2}
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
-  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
-  - {fileID: 11400000, guid: cccc97b288bd0444e8eba42a3e29571a, type: 2}
   - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
   - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
+  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
+  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
+  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
+  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
   - {fileID: 11400000, guid: cccc97b288bd0444e8eba42a3e29571a, type: 2}
+  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
+  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
+  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
+  - {fileID: 11400000, guid: df71aa196a73ea7408b58bb201727195, type: 2}
+  - {fileID: 11400000, guid: df71aa196a73ea7408b58bb201727195, type: 2}

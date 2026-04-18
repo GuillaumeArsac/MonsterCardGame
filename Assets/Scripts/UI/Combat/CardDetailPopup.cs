@@ -104,15 +104,31 @@ namespace MonsterCardGame.UI.Combat
                 _manaGenLabel.style.display = DisplayStyle.None;
             }
 
-            // Stats uniquement pour les alliés
-            if (data.CardType == CardType.Allie)
+            switch (data.CardType)
             {
-                _statsLabel.text = $"ATK {data.Attack}   DEF {data.Defense}";
-                _statsLabel.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                _statsLabel.style.display = DisplayStyle.None;
+                case CardType.Allie:
+                    _statsLabel.text = $"ATK {data.Attack}   DEF {data.Defense}";
+                    _statsLabel.style.display = DisplayStyle.Flex;
+                    break;
+
+                case CardType.Equipement:
+                    _statsLabel.text = $"DMG {data.Attack}   USE {data.Defense}";
+                    _statsLabel.style.display = DisplayStyle.Flex;
+                    break;
+
+                case CardType.Action:
+                    _statsLabel.text = $"DMG {data.Attack}";
+                    _statsLabel.style.display = DisplayStyle.Flex;
+                    break;
+
+                case CardType.Blocage:
+                    _statsLabel.text = $"BLK {data.Defense}";
+                    _statsLabel.style.display = DisplayStyle.Flex;
+                    break;
+
+                default:
+                    _statsLabel.style.display = DisplayStyle.None;
+                    break;
             }
 
             // Description

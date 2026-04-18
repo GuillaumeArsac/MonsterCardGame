@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: Goblin
+  m_Name: SnakeSword
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Goblin
-  _region: 0
-  _artwork: {fileID: 8749302817991680212, guid: 2b2cfa07211e5b24aa3089656ccf72f5, type: 3}
+  _cardName: Snake sword
+  _region: 5
+  _artwork: {fileID: 4660273087772458793, guid: 0af1a112d69b4d94e829f6a1a857a4ca, type: 3}
   _description: 
-  _manaCost: 0
+  _manaCost: 2
   _manaGenerated: 0
-  _cardType: 2
-  _rarity: 0
+  _cardType: 3
+  _rarity: 1
   _keywords: 
   _ritualValue: 0
-  _attack: 1
-  _defense: 1
+  _attack: 6
+  _defense: 2
