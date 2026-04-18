@@ -1,0 +1,17 @@
+{
+    "name": "MonsterCardGame.UI",
+    "rootNamespace": "MonsterCardGame.UI",
+    "references": [
+        "MonsterCardGame.Core",
+        "MonsterCardGame.Gameplay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

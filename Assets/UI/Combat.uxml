@@ -1,0 +1,65 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="Combat.uss" />
+    <ui:VisualElement name="root" class="combat-root">
+
+        <!-- Zone monstre (haut) -->
+        <ui:VisualElement name="monster-zone" class="zone monster-zone">
+            <ui:VisualElement class="zone-header">
+                <ui:Label name="monster-name-label" text="Monstre"    class="zone-title" />
+                <ui:Label name="monster-hp-label"   text="PV: 30"     class="hp-label" />
+                <ui:Label name="monster-deck-count-label" text="Deck: 0" class="count-label" />
+            </ui:VisualElement>
+            <ui:VisualElement name="monster-allies-zone" class="allies-row" />
+        </ui:VisualElement>
+
+        <!-- Zone de jeu — alliés joueur (milieu) -->
+        <ui:VisualElement name="play-zone" class="zone play-zone">
+            <ui:VisualElement class="zone-header">
+                <ui:Label text="Terrain — Joueur" class="zone-title" />
+            </ui:VisualElement>
+            <ui:VisualElement name="player-allies-zone" class="allies-row" />
+        </ui:VisualElement>
+
+        <!-- Bandeau de phase -->
+        <ui:VisualElement name="phase-banner" class="phase-banner">
+            <ui:Label name="active-player-label" text="Joueur"  class="active-player-label" />
+            <ui:Label name="phase-name-label"     text="Pioche" class="phase-name-label" />
+        </ui:VisualElement>
+
+        <!-- HUD joueur -->
+        <ui:VisualElement name="player-hud" class="hud">
+            <ui:Label name="player-hp-label"   text="PV: 30"  class="hp-label" />
+            <ui:Label name="player-mana-label" text="Mana: 0" class="mana-label" />
+            <ui:Label name="turn-label"        text="Tour 1"  class="turn-label" />
+        </ui:VisualElement>
+
+        <!-- Zone main joueur (bas) -->
+        <ui:VisualElement name="hand-zone" class="zone hand-zone">
+            <ui:VisualElement class="zone-header">
+                <ui:Label text="Main" class="zone-title" />
+                <ui:Label name="player-hand-count-label" text="0 carte(s)" class="count-label" />
+            </ui:VisualElement>
+            <ui:VisualElement name="hand-cards" class="hand-row" />
+        </ui:VisualElement>
+
+        <!-- Action monstre en attente (visible uniquement en fenêtre réactive) -->
+        <ui:VisualElement name="pending-action-banner" class="pending-action-banner hidden">
+            <ui:Label name="pending-action-label" text="" class="pending-action-label" />
+        </ui:VisualElement>
+
+        <!-- Boutons d'action -->
+        <ui:VisualElement name="action-buttons" class="action-bar">
+            <ui:Button name="sacrifice-btn" text="Sacrifier"    class="action-btn" />
+            <ui:Button name="end-play-btn"  text="Fin de phase" class="action-btn" />
+            <ui:Button name="attack-btn"    text="Attaquer"     class="action-btn action-btn--attack" />
+            <ui:Button name="block-btn"     text="Bloquer"      class="action-btn action-btn--block" />
+            <ui:Button name="pass-btn"      text="Passer"       class="action-btn" />
+        </ui:VisualElement>
+
+        <!-- Overlay résultat combat -->
+        <ui:VisualElement name="result-overlay" class="result-overlay hidden">
+            <ui:Label name="result-label" text="" class="result-label" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

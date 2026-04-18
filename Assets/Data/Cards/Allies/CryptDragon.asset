@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
+  m_Name: CryptDragon
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
+  _cardName: Crypt dragon
+  _region: 3
+  _artwork: {fileID: 3467007381663356831, guid: 21c4e15495d302c49ba9b411d8ac52f1, type: 3}
+  _description: 
+  _manaCost: 4
+  _manaGenerated: 2
+  _cardType: 2
+  _rarity: 1
+  _keywords: 00000000
+  _ritualValue: 0
+  _attack: 3
+  _defense: 4

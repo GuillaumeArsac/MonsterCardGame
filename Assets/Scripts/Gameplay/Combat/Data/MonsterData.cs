@@ -1,0 +1,30 @@
+using System.Collections.Generic;
+using UnityEngine;
+using MonsterCardGame.Gameplay.Cards;
+
+namespace MonsterCardGame.Gameplay.Combat.Data
+{
+    [CreateAssetMenu(fileName = "MonsterData", menuName = "MonsterCardGame/Monster Data")]
+    public class MonsterData : ScriptableObject
+    {
+        [Header("Identité")]
+        [SerializeField, Tooltip("Nom du monstre affiché en combat")]
+        private string _monsterName = "Monstre";
+
+        [Header("Combat")]
+        [SerializeField, Tooltip("Points de vie de départ du monstre")]
+        private int _startingHP = 30;
+
+        [SerializeField, Tooltip("Deck scripté du monstre — joué dans l'ordre")]
+        private List<CardData> _deck = new();
+
+        [Header("Boss Passive — Epic 5-7")]
+        [SerializeField, Tooltip("Passive boss (null = aucune). Implémentation dans Epics 5-7.")]
+        private ScriptableObject _bossPassive = null;
+
+        public string                  MonsterName => _monsterName;
+        public int                     StartingHP  => _startingHP;
+        public IReadOnlyList<CardData> Deck        => _deck;
+        public IBossPassive            BossPassive => _bossPassive as IBossPassive;
+    }
+}
