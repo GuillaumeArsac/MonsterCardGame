@@ -61,7 +61,7 @@ namespace MonsterCardGame.Gameplay.Combat
             _sacrificeState = new SacrificeState(TransitionTo, _playState);
             _drawState = new DrawState(TransitionTo, _sacrificeState);
 
-            _reactiveState.SetMonsterTurn(_monsterTurnState);
+            _reactiveState.SetAfterReactive(_drawState);
             _monsterTurnState.SetDrawState(_drawState);
         }
 

@@ -10,15 +10,15 @@ namespace MonsterCardGame.Gameplay.Combat.States
     public class ReactiveWindowState : ICombatState
     {
         private readonly Action<ICombatState> _transitionTo;
-        private ICombatState _monsterTurn;
+        private ICombatState _afterReactive;
 
-        public ReactiveWindowState(Action<ICombatState> transitionTo, ICombatState monsterTurn)
+        public ReactiveWindowState(Action<ICombatState> transitionTo, ICombatState afterReactive)
         {
             _transitionTo = transitionTo;
-            _monsterTurn = monsterTurn;
+            _afterReactive = afterReactive;
         }
 
-        public void SetMonsterTurn(ICombatState monsterTurn) => _monsterTurn = monsterTurn;
+        public void SetAfterReactive(ICombatState afterReactive) => _afterReactive = afterReactive;
 
         public void Enter(CombatContext ctx)
         {
@@ -42,14 +42,14 @@ namespace MonsterCardGame.Gameplay.Combat.States
         public void Exit(CombatContext ctx)
         { }
 
-        /// <summary>Le joueur passe : résout l'action en attente (dégâts appliqués) puis continue.</summary>
+        /// <summary>Le joueur passe : résout l'action en attente (dégâts appliqués) puis termine le tour monstre.</summary>
         public void Pass(CombatContext ctx)
         {
             ResolvePendingAction(ctx);
-            _transitionTo(_monsterTurn);
+            EndMonsterTurn(ctx);
         }
 
-        /// <summary>Le joueur joue une carte Blocage : annule l'action en attente sans dégâts.</summary>
+        /// <summary>Le joueur joue une carte Blocage : annule l'action en attente sans dégâts puis termine le tour monstre.</summary>
         public void TryBlock(CombatContext ctx, CardData blockCard)
         {
             if (ctx.PendingMonsterAction == null)
@@ -76,7 +76,14 @@ namespace MonsterCardGame.Gameplay.Combat.States
             ctx.PendingMonsterAction = null;
             ctx.PendingMonsterTarget = null;
 
-            _transitionTo(_monsterTurn);
+            EndMonsterTurn(ctx);
+        }
+
+        private void EndMonsterTurn(CombatContext ctx)
+        {
+            ctx.Turn++;
+            ctx.IsPlayerTurn = true;
+            _transitionTo(_afterReactive);
         }
 
         private static void ResolvePendingAction(CombatContext ctx)

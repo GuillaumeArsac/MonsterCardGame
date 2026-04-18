@@ -6,15 +6,12 @@ using MonsterCardGame.Gameplay.Combat.Keywords;
 namespace MonsterCardGame.Gameplay.Combat.MonsterAI
 {
     /// <summary>
-    /// IA scriptée : joue les cartes du deck monstre dans l'ordre.
-    /// Le deck n'est pas modifié — lecture par index, reset à 0 chaque tour monstre.
+    /// IA scriptée : joue la première carte du deck monstre chaque tour.
+    /// Allie → zone alliés (consommée). Action → bas du deck (rotation).
     /// </summary>
     public class MonsterAIController
     {
-        private int _actionIndex;
         private IKeywordResolver _resolver;
-
-        public void ResetForNewTurn() => _actionIndex = 0;
 
         public void ExecuteNextAction(CombatContext ctx, Action<CombatContext, bool> onComplete)
         {
@@ -27,20 +24,12 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
                 return;
             }
 
-            if (_actionIndex >= ctx.MonsterDeck.Count)
-            {
-                Core.GameLog.Info("MonsterAI", "Toutes les actions du tour exécutées");
-                onComplete(ctx, false);
-                return;
-            }
-
-            var card = ctx.MonsterDeck[_actionIndex];
-            _actionIndex++;
+            var card = ctx.MonsterDeck[0];
+            ctx.MonsterDeck.RemoveAt(0);
 
             ExecuteCard(ctx, card);
             CheckCombatEnd(ctx);
 
-            // 1 action par tour maximum
             onComplete(ctx, false);
         }
 
@@ -56,6 +45,7 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
 
                 case CardType.Action:
                     AnnounceAction(ctx, card);
+                    ctx.MonsterDeck.Add(card);
                     break;
 
                 default:

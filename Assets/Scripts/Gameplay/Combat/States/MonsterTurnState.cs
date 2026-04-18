@@ -55,7 +55,6 @@ namespace MonsterCardGame.Gameplay.Combat.States
             {
                 ctx.Turn++;
                 ctx.IsPlayerTurn = true;
-                _ai.ResetForNewTurn();
                 _transitionTo(_draw);
             }
         }
