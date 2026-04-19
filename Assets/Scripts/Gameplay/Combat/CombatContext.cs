@@ -22,6 +22,7 @@ namespace MonsterCardGame.Gameplay.Combat
         // --- Monstre ---
         public MonsterData          MonsterData      { get; }
         public List<CardData>       MonsterDeck      { get; } = new();
+        public List<CardData>       MonsterHand      { get; } = new();
         public List<AlliedInstance> MonsterAllies    { get; } = new();
         public List<CardData>       MonsterCemetery  { get; } = new();
         public int                  MonsterHP        { get; set; }

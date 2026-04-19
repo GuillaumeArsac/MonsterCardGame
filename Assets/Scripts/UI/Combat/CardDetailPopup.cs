@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Combat;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -75,7 +76,11 @@ namespace MonsterCardGame.UI.Combat
             panel.RegisterCallback<PointerDownEvent>(evt => evt.StopPropagation());
         }
 
-        public void Show(CardData data)
+        public void Show(AlliedInstance instance) => Show(instance.Data, instance.DEF);
+
+        public void Show(CardData data) => Show(data, data.Defense);
+
+        private void Show(CardData data, int currentDef)
         {
             // Illustration
             if (data.Artwork != null)
@@ -112,7 +117,7 @@ namespace MonsterCardGame.UI.Combat
                     break;
 
                 case CardType.Equipement:
-                    _statsLabel.text = $"DMG {data.Attack}   USE {data.Defense}";
+                    _statsLabel.text = $"DMG {data.Attack}   USE {currentDef}";
                     _statsLabel.style.display = DisplayStyle.Flex;
                     break;
 

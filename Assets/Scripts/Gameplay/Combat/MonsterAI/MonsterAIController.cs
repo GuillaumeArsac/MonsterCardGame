@@ -17,15 +17,15 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
         {
             _resolver ??= Services.Get<IKeywordResolver>();
 
-            if (ctx.MonsterDeck.Count == 0)
+            if (ctx.MonsterHand.Count == 0)
             {
-                Core.GameLog.Info("MonsterAI", "Deck monstre vide — fin du tour monstre");
+                Core.GameLog.Info("MonsterAI", "Main monstre vide — fin du tour monstre");
                 onComplete(ctx, false);
                 return;
             }
 
-            var card = ctx.MonsterDeck[0];
-            ctx.MonsterDeck.RemoveAt(0);
+            var card = ctx.MonsterHand[0];
+            ctx.MonsterHand.RemoveAt(0);
 
             ExecuteCard(ctx, card);
             CheckCombatEnd(ctx);
@@ -45,7 +45,7 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
 
                 case CardType.Action:
                     AnnounceAction(ctx, card);
-                    ctx.MonsterDeck.Add(card);
+                    ctx.MonsterDeck.Add(card); // retourne en bas du deck
                     break;
 
                 default:
@@ -54,15 +54,11 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
             }
         }
 
-        private void AnnounceAction(CombatContext ctx, CardData card)
+        private static void AnnounceAction(CombatContext ctx, CardData card)
         {
-            var target = _resolver.GetPriorityTarget(ctx.PlayerAllies);
-
             ctx.PendingMonsterAction = card;
-            ctx.PendingMonsterTarget = target;
-
-            var targetName = target != null ? target.Data.CardName : "le joueur";
-            Core.GameLog.Info("MonsterAI", $"{card.CardName} annonce une attaque contre {targetName} — le joueur peut bloquer");
+            ctx.PendingMonsterTarget = null; // toujours le joueur
+            Core.GameLog.Info("MonsterAI", $"{card.CardName} annonce une attaque contre le joueur — le joueur peut bloquer");
         }
 
         private static void CheckCombatEnd(CombatContext ctx)

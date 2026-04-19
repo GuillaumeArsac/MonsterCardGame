@@ -1,6 +1,7 @@
 using System;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Cards.Effects;
 using MonsterCardGame.Gameplay.Combat.Keywords;
 
 namespace MonsterCardGame.Gameplay.Combat.States
@@ -77,6 +78,9 @@ namespace MonsterCardGame.Gameplay.Combat.States
                     break;
             }
 
+            foreach (var effect in card.OnPlayEffects)
+                effect.Apply(new CardEffectContext(ctx));
+
             return true;
         }
 
@@ -104,15 +108,18 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
             Core.GameLog.Info("PlayState", $"{attacker.Data.CardName} ({atkDmg}/{atkDef} ATK/DEF) ↔ {target.Data.CardName} ({tgtDmg}/{tgtDef} ATK/DEF)");
 
-            if (atkDmg > tgtDef)
+            if (atkDmg >= tgtDef)
                 Remove(ctx.MonsterAllies, ctx.MonsterCemetery, target);
 
-            if (tgtDmg > atkDef)
+            if (tgtDmg >= atkDef && attacker.Data.CardType == CardType.Allie)
                 Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
             else if (attacker.Data.CardType == CardType.Equipement && attacker.SpendCharge())
                 Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
             else if (attacker.Data.CardType != CardType.Equipement)
                 attacker.SetSleeping(true);
+
+            foreach (var effect in attacker.Data.OnAttackEffects)
+                effect.Apply(new CardEffectContext(ctx, attacker));
 
             CheckCombatEnd(ctx);
             return true;
@@ -140,6 +147,10 @@ namespace MonsterCardGame.Gameplay.Combat.States
                 Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
             else if (attacker.Data.CardType != CardType.Equipement)
                 attacker.SetSleeping(true);
+
+            foreach (var effect in attacker.Data.OnAttackEffects)
+                effect.Apply(new CardEffectContext(ctx, attacker));
+
             Core.GameLog.Info("PlayState",
                 $"{attacker.Data.CardName} attaque le monstre pour {attacker.ATK} dégâts. PV monstre : {ctx.MonsterHP}");
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Combat;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -14,6 +15,7 @@ namespace MonsterCardGame.UI.Combat
 
         private readonly Label _nameLabel;
         private readonly VisualElement _artworkImage;
+        private readonly Label _chargeLabel;
 
         private string _currentTypeClass;
 
@@ -23,9 +25,13 @@ namespace MonsterCardGame.UI.Combat
 
             _nameLabel = new Label { name = "card-name" };
             _artworkImage = new VisualElement { name = "card-artwork" };
+            _chargeLabel = new Label { name = "card-charges" };
+            _chargeLabel.AddToClassList("card-charges");
+            _chargeLabel.AddToClassList("hidden");
 
             Add(_nameLabel);
             Add(_artworkImage);
+            Add(_chargeLabel);
 
             Refresh(data);
         }
@@ -53,6 +59,18 @@ namespace MonsterCardGame.UI.Combat
 
             _currentTypeClass = GetRegionClass(data.Region);
             AddToClassList(_currentTypeClass);
+        }
+
+        public void RefreshInstance(AlliedInstance instance)
+        {
+            if (instance.Data.CardType != CardType.Equipement)
+            {
+                _chargeLabel.AddToClassList("hidden");
+                return;
+            }
+
+            _chargeLabel.RemoveFromClassList("hidden");
+            _chargeLabel.text = $"{instance.DEF}";
         }
 
         private static string GetRegionClass(Region region) => region switch

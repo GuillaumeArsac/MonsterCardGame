@@ -81,8 +81,6 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
         private void EndMonsterTurn(CombatContext ctx)
         {
-            ctx.Turn++;
-            ctx.IsPlayerTurn = true;
             _transitionTo(_afterReactive);
         }
 

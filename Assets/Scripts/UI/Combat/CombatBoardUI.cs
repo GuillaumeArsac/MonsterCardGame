@@ -156,7 +156,7 @@ namespace MonsterCardGame.UI.Combat
 
                     view.RegisterCallback<PointerDownEvent>(evt =>
                     {
-                        if (evt.button == 1) { _cardDetailPopup.Show(instance.Data); evt.StopPropagation(); return; }
+                        if (evt.button == 1) { _cardDetailPopup.Show(instance); evt.StopPropagation(); return; }
                         if (evt.button == 0) { SelectAttacker(instance, view); evt.StopPropagation(); }
                     });
 
@@ -167,10 +167,15 @@ namespace MonsterCardGame.UI.Combat
 
             for (int i = 0; i < ctx.PlayerAllies.Count && i < _playerAllyViews.Count; i++)
             {
-                if (ctx.PlayerAllies[i].IsSleeping)
-                    _playerAllyViews[i].AddToClassList("ally-sleeping");
+                var ally = ctx.PlayerAllies[i];
+                var view = _playerAllyViews[i];
+
+                if (ally.IsSleeping)
+                    view.AddToClassList("ally-sleeping");
                 else
-                    _playerAllyViews[i].RemoveFromClassList("ally-sleeping");
+                    view.RemoveFromClassList("ally-sleeping");
+
+                view.RefreshInstance(ally);
             }
         }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MonsterCardGame.Core;
+using MonsterCardGame.Gameplay.Cards.Effects;
 
 namespace MonsterCardGame.Gameplay.Cards
 {
@@ -49,6 +50,13 @@ namespace MonsterCardGame.Gameplay.Cards
         [SerializeField, Tooltip("Points de défense")]
         private int _defense;
 
+        [Header("Effets")]
+        [SerializeField, Tooltip("Effets déclenchés quand la carte est jouée depuis la main")]
+        private List<CardEffect> _onPlayEffects = new();
+
+        [SerializeField, Tooltip("Effets déclenchés quand la carte ou l'allié attaque")]
+        private List<CardEffect> _onAttackEffects = new();
+
         // Propriétés publiques
         public string CardName => _cardName;
 
@@ -63,6 +71,8 @@ namespace MonsterCardGame.Gameplay.Cards
         public int RitualValue => _ritualValue;
         public int Attack => _attack;
         public int Defense => _defense;
+        public IReadOnlyList<CardEffect> OnPlayEffects   => _onPlayEffects;
+        public IReadOnlyList<CardEffect> OnAttackEffects => _onAttackEffects;
 
         public bool HasKeyword(Keyword keyword) => _keywords != null && _keywords.Contains(keyword);
 
