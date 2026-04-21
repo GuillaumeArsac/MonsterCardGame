@@ -59,6 +59,7 @@
         <!-- Overlay résultat combat -->
         <ui:VisualElement name="result-overlay" class="result-overlay hidden">
             <ui:Label name="result-label" text="" class="result-label" />
+            <ui:VisualElement name="loot-list" class="loot-list" />
         </ui:VisualElement>
 
     </ui:VisualElement>

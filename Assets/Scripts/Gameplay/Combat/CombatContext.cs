@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MonsterCardGame.Gameplay.Cards;
 using MonsterCardGame.Gameplay.Combat.Data;
+using MonsterCardGame.Gameplay.Inventory;
 
 namespace MonsterCardGame.Gameplay.Combat
 {
@@ -38,7 +39,9 @@ namespace MonsterCardGame.Gameplay.Combat
         public AlliedInstance       PendingMonsterTarget { get; set; } = null;
 
         // --- Résultat ---
-        public CombatResult         Result         { get; set; } = CombatResult.None;
+        public CombatResult         Result           { get; set; } = CombatResult.None;
+        /// <summary>Matériaux droppés lors de cette victoire. Vide si défaite ou combat en cours.</summary>
+        public List<MaterialData>   DroppedMaterials { get; } = new();
 
         public CombatContext(MonsterData monsterData, IReadOnlyList<CardData> playerDeckSource)
         {

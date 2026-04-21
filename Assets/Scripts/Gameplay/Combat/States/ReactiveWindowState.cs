@@ -62,6 +62,11 @@ namespace MonsterCardGame.Gameplay.Combat.States
                 Core.GameLog.Warning("ReactiveWindowState", $"{blockCard.CardName} n'est pas une carte Blocage");
                 return;
             }
+            if (blockCard.Defense < ctx.PendingMonsterAction.Attack)
+            {
+                Core.GameLog.Warning("ReactiveWindowState", $"{blockCard.CardName} n'a pas assez de blocage ({blockCard.Defense}) pour bloquer {ctx.PendingMonsterAction.CardName} ({ctx.PendingMonsterAction.Attack})");
+                return;
+            }
             if (!ctx.PlayerHand.Remove(blockCard))
             {
                 Core.GameLog.Warning("ReactiveWindowState", $"{blockCard.CardName} introuvable en main");

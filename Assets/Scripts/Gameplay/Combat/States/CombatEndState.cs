@@ -1,3 +1,6 @@
+using MonsterCardGame.Core.Services;
+using MonsterCardGame.Gameplay.Inventory;
+
 namespace MonsterCardGame.Gameplay.Combat.States
 {
     /// <summary>Affiche victoire ou défaite. État terminal — aucune transition sortante.</summary>
@@ -8,7 +11,8 @@ namespace MonsterCardGame.Gameplay.Combat.States
             switch (ctx.Result)
             {
                 case CombatResult.PlayerWin:
-                    Core.GameLog.Info("CombatEndState", "VICTOIRE");
+                    ResolveLoot(ctx);
+                    Core.GameLog.Info("CombatEndState", $"VICTOIRE — {ctx.DroppedMaterials.Count} matériau(x) obtenu(s)");
                     break;
                 case CombatResult.PlayerLose:
                     Core.GameLog.Info("CombatEndState", "DÉFAITE");
@@ -21,5 +25,17 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
         public void Update(CombatContext ctx) { }
         public void Exit(CombatContext ctx) { }
+
+        private static void ResolveLoot(CombatContext ctx)
+        {
+            var drops = LootResolver.Resolve(ctx.MonsterData);
+            var inventory = Services.Get<IPlayerInventory>();
+
+            foreach (var mat in drops)
+            {
+                ctx.DroppedMaterials.Add(mat);
+                inventory?.AddMaterial(mat);
+            }
+        }
     }
 }

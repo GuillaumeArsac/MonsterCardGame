@@ -5,6 +5,7 @@ using MonsterCardGame.Core;
 using MonsterCardGame.Gameplay.Cards;
 using MonsterCardGame.Gameplay.Combat;
 using MonsterCardGame.Gameplay.Combat.States;
+using MonsterCardGame.Gameplay.Inventory;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -35,6 +36,8 @@ namespace MonsterCardGame.UI.Combat
         private Label         _pendingActionLabel;
         private VisualElement _resultOverlay;
         private Label         _resultLabel;
+        private VisualElement _lootList;
+        private bool          _lootDisplayed;
 
         private readonly List<CardView> _handViews            = new();
         private readonly List<CardView> _playerAllyViews      = new();
@@ -73,6 +76,7 @@ namespace MonsterCardGame.UI.Combat
             _pendingActionLabel    = root.Q<Label>("pending-action-label");
             _resultOverlay         = root.Q<VisualElement>("result-overlay");
             _resultLabel           = root.Q<Label>("result-label");
+            _lootList              = root.Q<VisualElement>("loot-list");
 
             _sacrificeBtn.clicked += OnSacrificeClicked;
             _endPlayBtn.clicked   += OnEndPlayClicked;
@@ -331,11 +335,54 @@ namespace MonsterCardGame.UI.Combat
         private void RefreshResultOverlay(CombatContext ctx)
         {
             if (ctx.Result == CombatResult.None)
-                _resultOverlay.AddToClassList("hidden");
-            else
             {
-                _resultOverlay.RemoveFromClassList("hidden");
-                _resultLabel.text = ctx.Result == CombatResult.PlayerWin ? "VICTOIRE" : "DÉFAITE";
+                _resultOverlay.AddToClassList("hidden");
+                _lootDisplayed = false;
+                return;
+            }
+
+            _resultOverlay.RemoveFromClassList("hidden");
+            _resultLabel.text = ctx.Result == CombatResult.PlayerWin ? "VICTOIRE !" : "DÉFAITE";
+
+            if (!_lootDisplayed && ctx.Result == CombatResult.PlayerWin
+                && _combatManager.CurrentState is CombatEndState)
+            {
+                _lootDisplayed = true;
+                BuildLootList(ctx);
+            }
+        }
+
+        private void BuildLootList(CombatContext ctx)
+        {
+            _lootList.Clear();
+
+            if (ctx.DroppedMaterials.Count == 0)
+            {
+                var noneLabel = new Label("Aucun matériau obtenu");
+                noneLabel.AddToClassList("loot-item");
+                noneLabel.AddToClassList("loot-item--commun");
+                _lootList.Add(noneLabel);
+                return;
+            }
+
+            var header = new Label("Matériaux obtenus :");
+            header.AddToClassList("loot-header");
+            _lootList.Add(header);
+
+            // Regrouper les doublons
+            var grouped = new Dictionary<MaterialData, int>();
+            foreach (var mat in ctx.DroppedMaterials)
+            {
+                grouped.TryGetValue(mat, out int count);
+                grouped[mat] = count + 1;
+            }
+
+            foreach (var (mat, count) in grouped)
+            {
+                var label = new Label($"× {count}  {mat.MaterialName}");
+                label.AddToClassList("loot-item");
+                label.AddToClassList(mat.Rarity == MaterialRarity.Rare ? "loot-item--rare" : "loot-item--commun");
+                _lootList.Add(label);
             }
         }
 

@@ -267,6 +267,32 @@
     -unity-font-style: bold;
 }
 
+.loot-list {
+    margin-top: 24px;
+    align-items: center;
+}
+
+.loot-header {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.loot-item {
+    font-size: 15px;
+    margin: 2px 0;
+}
+
+.loot-item--commun {
+    color: rgb(210, 210, 210);
+}
+
+.loot-item--rare {
+    color: rgb(180, 130, 255);
+    -unity-font-style: bold;
+}
+
 .hidden {
     display: none;
 }

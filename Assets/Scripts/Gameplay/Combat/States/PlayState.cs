@@ -81,6 +81,7 @@ namespace MonsterCardGame.Gameplay.Combat.States
             foreach (var effect in card.OnPlayEffects)
                 effect.Apply(new CardEffectContext(ctx));
 
+            CheckCombatEnd(ctx);
             return true;
         }
 

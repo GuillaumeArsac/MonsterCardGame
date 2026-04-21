@@ -22,7 +22,7 @@ MonoBehaviour:
   _rarity: 0
   _keywords: 
   _ritualValue: 0
-  _attack: 3
+  _attack: 2
   _defense: 0
   _onPlayEffects: []
   _onAttackEffects: []
