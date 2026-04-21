@@ -17,10 +17,12 @@ MonoBehaviour:
   _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
   _description: 
   _manaCost: 1
-  _manaGenerated: 1
+  _manaGenerated: 2
   _cardType: 0
   _rarity: 0
-  _keywords: 0
+  _keywords: 
   _ritualValue: 0
-  _attack: 1
+  _attack: 3
   _defense: 0
+  _onPlayEffects: []
+  _onAttackEffects: []

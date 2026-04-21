@@ -20,7 +20,9 @@ MonoBehaviour:
   _manaGenerated: 2
   _cardType: 1
   _rarity: 0
-  _keywords: 0
+  _keywords: 
   _ritualValue: 0
   _attack: 0
-  _defense: 1
+  _defense: 2
+  _onPlayEffects: []
+  _onAttackEffects: []

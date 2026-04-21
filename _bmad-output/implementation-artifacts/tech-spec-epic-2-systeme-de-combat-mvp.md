@@ -2,7 +2,7 @@
 title: 'Epic 2 — Système de Combat (MVP)'
 slug: 'epic-2-systeme-de-combat-mvp'
 created: '2026-04-15'
-status: 'completed'
+status: 'validated'
 stepsCompleted: [1, 2, 3, 4, 5, 6]
 tech_stack:
   - 'Unity 6.3 LTS (6000.3.12f1)'
@@ -1501,59 +1501,60 @@ Ces étapes ne peuvent pas être scriptées — elles nécessitent l'éditeur Un
 ### Acceptance Criteria
 
 #### AC-2.1 — Pioche et état main (DrawState)
-- [ ] Au début du tour, 1 carte est tirée du deck et ajoutée en main (si < 6 cartes)
-- [ ] Si deck vide au début d'un tour → `ctx.Result = PlayerLose`
-- [ ] `PlayerMana` = `Math.Min(turn, 10)` à chaque DrawState.Enter
+- [x] Au début du tour, 1 carte est tirée du deck et ajoutée en main (si < 6 cartes)
+- [x] Si deck vide au début d'un tour → `ctx.Result = PlayerLose`
+- [x] `PlayerMana` = `Math.Min(turn, 10)` à chaque DrawState.Enter
 
 #### AC-2.2 — Sacrifice (SacrificeState)
-- [ ] Sélectionner une carte + cliquer "Sacrifier" : carte retirée de la main, ajoutée en bas du deck, `PlayerMana++`
-- [ ] Un seul sacrifice par tour autorisé
-- [ ] Cliquer "Fin de phase" sans sacrifier passe directement à PlayState
+- [x] Sélectionner une carte + cliquer "Sacrifier" : carte retirée de la main, ajoutée en bas du deck, `PlayerMana++`
+- [x] Un seul sacrifice par tour autorisé
+- [x] Cliquer "Fin de phase" sans sacrifier passe directement à PlayState
 
 #### AC-2.3 — Jeu de cartes (PlayState)
-- [ ] Drag & drop d'une carte Allié → AlliedInstance créée dans `ctx.PlayerAllies`
-- [ ] Drag & drop impossible si `PlayerMana < card.ManaCost` (log Warning)
-- [ ] Allié sans Éveillé : `IsSleeping = true` à la pose
-- [ ] Allié avec Éveillé : `IsSleeping = false` à la pose
-- [ ] Carte Action jouée → bas du deck joueur
-- [ ] Équipement joué → cimetière joueur
-- [ ] "Fin de phase" → transition vers ReactiveWindowState
+- [x] Drag & drop d'une carte Allié → AlliedInstance créée dans `ctx.PlayerAllies`
+- [x] Drag & drop impossible si `PlayerMana < card.ManaCost` (log Warning)
+- [x] Allié sans Éveillé : `IsSleeping = true` à la pose
+- [x] Allié avec Éveillé : `IsSleeping = false` à la pose
+- [x] Carte Action jouée → bas du deck joueur
+- [x] Équipement joué → cimetière joueur
+- [x] "Fin de phase" → transition vers ReactiveWindowState
 
 #### AC-2.4 — Fenêtre réactive (ReactiveWindowState)
-- [ ] Bouton "Passer" visible et fonctionnel
-- [ ] Pas de timer — le jeu attend indéfiniment le clic
+- [x] Bouton "Passer" visible et fonctionnel
+- [x] Pas de timer — le jeu attend indéfiniment le clic
 
 #### AC-2.5 — Tour monstre (MonsterTurnState + MonsterAIController)
-- [ ] Monstre joue les cartes de son deck dans l'ordre (`_actionIndex` séquentiel)
-- [ ] Carte Action : cible l'allié joueur avec Provocation en priorité, sinon premier allié, sinon attaque directe au joueur
-- [ ] Un allié monstre est créé en `ctx.MonsterAllies` si carte Allié
-- [ ] Chaque action est séparée par une ReactiveWindowState (bouton "Passer")
-- [ ] Fin du tour monstre → `ctx.Turn++`, transition vers DrawState
+- [x] Monstre joue les cartes de son deck dans l'ordre
+- [x] Carte Action : cible l'allié joueur avec Provocation en priorité, sinon premier allié, sinon attaque directe au joueur
+- [x] Alliés monstres : entrent endormis, attaquent à chaque tour éveillés, s'endorment après attaque
+- [x] Un allié monstre est créé en `ctx.MonsterAllies` si carte Allié
+- [x] Chaque action est séparée par une ReactiveWindowState (bouton "Passer")
+- [x] Fin du tour monstre → `ctx.Turn++`, transition vers DrawState
 
 #### AC-2.6 — Fin de combat (CombatEndState)
-- [ ] `ctx.PlayerHP <= 0` → `CombatResult.PlayerLose` → overlay "DÉFAITE" visible
-- [ ] `ctx.MonsterHP <= 0` → `CombatResult.PlayerWin` → overlay "VICTOIRE" visible
+- [x] `ctx.PlayerHP <= 0` → `CombatResult.PlayerLose` → overlay "DÉFAITE" visible
+- [x] `ctx.MonsterHP <= 0` → `CombatResult.PlayerWin` → overlay "VICTOIRE" visible
 
 #### AC-2.7 — KeywordResolver (service pur)
-- [ ] `KeywordResolver` enregistré via ServiceLocator dans `BootLoader.RegisterServices()`
-- [ ] `CanTarget(ground, vol)` = false
-- [ ] `CanTarget(portee, vol)` = true
-- [ ] `GetPriorityTarget` : Provocation cible en premier
-- [ ] `CanBeBlocked(instantane)` = false
-- [ ] `GetRitualCost` = 0 si pas de mot-clé Rituel
+- [x] `KeywordResolver` enregistré via ServiceLocator dans `BootLoader.RegisterServices()`
+- [x] `CanTarget(ground, vol)` = false
+- [x] `CanTarget(portee, vol)` = true
+- [x] `GetPriorityTarget` : Provocation cible en premier
+- [x] `CanBeBlocked(instantane)` = false
+- [x] `GetRitualCost` = 0 si pas de mot-clé Rituel
 
 #### AC-2.8 — UI Toolkit
-- [ ] 6 zones visibles dans Combat.unity : zone monstre, alliés monstre, zone de jeu, main, HUD, boutons
-- [ ] Labels PV joueur, PV monstre, mana, numéro de tour se mettent à jour chaque frame
-- [ ] CardView affiche nom et coût mana pour chaque carte en main
+- [x] 6 zones visibles dans Combat.unity : zone monstre, alliés monstre, zone de jeu, main, HUD, boutons
+- [x] Labels PV joueur, PV monstre, mana, numéro de tour se mettent à jour chaque frame
+- [x] CardView affiche nom et coût mana pour chaque carte en main
 
 #### AC-2.9 — Tests Edit Mode
-- [ ] `KeywordResolverTests` : 11 tests passent tous en mode Edit
-- [ ] Aucun test n'utilise `new CardData()` directement — tous passent par `ScriptableObject.CreateInstance`
+- [x] `KeywordResolverTests` : 11 tests passent tous en mode Edit
+- [x] Aucun test n'utilise `new CardData()` directement — tous passent par `ScriptableObject.CreateInstance`
 
 #### AC-2.10 — Build sans erreurs
-- [ ] `Build > Build Settings > Build` ou Play Mode sans erreur de compilation
-- [ ] Aucun `Debug.Log` direct — uniquement `GameLog.*`
+- [x] Play Mode sans erreur de compilation
+- [x] Aucun `Debug.Log` direct — uniquement `GameLog.*`
 
 ## Additional Context
 

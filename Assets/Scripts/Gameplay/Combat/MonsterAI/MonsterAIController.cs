@@ -17,6 +17,17 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
         {
             _resolver ??= Services.Get<IKeywordResolver>();
 
+            // Phase 1 : attaques des alliés éveillés (un par appel — ReactiveWindow entre chaque)
+            var attacker = ctx.MonsterAllies.Find(a => !a.IsSleeping);
+            if (attacker != null)
+            {
+                AllyAttack(ctx, attacker);
+                CheckCombatEnd(ctx);
+                onComplete(ctx, false);
+                return;
+            }
+
+            // Phase 2 : jouer une carte de la main
             if (ctx.MonsterHand.Count == 0)
             {
                 Core.GameLog.Info("MonsterAI", "Main monstre vide — fin du tour monstre");
@@ -31,6 +42,18 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
             CheckCombatEnd(ctx);
 
             onComplete(ctx, false);
+        }
+
+        private void AllyAttack(CombatContext ctx, AlliedInstance attacker)
+        {
+            attacker.SetSleeping(true);
+
+            var target = _resolver.GetPriorityTarget(ctx.PlayerAllies);
+            ctx.PendingMonsterAction = attacker.Data;
+            ctx.PendingMonsterTarget = target; // null = attaque directe au joueur
+
+            var targetName = target != null ? target.Data.CardName : "le joueur";
+            Core.GameLog.Info("MonsterAI", $"Allié {attacker.Data.CardName} attaque {targetName}");
         }
 
         private void ExecuteCard(CombatContext ctx, CardData card)

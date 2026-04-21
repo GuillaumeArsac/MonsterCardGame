@@ -48,6 +48,9 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
         private static void DrawMonsterHand(CombatContext ctx)
         {
+            foreach (var ally in ctx.MonsterAllies)
+                ally.SetSleeping(false);
+
             int toDraw = Core.GameRules.StartOfTurnHandSize - ctx.MonsterHand.Count;
             for (int i = 0; i < toDraw && ctx.MonsterDeck.Count > 0; i++)
             {

@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
   m_Name: HugeSpider
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: 
-  _region: 0
+  _cardName: Huge spider
+  _region: 2
   _artwork: {fileID: 7846545015966451418, guid: b47401b16753ab94380111cedcf4fff6, type: 3}
   _description: 
-  _manaCost: 0
+  _manaCost: 1
   _manaGenerated: 0
-  _cardType: 0
+  _cardType: 2
   _rarity: 0
-  _keywords: 
+  _keywords: 01000000
   _ritualValue: 0
-  _attack: 0
-  _defense: 0
+  _attack: 1
+  _defense: 2
+  _onPlayEffects: []
+  _onAttackEffects: []
