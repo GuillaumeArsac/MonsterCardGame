@@ -1,6 +1,7 @@
 using UnityEngine;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Combat.Keywords;
+using MonsterCardGame.Gameplay.Inventory;
 
 namespace MonsterCardGame.Gameplay.Combat
 {
@@ -15,7 +16,8 @@ namespace MonsterCardGame.Gameplay.Combat
         private static void RegisterGameplayServices()
         {
             Services.Register<IKeywordResolver>(new KeywordResolver());
-            Core.GameLog.Info("CombatServicesInstaller", "KeywordResolver enregistré");
+            Services.Register<IPlayerInventory>(new PlayerInventory());
+            Core.GameLog.Info("CombatServicesInstaller", "Services Gameplay enregistrés");
         }
     }
 }

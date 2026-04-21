@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Inventory;
 
 namespace MonsterCardGame.Gameplay.Combat.Data
 {
@@ -18,13 +19,18 @@ namespace MonsterCardGame.Gameplay.Combat.Data
         [SerializeField, Tooltip("Deck scripté du monstre — joué dans l'ordre")]
         private List<CardData> _deck = new();
 
+        [Header("Loot")]
+        [SerializeField, Tooltip("Matériaux que ce monstre peut droper à la victoire, avec leur chance individuelle")]
+        private List<LootEntry> _lootTable = new();
+
         [Header("Boss Passive — Epic 5-7")]
         [SerializeField, Tooltip("Passive boss (null = aucune). Implémentation dans Epics 5-7.")]
         private ScriptableObject _bossPassive = null;
 
-        public string                  MonsterName => _monsterName;
-        public int                     StartingHP  => _startingHP;
-        public IReadOnlyList<CardData> Deck        => _deck;
-        public IBossPassive            BossPassive => _bossPassive as IBossPassive;
+        public string                   MonsterName => _monsterName;
+        public int                      StartingHP  => _startingHP;
+        public IReadOnlyList<CardData>  Deck        => _deck;
+        public IReadOnlyList<LootEntry> LootTable   => _lootTable;
+        public IBossPassive             BossPassive => _bossPassive as IBossPassive;
     }
 }

@@ -29,5 +29,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
+  _lootTable: []
   _bossPassive: {fileID: 0}
