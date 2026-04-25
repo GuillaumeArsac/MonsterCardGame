@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: BlackScaleCurse
+  m_Name: LightOrb
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Black scale curse
-  _region: 2
-  _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
-  _description: 'Inflige '
-  _manaCost: 1
+  _cardName: Light Orb
+  _region: 3
+  _artwork: {fileID: 2322374121114253753, guid: 1e94fc195f0a357478131303846dbfaa, type: 3}
+  _description: 
+  _manaCost: 2
   _manaGenerated: 2
   _cardType: 0
   _rarity: 0
@@ -24,5 +24,6 @@ MonoBehaviour:
   _ritualValue: 0
   _attack: 3
   _defense: 0
-  _onPlayEffects: []
+  _onPlayEffects:
+  - {fileID: 11400000, guid: 105f904507b47f84b8b7c7f0685c05eb, type: 2}
   _onAttackEffects: []

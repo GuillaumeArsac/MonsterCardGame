@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: BlackScaleCurse
+  m_Name: DryadTrident
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Black scale curse
-  _region: 2
-  _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
-  _description: 'Inflige '
-  _manaCost: 1
-  _manaGenerated: 2
-  _cardType: 0
-  _rarity: 0
+  _cardName: Dryad trident
+  _region: 0
+  _artwork: {fileID: 5034473420953380817, guid: c48b1d66d5713c249a19529006073e07, type: 3}
+  _description: 
+  _manaCost: 3
+  _manaGenerated: 0
+  _cardType: 3
+  _rarity: 1
   _keywords: 
   _ritualValue: 0
-  _attack: 3
-  _defense: 0
+  _attack: 2
+  _defense: 4
   _onPlayEffects: []
-  _onAttackEffects: []
+  _onAttackEffects:
+  - {fileID: 0}

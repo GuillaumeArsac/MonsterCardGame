@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: BlackScaleCurse
+  m_Name: LavaBlast
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Black scale curse
-  _region: 2
-  _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
-  _description: 'Inflige '
-  _manaCost: 1
-  _manaGenerated: 2
+  _cardName: Lava blast
+  _region: 1
+  _artwork: {fileID: 4431481972745090289, guid: 5d1f74860b18f234b950408c3ac40b66, type: 3}
+  _description: 
+  _manaCost: 0
+  _manaGenerated: 1
   _cardType: 0
   _rarity: 0
   _keywords: 
   _ritualValue: 0
-  _attack: 3
+  _attack: 1
   _defense: 0
   _onPlayEffects: []
   _onAttackEffects: []

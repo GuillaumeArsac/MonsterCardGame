@@ -1,6 +1,7 @@
 using System;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Cards.Effects;
 using MonsterCardGame.Gameplay.Combat.Keywords;
 
 namespace MonsterCardGame.Gameplay.Combat.MonsterAI
@@ -50,7 +51,10 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
 
             var target = _resolver.GetPriorityTarget(ctx.PlayerAllies);
             ctx.PendingMonsterAction = attacker.Data;
-            ctx.PendingMonsterTarget = target; // null = attaque directe au joueur
+            ctx.PendingMonsterTarget = target;
+
+            foreach (var effect in attacker.Data.OnAttackEffects)
+                effect.Apply(new CardEffectContext(ctx, attacker, isPlayer: false));
 
             var targetName = target != null ? target.Data.CardName : "le joueur";
             Core.GameLog.Info("MonsterAI", $"Allié {attacker.Data.CardName} attaque {targetName}");
@@ -60,28 +64,38 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
         {
             Core.GameLog.Info("MonsterAI", $"Monstre joue : {card.CardName}");
 
+            AlliedInstance source = null;
+
             switch (card.CardType)
             {
                 case CardType.Allie:
-                    ctx.MonsterAllies.Add(new AlliedInstance(card));
+                    source = new AlliedInstance(card);
+                    ctx.MonsterAllies.Add(source);
                     break;
 
                 case CardType.Action:
                     AnnounceAction(ctx, card);
-                    ctx.MonsterDeck.Add(card); // retourne en bas du deck
+                    ctx.MonsterDeck.Add(card);
                     break;
 
                 default:
                     Core.GameLog.Info("MonsterAI", $"{card.CardName} (type {card.CardType}) — ignorée pour MVP");
                     break;
             }
+
+            foreach (var effect in card.OnPlayEffects)
+                effect.Apply(new CardEffectContext(ctx, source, isPlayer: false));
         }
 
-        private static void AnnounceAction(CombatContext ctx, CardData card)
+        private void AnnounceAction(CombatContext ctx, CardData card)
         {
+            _resolver ??= Services.Get<IKeywordResolver>();
+            var target = _resolver.GetPriorityTarget(ctx.PlayerAllies);
             ctx.PendingMonsterAction = card;
-            ctx.PendingMonsterTarget = null; // toujours le joueur
-            Core.GameLog.Info("MonsterAI", $"{card.CardName} annonce une attaque contre le joueur — le joueur peut bloquer");
+            ctx.PendingMonsterTarget = target;
+
+            var targetName = target != null ? target.Data.CardName : "le joueur";
+            Core.GameLog.Info("MonsterAI", $"{card.CardName} annonce une attaque contre {targetName} — le joueur peut bloquer");
         }
 
         private static void CheckCombatEnd(CombatContext ctx)

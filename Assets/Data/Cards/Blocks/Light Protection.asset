@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: BlackScaleCurse
+  m_Name: Light Protection
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Black scale curse
-  _region: 2
-  _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
-  _description: 'Inflige '
-  _manaCost: 1
-  _manaGenerated: 2
-  _cardType: 0
+  _cardName: Light protection
+  _region: 3
+  _artwork: {fileID: 5050127746665688393, guid: 487f4ddcad1e4f04a86eaea5c55454bf, type: 3}
+  _description: 
+  _manaCost: 0
+  _manaGenerated: 1
+  _cardType: 1
   _rarity: 0
   _keywords: 
   _ritualValue: 0
-  _attack: 3
-  _defense: 0
-  _onPlayEffects: []
+  _attack: 0
+  _defense: 2
+  _onPlayEffects:
+  - {fileID: 11400000, guid: d9f31e4d95dd19248bb6245e62a2315a, type: 2}
   _onAttackEffects: []

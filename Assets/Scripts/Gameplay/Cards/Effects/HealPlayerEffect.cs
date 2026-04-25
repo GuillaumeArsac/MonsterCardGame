@@ -6,12 +6,20 @@ namespace MonsterCardGame.Gameplay.Cards.Effects
     public class HealPlayerEffect : CardEffect
     {
         [SerializeField, Tooltip("PV rendus au joueur")]
-        private int _amount = 1;
+        private int _amount;
 
         public override void Apply(CardEffectContext ctx)
         {
-            ctx.Combat.PlayerHP += _amount;
-            Core.GameLog.Info("HealPlayerEffect", $"Joueur soigné de {_amount} PV → {ctx.Combat.PlayerHP} PV");
+            if (ctx.IsPlayer)
+            {
+                ctx.Combat.PlayerHP += _amount;
+                Core.GameLog.Info("HealPlayerEffect", $"Joueur soigné de {_amount} PV → {ctx.Combat.PlayerHP} PV");
+            }
+            else
+            {
+                ctx.Combat.MonsterHP += _amount;
+                Core.GameLog.Info("HealPlayerEffect", $"Monstre soigné de {_amount} PV → {ctx.Combat.MonsterHP} PV");
+            }
         }
     }
 }
