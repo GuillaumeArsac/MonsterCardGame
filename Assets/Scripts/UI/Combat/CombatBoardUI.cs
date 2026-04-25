@@ -50,6 +50,12 @@ namespace MonsterCardGame.UI.Combat
         private int                     _lastPlayerAllyCount  = -1;
         private int                     _lastMonsterAllyCount = -1;
 
+        private VisualElement   _monsterZone;
+        private VisualElement   _targetingBanner;
+        private Label           _targetingLabel;
+        private bool            _isTargeting;
+        private CardData        _pendingActionCard;
+
         private CardDetailPopup _cardDetailPopup;
 
         private void OnEnable()
@@ -79,12 +85,26 @@ namespace MonsterCardGame.UI.Combat
             _resultLabel           = root.Q<Label>("result-label");
             _lootList              = root.Q<VisualElement>("loot-list");
 
+            _monsterZone     = root.Q<VisualElement>("monster-zone");
+            _targetingBanner = root.Q<VisualElement>("targeting-banner");
+            _targetingLabel  = root.Q<Label>("targeting-label");
+
             _sacrificeBtn.clicked += OnSacrificeClicked;
             _endPlayBtn.clicked   += OnEndPlayClicked;
             _attackBtn.clicked    += OnAttackClicked;
             _blockBtn.clicked     += OnBlockClicked;
             _passBtn.clicked      += OnPassClicked;
+            root.Q<Button>("cancel-target-btn").clicked += ExitTargetingMode;
             root.Q<Button>("forge-btn").clicked += () => SceneManager.LoadScene("Forge");
+
+            _monsterZone.RegisterCallback<PointerDownEvent>(evt =>
+            {
+                if (evt.button == 0 && _isTargeting)
+                {
+                    ResolveTargeting(CombatTarget.Monster);
+                    evt.StopPropagation();
+                }
+            });
 
             _cardDetailPopup = new CardDetailPopup();
             root.Add(_cardDetailPopup);
@@ -101,6 +121,9 @@ namespace MonsterCardGame.UI.Combat
 
         private void Update()
         {
+            if (_isTargeting && _combatManager.CurrentState is not PlayState)
+                ExitTargetingMode();
+
             if (_selectedAttacker != null && _selectedAttacker.IsSleeping)
                 ClearAttackerSelection();
 
@@ -163,7 +186,12 @@ namespace MonsterCardGame.UI.Combat
                     view.RegisterCallback<PointerDownEvent>(evt =>
                     {
                         if (evt.button == 1) { _cardDetailPopup.Show(instance); evt.StopPropagation(); return; }
-                        if (evt.button == 0) { SelectAttacker(instance, view); evt.StopPropagation(); }
+                        if (evt.button == 0)
+                        {
+                            if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); evt.StopPropagation(); return; }
+                            SelectAttacker(instance, view);
+                            evt.StopPropagation();
+                        }
                     });
 
                     _playerAlliesZone.Add(view);
@@ -203,12 +231,15 @@ namespace MonsterCardGame.UI.Combat
                 view.RegisterCallback<PointerDownEvent>(evt =>
                 {
                     if (evt.button == 1) { _cardDetailPopup.Show(instance.Data); evt.StopPropagation(); return; }
-                    if (evt.button == 0 && _selectedAttacker != null)
+                    if (evt.button == 0)
                     {
-                        _combatManager.PlayState?.TryAttackWithAlly(
-                            _combatManager.Context, _selectedAttacker, instance);
-                        ClearAttackerSelection();
-                        evt.StopPropagation();
+                        if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); evt.StopPropagation(); return; }
+                        if (_selectedAttacker != null)
+                        {
+                            _combatManager.PlayState?.TryAttackWithAlly(_combatManager.Context, _selectedAttacker, instance);
+                            ClearAttackerSelection();
+                            evt.StopPropagation();
+                        }
                     }
                 });
 
@@ -263,8 +294,40 @@ namespace MonsterCardGame.UI.Combat
         {
             if (_selectedCard == null) return;
             if (_combatManager.CurrentState is not PlayState) return;
-            _combatManager.PlayState.TryPlayCard(_combatManager.Context, _selectedCard.Data);
+            var card = _selectedCard.Data;
             ClearSelection();
+            if (card.CardType == CardType.Action)
+                EnterTargetingMode(card);
+            else
+                _combatManager.PlayState.TryPlayCard(_combatManager.Context, card);
+        }
+
+        private void EnterTargetingMode(CardData card)
+        {
+            _isTargeting       = true;
+            _pendingActionCard = card;
+            _targetingBanner.RemoveFromClassList("hidden");
+            _targetingLabel.text = $"{card.CardName} ({card.Attack} ATK) — choisissez une cible";
+            _monsterZone.AddToClassList("targeting-highlight");
+            foreach (var v in _playerAllyViews)  v.AddToClassList("targeting-highlight");
+            foreach (var v in _monsterAllyViews) v.AddToClassList("targeting-highlight");
+        }
+
+        private void ExitTargetingMode()
+        {
+            _isTargeting       = false;
+            _pendingActionCard = null;
+            _targetingBanner.AddToClassList("hidden");
+            _monsterZone.RemoveFromClassList("targeting-highlight");
+            foreach (var v in _playerAllyViews)  v.RemoveFromClassList("targeting-highlight");
+            foreach (var v in _monsterAllyViews) v.RemoveFromClassList("targeting-highlight");
+        }
+
+        private void ResolveTargeting(CombatTarget target)
+        {
+            var card = _pendingActionCard;
+            ExitTargetingMode();
+            _combatManager.PlayState?.TryPlayCard(_combatManager.Context, card, target);
         }
 
         private void ClearSelection()
@@ -313,7 +376,7 @@ namespace MonsterCardGame.UI.Combat
 
             _sacrificeBtn.SetEnabled(inSacrifice);
             _endPlayBtn.SetEnabled(inSacrifice || inPlay);
-            _attackBtn.SetEnabled(inPlay && hasAttacker);
+            _attackBtn.SetEnabled(inPlay && hasAttacker && !_isTargeting);
             _blockBtn.SetEnabled(inReactive && hasPending && hasBlockCard);
             _passBtn.SetEnabled(inReactive);
         }

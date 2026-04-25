@@ -309,6 +309,31 @@
     display: none;
 }
 
+/* ── Mode ciblage ───────────────────────────── */
+
+.targeting-banner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(30, 60, 80);
+    border-width: 1px;
+    border-color: rgb(80, 180, 220);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-bottom: 4px;
+}
+
+.targeting-label {
+    color: rgb(100, 200, 255);
+    font-size: 13px;
+    flex-grow: 1;
+}
+
+.targeting-highlight {
+    border-color: rgb(100, 200, 255) !important;
+    border-width: 2px !important;
+}
+
 /* ── Popup détail carte ─────────────────────────────── */
 
 .card-detail-overlay {

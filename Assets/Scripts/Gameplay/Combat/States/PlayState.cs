@@ -35,7 +35,7 @@ namespace MonsterCardGame.Gameplay.Combat.States
         { }
 
         /// <summary>Tente de jouer une carte depuis la main. Retourne true si réussi.</summary>
-        public bool TryPlayCard(CombatContext ctx, CardData card)
+        public bool TryPlayCard(CombatContext ctx, CardData card, CombatTarget target = null)
         {
             if (!ctx.PlayerHand.Contains(card))
             {
@@ -51,18 +51,35 @@ namespace MonsterCardGame.Gameplay.Combat.States
             ctx.PlayerMana -= card.ManaCost;
             ctx.PlayerHand.Remove(card);
 
+            AlliedInstance source = null;
+
             switch (card.CardType)
             {
                 case CardType.Allie:
-                    var ally = new AlliedInstance(card);
-                    ctx.PlayerAllies.Add(ally);
-                    Core.GameLog.Info("PlayState", $"Allié joué : {card.CardName} (Éveillé={ally.Data.HasKeyword(Keyword.Eveille)})");
+                    source = new AlliedInstance(card);
+                    ctx.PlayerAllies.Add(source);
+                    Core.GameLog.Info("PlayState", $"Allié joué : {card.CardName} (Éveillé={source.Data.HasKeyword(Keyword.Eveille)})");
                     break;
 
                 case CardType.Action:
-                    ctx.MonsterHP -= card.Attack;
-                    ctx.PlayerDeck.Add(card); // bas du deck
-                    Core.GameLog.Info("PlayState", $"Carte jouée : {card.CardName} → bas du deck");
+                    target ??= CombatTarget.Monster;
+                    if (target.IsMonster)
+                    {
+                        ctx.MonsterHP -= card.Attack;
+                        Core.GameLog.Info("PlayState", $"{card.CardName} → {card.Attack} dégâts au monstre");
+                    }
+                    else if (ctx.MonsterAllies.Contains(target.Ally))
+                    {
+                        if (card.Attack >= target.Ally.DEF)
+                            CombatHelper.DestroyAlly(ctx, ctx.MonsterAllies, ctx.MonsterCemetery, target.Ally, isPlayer: false);
+                        else
+                            Core.GameLog.Info("PlayState", $"{card.CardName} → {card.Attack} ATK insuffisant contre {target.Ally.Data.CardName} (DEF {target.Ally.DEF})");
+                    }
+                    else
+                    {
+                        Core.GameLog.Info("PlayState", $"{card.CardName} → cible {target.Ally.Data.CardName} (allié joueur, pas de dégâts)");
+                    }
+                    ctx.PlayerDeck.Add(card);
                     break;
 
                 case CardType.Blocage:
@@ -71,15 +88,15 @@ namespace MonsterCardGame.Gameplay.Combat.States
                     break;
 
                 case CardType.Equipement:
-                    var equipment = new AlliedInstance(card);
-                    equipment.SetSleeping(false);
-                    ctx.PlayerAllies.Add(equipment);
+                    source = new AlliedInstance(card);
+                    source.SetSleeping(false);
+                    ctx.PlayerAllies.Add(source);
                     Core.GameLog.Info("PlayState", $"Équipement joué : {card.CardName} → terrain");
                     break;
             }
 
             foreach (var effect in card.OnPlayEffects)
-                effect.Apply(new CardEffectContext(ctx));
+                effect.Apply(new CardEffectContext(ctx, source, isPlayer: true, target));
 
             CheckCombatEnd(ctx);
             return true;

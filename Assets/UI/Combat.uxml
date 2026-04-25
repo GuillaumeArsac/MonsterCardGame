@@ -42,6 +42,12 @@
             <ui:VisualElement name="hand-cards" class="hand-row" />
         </ui:VisualElement>
 
+        <!-- Bannière de ciblage (visible uniquement lors du ciblage d'une action) -->
+        <ui:VisualElement name="targeting-banner" class="targeting-banner hidden">
+            <ui:Label name="targeting-label" text="" class="targeting-label" />
+            <ui:Button name="cancel-target-btn" text="Annuler" class="action-btn" />
+        </ui:VisualElement>
+
         <!-- Action monstre en attente (visible uniquement en fenêtre réactive) -->
         <ui:VisualElement name="pending-action-banner" class="pending-action-banner hidden">
             <ui:Label name="pending-action-label" text="" class="pending-action-label" />
