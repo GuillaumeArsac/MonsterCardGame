@@ -20,5 +20,15 @@ namespace MonsterCardGame.Gameplay.Inventory
         void AddCard(CardData card);
 
         int GetCardCount(CardData card);
+
+        // --- Deck actif ---
+        IReadOnlyList<CardData> ActiveDeck { get; }
+
+        void AddCardToDeck(CardData card);
+
+        /// <summary>Retire une copie du deck actif. Retourne false si la carte n'y est pas.</summary>
+        bool RemoveCardFromDeck(CardData card);
+
+        int GetDeckCardCount(CardData card);
     }
 }

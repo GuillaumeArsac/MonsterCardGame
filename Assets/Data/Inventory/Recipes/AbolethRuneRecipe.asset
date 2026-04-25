@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454430634f10a974c80f37a33e27d35d, type: 3}
   m_Name: AbolethRuneRecipe
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Inventory.CraftRecipe
+  _recipeName: Aboleth rune
   _ingredients:
   - Material: {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
     Quantity: 1

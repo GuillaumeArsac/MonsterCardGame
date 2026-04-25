@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="DeckBuilder.uss" />
+    <ui:VisualElement name="deckbuilder-root" class="deckbuilder-root">
+
+        <!-- En-tête : titre + stats du deck -->
+        <ui:VisualElement name="deckbuilder-header" class="deckbuilder-header">
+            <ui:Label text="Deck Builder" class="deckbuilder-title" />
+            <ui:VisualElement name="stats-bar" class="stats-bar">
+                <ui:Label name="cards-count-label" text="0 / 40 cartes" class="stat-label stat--warn" />
+                <ui:Label name="weight-label"      text="Poids : 0 / 15" class="stat-label stat--ok" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Contenu principal -->
+        <ui:VisualElement name="deckbuilder-content" class="deckbuilder-content">
+
+            <!-- Panneau gauche : collection -->
+            <ui:VisualElement name="collection-panel" class="db-panel">
+                <ui:Label text="Collection" class="panel-title" />
+                <ui:ScrollView name="collection-scroll" class="db-scroll">
+                    <ui:VisualElement name="collection-list" class="card-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+            <!-- Panneau droit : deck actif -->
+            <ui:VisualElement name="deck-panel" class="db-panel">
+                <ui:Label text="Mon Deck" class="panel-title" />
+                <ui:ScrollView name="deck-scroll" class="db-scroll">
+                    <ui:VisualElement name="deck-list" class="card-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Pied de page : navigation -->
+        <ui:VisualElement name="deckbuilder-footer" class="deckbuilder-footer">
+            <ui:Button name="forge-btn" text="Forge"  class="nav-btn" />
+            <ui:Button name="play-btn"  text="Jouer"  class="nav-btn nav-btn--primary" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

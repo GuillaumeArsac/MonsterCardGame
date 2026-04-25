@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
 using MonsterCardGame.Gameplay.Deck;
 using MonsterCardGame.Gameplay.Combat.Data;
 using MonsterCardGame.Gameplay.Combat.MonsterAI;
 using MonsterCardGame.Gameplay.Combat.States;
+using MonsterCardGame.Gameplay.Inventory;
 
 namespace MonsterCardGame.Gameplay.Combat
 {
@@ -45,7 +47,13 @@ namespace MonsterCardGame.Gameplay.Combat
             }
 
             InitStates();
-            _ctx = new CombatContext(_monsterData, _playerDeck.Cards);
+            var inventory = Services.Get<IPlayerInventory>();
+            SeedStartingInventory(inventory);
+            IReadOnlyList<CardData> deckSource =
+                inventory != null && inventory.ActiveDeck.Count > 0
+                    ? inventory.ActiveDeck
+                    : _playerDeck.Cards;
+            _ctx = new CombatContext(_monsterData, deckSource);
             Shuffle(_ctx.PlayerDeck);
             Shuffle(_ctx.MonsterDeck);
             TransitionTo(_drawState);
@@ -63,6 +71,21 @@ namespace MonsterCardGame.Gameplay.Combat
 
             _reactiveState.SetAfterReactive(_monsterTurnState);
             _monsterTurnState.SetDrawState(_drawState);
+        }
+
+        /// <summary>
+        /// Ajoute les cartes du deck de départ à l'inventaire une seule fois (session vierge).
+        /// Remplacé par un vrai système de sauvegarde en Epic 4.
+        /// </summary>
+        private void SeedStartingInventory(IPlayerInventory inventory)
+        {
+            if (inventory == null || inventory.OwnedCards.Count > 0) return;
+
+            foreach (var card in _playerDeck.Cards)
+                inventory.AddCard(card);
+
+            Core.GameLog.Info("CombatManager",
+                $"Inventaire initialisé avec {_playerDeck.Cards.Count} carte(s) du deck de départ");
         }
 
         private static void Shuffle<T>(List<T> list)

@@ -1,0 +1,203 @@
+.deckbuilder-root {
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: rgb(18, 22, 18);
+    padding: 12px;
+}
+
+/* ── En-tête ─────────────────────────────── */
+
+.deckbuilder-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom-width: 1px;
+    border-color: rgb(50, 60, 50);
+}
+
+.deckbuilder-title {
+    font-size: 26px;
+    color: rgb(180, 220, 255);
+    -unity-font-style: bold;
+}
+
+.stats-bar {
+    flex-direction: row;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-left: 20px;
+}
+
+.stat--ok    { color: rgb(100, 210, 120); }
+.stat--warn  { color: rgb(230, 180, 60);  }
+.stat--error { color: rgb(220, 80,  60);  }
+
+/* ── Contenu ─────────────────────────────── */
+
+.deckbuilder-content {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.db-panel {
+    flex-grow: 1;
+    flex-direction: column;
+    margin-right: 10px;
+    background-color: rgb(22, 28, 22);
+    border-width: 1px;
+    border-color: rgb(45, 60, 45);
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.db-panel:last-child {
+    margin-right: 0;
+}
+
+.panel-title {
+    font-size: 13px;
+    color: rgb(150, 150, 150);
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-color: rgb(50, 60, 50);
+}
+
+.db-scroll {
+    flex-grow: 1;
+}
+
+.card-list {
+    flex-direction: column;
+}
+
+/* ── Ligne collection ────────────────────── */
+
+.collection-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 4px;
+    margin-bottom: 3px;
+    background-color: rgb(28, 35, 28);
+    border-radius: 3px;
+}
+
+.col-name {
+    flex-grow: 1;
+    font-size: 13px;
+    color: rgb(210, 210, 210);
+}
+
+.col-type {
+    font-size: 11px;
+    color: rgb(130, 130, 130);
+    -unity-font-style: italic;
+    margin-right: 10px;
+    width: 130px;
+}
+
+.col-copies {
+    font-size: 12px;
+    color: rgb(160, 200, 160);
+    width: 40px;
+    -unity-text-align: middle-center;
+    margin-right: 6px;
+}
+
+.col-copies--full {
+    color: rgb(180, 130, 60);
+}
+
+/* ── Ligne deck ──────────────────────────── */
+
+.deck-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 4px;
+    margin-bottom: 3px;
+    background-color: rgb(28, 35, 28);
+    border-radius: 3px;
+}
+
+.deck-count {
+    font-size: 13px;
+    color: rgb(120, 180, 255);
+    -unity-font-style: bold;
+    width: 30px;
+    -unity-text-align: middle-left;
+}
+
+.deck-name {
+    flex-grow: 1;
+    font-size: 13px;
+    color: rgb(210, 210, 210);
+}
+
+/* ── Boutons +/− ─────────────────────────── */
+
+.deck-action-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    margin-left: 4px;
+    background-color: rgb(45, 55, 45);
+    color: rgb(200, 200, 200);
+    border-color: rgb(70, 90, 70);
+    border-width: 1px;
+    border-radius: 4px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.deck-action-btn:disabled {
+    color: rgb(70, 70, 70);
+    border-color: rgb(45, 45, 45);
+}
+
+/* ── Divers ──────────────────────────────── */
+
+.empty-label {
+    font-size: 13px;
+    color: rgb(100, 100, 100);
+    -unity-font-style: italic;
+    margin: 12px 6px;
+}
+
+/* ── Pied de page ────────────────────────── */
+
+.deckbuilder-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.nav-btn {
+    padding: 8px 24px;
+    background-color: rgb(40, 50, 40);
+    color: rgb(180, 180, 180);
+    border-color: rgb(70, 80, 70);
+    border-width: 1px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.nav-btn--primary {
+    background-color: rgb(40, 80, 50);
+    color: rgb(160, 240, 180);
+    border-color: rgb(80, 160, 100);
+    -unity-font-style: bold;
+}
+
+.nav-btn--primary:disabled {
+    background-color: rgb(30, 40, 30);
+    color: rgb(80, 100, 80);
+    border-color: rgb(45, 60, 45);
+}
