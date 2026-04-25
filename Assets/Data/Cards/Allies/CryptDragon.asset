@@ -16,11 +16,13 @@ MonoBehaviour:
   _region: 3
   _artwork: {fileID: 3467007381663356831, guid: 21c4e15495d302c49ba9b411d8ac52f1, type: 3}
   _description: 
-  _manaCost: 4
-  _manaGenerated: 2
+  _manaCost: 6
+  _manaGenerated: 0
   _cardType: 2
   _rarity: 1
   _keywords: 00000000
   _ritualValue: 0
-  _attack: 3
-  _defense: 4
+  _attack: 10
+  _defense: 3
+  _onPlayEffects: []
+  _onAttackEffects: []

@@ -25,12 +25,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
-  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
-  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
-  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
+  - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
+  - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
+  - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
   _lootTable:
-  - Material: {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
-    DropChance: 0.4
+  - Material: {fileID: 11400000, guid: 979ef2487e001a847ae15edfa4bcca22, type: 2}
+    DropChance: 1
   - Material: {fileID: 11400000, guid: 979ef2487e001a847ae15edfa4bcca22, type: 2}
     DropChance: 0.7
+  - Material: {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
+    DropChance: 0.4
   _bossPassive: {fileID: 0}

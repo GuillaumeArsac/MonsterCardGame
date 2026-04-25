@@ -7,6 +7,10 @@ namespace MonsterCardGame.Gameplay.Inventory
     [CreateAssetMenu(fileName = "CraftRecipe", menuName = "MonsterCardGame/Inventory/Craft Recipe")]
     public class CraftRecipe : ScriptableObject
     {
+        [Header("Identité")]
+        [SerializeField, Tooltip("Nom affiché dans la liste des recettes de la Forge")]
+        private string _recipeName;
+
         [Header("Ingrédients")]
         [SerializeField, Tooltip("Liste des matériaux requis et leurs quantités")]
         private List<MaterialCost> _ingredients = new();
@@ -19,6 +23,7 @@ namespace MonsterCardGame.Gameplay.Inventory
         [SerializeField, Tooltip("True = visible dès le départ. False = cachée jusqu'à découverte empirique ou PNJ.")]
         private bool _isDiscoveredByDefault = false;
 
+        public string                      RecipeName           => _recipeName;
         public IReadOnlyList<MaterialCost> Ingredients          => _ingredients;
         public CardData                    Result               => _result;
         public bool                        IsDiscoveredByDefault => _isDiscoveredByDefault;

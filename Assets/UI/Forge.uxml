@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Forge.uss" />
+    <ui:VisualElement name="forge-root" class="forge-root">
+
+        <!-- En-tête -->
+        <ui:VisualElement name="forge-header" class="forge-header">
+            <ui:Label text="Forge" class="forge-title" />
+        </ui:VisualElement>
+
+        <!-- Contenu principal -->
+        <ui:VisualElement name="forge-content" class="forge-content">
+
+            <!-- Panneau gauche : liste des recettes -->
+            <ui:VisualElement name="recipe-panel" class="recipe-panel">
+                <ui:Label text="Recettes" class="panel-title" />
+                <ui:ScrollView name="recipe-scroll" class="recipe-scroll">
+                    <ui:VisualElement name="recipe-list" class="recipe-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+            <!-- Panneau droit : détail de la recette sélectionnée -->
+            <ui:VisualElement name="detail-panel" class="detail-panel">
+                <ui:Label name="detail-name" text="Sélectionne une recette" class="detail-name" />
+                <ui:Label name="detail-type" text="" class="detail-type" />
+
+                <ui:VisualElement name="ingredients-section" class="ingredients-section">
+                    <ui:Label text="Ingrédients" class="section-title" />
+                    <ui:VisualElement name="ingredients-list" class="ingredients-list" />
+                </ui:VisualElement>
+
+                <ui:Button name="craft-btn" text="Forger" class="craft-btn" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Pied de page : navigation -->
+        <ui:VisualElement name="forge-footer" class="forge-footer">
+            <ui:Button name="back-btn"        text="Retour au combat" class="nav-btn" />
+            <ui:Button name="deckbuilder-btn" text="Deck Builder"     class="nav-btn nav-btn--primary" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

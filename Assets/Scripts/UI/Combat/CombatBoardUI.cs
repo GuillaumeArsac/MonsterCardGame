@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using MonsterCardGame.Core;
 using MonsterCardGame.Gameplay.Cards;
@@ -83,6 +84,7 @@ namespace MonsterCardGame.UI.Combat
             _attackBtn.clicked    += OnAttackClicked;
             _blockBtn.clicked     += OnBlockClicked;
             _passBtn.clicked      += OnPassClicked;
+            root.Q<Button>("forge-btn").clicked += () => SceneManager.LoadScene("Forge");
 
             _cardDetailPopup = new CardDetailPopup();
             root.Add(_cardDetailPopup);

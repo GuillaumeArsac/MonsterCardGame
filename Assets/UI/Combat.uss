@@ -293,6 +293,18 @@
     -unity-font-style: bold;
 }
 
+.result-nav-btn {
+    margin-top: 24px;
+    padding: 10px 24px;
+    background-color: rgb(60, 100, 60);
+    color: rgb(220, 255, 220);
+    border-color: rgb(100, 180, 100);
+    border-width: 1px;
+    border-radius: 6px;
+    font-size: 15px;
+    -unity-font-style: bold;
+}
+
 .hidden {
     display: none;
 }
