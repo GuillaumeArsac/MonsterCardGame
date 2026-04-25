@@ -110,12 +110,12 @@ namespace MonsterCardGame.Gameplay.Combat.States
             Core.GameLog.Info("PlayState", $"{attacker.Data.CardName} ({atkDmg}/{atkDef} ATK/DEF) ↔ {target.Data.CardName} ({tgtDmg}/{tgtDef} ATK/DEF)");
 
             if (atkDmg >= tgtDef)
-                Remove(ctx.MonsterAllies, ctx.MonsterCemetery, target);
+                CombatHelper.DestroyAlly(ctx, ctx.MonsterAllies, ctx.MonsterCemetery, target, isPlayer: false);
 
             if (tgtDmg >= atkDef && attacker.Data.CardType == CardType.Allie)
-                Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
+                CombatHelper.DestroyAlly(ctx, ctx.PlayerAllies, ctx.PlayerCemetery, attacker, isPlayer: true);
             else if (attacker.Data.CardType == CardType.Equipement && attacker.SpendCharge())
-                Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
+                CombatHelper.DestroyAlly(ctx, ctx.PlayerAllies, ctx.PlayerCemetery, attacker, isPlayer: true);
             else if (attacker.Data.CardType != CardType.Equipement)
                 attacker.SetSleeping(true);
 
@@ -145,7 +145,7 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
             ctx.MonsterHP -= attacker.ATK;
             if (attacker.Data.CardType == CardType.Equipement && attacker.SpendCharge())
-                Remove(ctx.PlayerAllies, ctx.PlayerCemetery, attacker);
+                CombatHelper.DestroyAlly(ctx, ctx.PlayerAllies, ctx.PlayerCemetery, attacker, isPlayer: true);
             else if (attacker.Data.CardType != CardType.Equipement)
                 attacker.SetSleeping(true);
 
@@ -185,16 +185,6 @@ namespace MonsterCardGame.Gameplay.Combat.States
                 return false;
             }
             return true;
-        }
-
-        private static void Remove(
-            System.Collections.Generic.List<AlliedInstance> zone,
-            System.Collections.Generic.List<Cards.CardData> cemetery,
-            AlliedInstance ally)
-        {
-            zone.Remove(ally);
-            cemetery.Add(ally.Data);
-            Core.GameLog.Info("PlayState", $"{ally.Data.CardName} est détruit → cimetière");
         }
 
         private static void CheckCombatEnd(CombatContext ctx)

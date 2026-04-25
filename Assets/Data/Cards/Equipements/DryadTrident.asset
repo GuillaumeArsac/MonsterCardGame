@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Dryad trident
   _region: 0
   _artwork: {fileID: 5034473420953380817, guid: c48b1d66d5713c249a19529006073e07, type: 3}
-  _description: 
+  _description: 'On attack summon 2 [Living root]'
   _manaCost: 3
   _manaGenerated: 0
   _cardType: 3
@@ -26,4 +26,5 @@ MonoBehaviour:
   _defense: 4
   _onPlayEffects: []
   _onAttackEffects:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 77e51a4881586424b874ecc6ee4dc32c, type: 2}
+  _onDestroyEffects: []

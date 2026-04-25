@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Spider shield
   _region: 2
   _artwork: {fileID: 1477463248934438449, guid: ebb5b5ee71948ea4bbd8210f1f12b2c8, type: 3}
-  _description: 
+  _description: 'On play summon 4 [Huge spider]'
   _manaCost: 1
   _manaGenerated: 0
   _cardType: 1
@@ -25,5 +25,6 @@ MonoBehaviour:
   _attack: 0
   _defense: 4
   _onPlayEffects:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 90fc2d1a5b6319e408305ca4c6fc8d8d, type: 2}
   _onAttackEffects: []
+  _onDestroyEffects: []

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MonsterCardGame.Gameplay.Cards.Effects;
 using MonsterCardGame.Gameplay.Combat;
 using UnityEngine;
@@ -13,22 +14,23 @@ namespace MonsterCardGame.Gameplay
         public override void Apply(CardEffectContext ctx)
         {
             if ((_opponent && ctx.IsPlayer) || (_self && !ctx.IsPlayer))
-            {
-                foreach (var a in ctx.Combat.MonsterAllies)
-                {
-                    ctx.Combat.MonsterCemetery.Add(a.Data);
-                }
-                ctx.Combat.MonsterAllies.Clear();
-            }
+                DestroyAll(ctx, ctx.Combat.MonsterAllies, ctx.Combat.MonsterCemetery, isPlayer: false);
 
             if ((_opponent && !ctx.IsPlayer) || (_self && ctx.IsPlayer))
-            {
-                foreach (var a in ctx.Combat.PlayerAllies)
-                {
-                    ctx.Combat.PlayerCemetery.Add(a.Data);
-                }
-                ctx.Combat.PlayerAllies.Clear();
-            }
+                DestroyAll(ctx, ctx.Combat.PlayerAllies, ctx.Combat.PlayerCemetery, isPlayer: true);
+        }
+
+        private static void DestroyAll(
+            CardEffectContext ctx,
+            List<AlliedInstance> zone,
+            List<Cards.CardData> cemetery,
+            bool isPlayer)
+        {
+            // Copie pour éviter une modification de la liste pendant l'itération
+            var snapshot = new List<AlliedInstance>(zone);
+            foreach (var ally in snapshot)
+                if (ally.Data.CardType == Cards.CardType.Allie)
+                    CombatHelper.DestroyAlly(ctx.Combat, zone, cemetery, ally, isPlayer);
         }
     }
 }

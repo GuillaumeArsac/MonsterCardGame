@@ -57,6 +57,9 @@ namespace MonsterCardGame.Gameplay.Cards
         [SerializeField, Tooltip("Effets déclenchés quand la carte ou l'allié attaque")]
         private List<CardEffect> _onAttackEffects = new();
 
+        [SerializeField, Tooltip("Effets déclenchés quand l'allié est détruit et envoyé au cimetière")]
+        private List<CardEffect> _onDestroyEffects = new();
+
         // Propriétés publiques
         public string CardName => _cardName;
 
@@ -71,8 +74,9 @@ namespace MonsterCardGame.Gameplay.Cards
         public int RitualValue => _ritualValue;
         public int Attack => _attack;
         public int Defense => _defense;
-        public IReadOnlyList<CardEffect> OnPlayEffects   => _onPlayEffects;
-        public IReadOnlyList<CardEffect> OnAttackEffects => _onAttackEffects;
+        public IReadOnlyList<CardEffect> OnPlayEffects    => _onPlayEffects;
+        public IReadOnlyList<CardEffect> OnAttackEffects  => _onAttackEffects;
+        public IReadOnlyList<CardEffect> OnDestroyEffects => _onDestroyEffects;
 
         public bool HasKeyword(Keyword keyword) => _keywords != null && _keywords.Contains(keyword);
 

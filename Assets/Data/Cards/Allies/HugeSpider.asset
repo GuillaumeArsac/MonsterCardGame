@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Huge spider
   _region: 2
   _artwork: {fileID: 7846545015966451418, guid: b47401b16753ab94380111cedcf4fff6, type: 3}
-  _description: 
+  _description: Range
   _manaCost: 1
   _manaGenerated: 0
   _cardType: 2
@@ -26,3 +26,4 @@ MonoBehaviour:
   _defense: 2
   _onPlayEffects: []
   _onAttackEffects: []
+  _onDestroyEffects: []

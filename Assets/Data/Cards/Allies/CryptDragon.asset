@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Crypt dragon
   _region: 3
   _artwork: {fileID: 3467007381663356831, guid: 21c4e15495d302c49ba9b411d8ac52f1, type: 3}
-  _description: 
+  _description: Flying
   _manaCost: 4
   _manaGenerated: 0
   _cardType: 2
@@ -26,3 +26,4 @@ MonoBehaviour:
   _defense: 3
   _onPlayEffects: []
   _onAttackEffects: []
+  _onDestroyEffects: []

@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: LivingRoot
+  m_Name: TigerFish
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Living root
-  _region: 0
-  _artwork: {fileID: 296712912865498188, guid: d009f8b420e720c4ea74c9cf9cee19aa, type: 3}
-  _description: Taunt
-  _manaCost: 1
-  _manaGenerated: 1
+  _cardName: Tiger fish
+  _region: 6
+  _artwork: {fileID: -2535633670130227077, guid: e2c3e251adb2d614c9005121a4c86e6c, type: 3}
+  _description: 
+  _manaCost: 3
+  _manaGenerated: 3
   _cardType: 2
-  _rarity: 0
-  _keywords: 03000000
+  _rarity: 1
+  _keywords: 
   _ritualValue: 0
-  _attack: 0
-  _defense: 2
+  _attack: 3
+  _defense: 3
   _onPlayEffects: []
   _onAttackEffects: []
   _onDestroyEffects: []

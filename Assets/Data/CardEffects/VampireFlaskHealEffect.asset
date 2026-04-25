@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40ae3edb7e0026548950a3666b40594a, type: 3}
   m_Name: VampireFlaskHealEffect
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.Effects.HealPlayerEffect
-  _amount: 5
+  _amount: 4

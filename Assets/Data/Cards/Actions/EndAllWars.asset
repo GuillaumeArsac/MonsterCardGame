@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: End all wars
   _region: 3
   _artwork: {fileID: -7936606103070726561, guid: 426a19e6a322b5e46b2e28deb51e062a, type: 3}
-  _description: 
+  _description: Destroy all allies
   _manaCost: 5
   _manaGenerated: 4
   _cardType: 0
@@ -27,3 +27,4 @@ MonoBehaviour:
   _onPlayEffects:
   - {fileID: 11400000, guid: a60502efe17c34d40b9c2dcece8b83a2, type: 2}
   _onAttackEffects: []
+  _onDestroyEffects: []

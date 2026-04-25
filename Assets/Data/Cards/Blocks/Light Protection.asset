@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Light protection
   _region: 3
   _artwork: {fileID: 5050127746665688393, guid: 487f4ddcad1e4f04a86eaea5c55454bf, type: 3}
-  _description: 
+  _description: Heal 2 HP
   _manaCost: 0
   _manaGenerated: 1
   _cardType: 1
@@ -27,3 +27,4 @@ MonoBehaviour:
   _onPlayEffects:
   - {fileID: 11400000, guid: d9f31e4d95dd19248bb6245e62a2315a, type: 2}
   _onAttackEffects: []
+  _onDestroyEffects: []

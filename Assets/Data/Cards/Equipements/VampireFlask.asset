@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Vampire flask
   _region: 4
   _artwork: {fileID: 7714591975857139113, guid: b225597101046ad47a22d1c9c8974b09, type: 3}
-  _description: 
+  _description: On attack heal 4 HP
   _manaCost: 2
   _manaGenerated: 0
   _cardType: 3
@@ -27,3 +27,4 @@ MonoBehaviour:
   _onPlayEffects: []
   _onAttackEffects:
   - {fileID: 11400000, guid: d763440bbb5d8fa4f9583692c18bacbb, type: 2}
+  _onDestroyEffects: []

@@ -86,7 +86,7 @@ namespace MonsterCardGame.UI.DeckBuilder
                 var typeLabel = new Label($"{card.CardType}  ·  {card.Rarity}");
                 typeLabel.AddToClassList("col-type");
 
-                var copiesLabel = new Label($"{inDeck} / {maxCopies}");
+                var copiesLabel = new Label($"{inDeck} / {maxCopies}  ({owned}×)");
                 copiesLabel.AddToClassList("col-copies");
                 if (inDeck >= maxCopies) copiesLabel.AddToClassList("col-copies--full");
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Light Orb
   _region: 3
   _artwork: {fileID: 2322374121114253753, guid: 1e94fc195f0a357478131303846dbfaa, type: 3}
-  _description: 
+  _description: Heal 3 HP
   _manaCost: 2
   _manaGenerated: 2
   _cardType: 0
@@ -27,3 +27,4 @@ MonoBehaviour:
   _onPlayEffects:
   - {fileID: 11400000, guid: 105f904507b47f84b8b7c7f0685c05eb, type: 2}
   _onAttackEffects: []
+  _onDestroyEffects: []

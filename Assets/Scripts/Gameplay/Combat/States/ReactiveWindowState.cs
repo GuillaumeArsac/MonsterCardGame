@@ -104,11 +104,7 @@ namespace MonsterCardGame.Gameplay.Combat.States
                 Core.GameLog.Info("ReactiveWindowState", $"{action.CardName} inflige {action.Attack} dégâts à {target.Data.CardName}");
 
                 if (target.DEF <= action.Attack)
-                {
-                    ctx.PlayerAllies.Remove(target);
-                    ctx.PlayerCemetery.Add(target.Data);
-                    Core.GameLog.Info("ReactiveWindowState", $"{target.Data.CardName} est détruit → cimetière");
-                }
+                    CombatHelper.DestroyAlly(ctx, ctx.PlayerAllies, ctx.PlayerCemetery, target, isPlayer: true);
             }
             else
             {

@@ -106,7 +106,7 @@
 .col-copies {
     font-size: 12px;
     color: rgb(160, 200, 160);
-    width: 40px;
+    width: 90px;
     -unity-text-align: middle-center;
     margin-right: 6px;
 }

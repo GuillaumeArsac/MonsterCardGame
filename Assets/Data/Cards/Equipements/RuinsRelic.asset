@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Ruins relic
   _region: 4
   _artwork: {fileID: -8261564427468842030, guid: 6c4be063abc3e944ea3a4e84f00a49ab, type: 3}
-  _description: 
+  _description: On attack generate 3 mana
   _manaCost: 0
   _manaGenerated: 0
   _cardType: 3
@@ -27,3 +27,4 @@ MonoBehaviour:
   _onPlayEffects: []
   _onAttackEffects:
   - {fileID: 11400000, guid: 613c75ee3c4a11b4aba4fb24a3287217, type: 2}
+  _onDestroyEffects: []
