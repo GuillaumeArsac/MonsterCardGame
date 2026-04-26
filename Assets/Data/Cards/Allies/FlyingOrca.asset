@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Flying orca
   _region: 6
   _artwork: {fileID: -330244618373840163, guid: 921286109e7541e4a8175ea69a8cde20, type: 3}
-  _description: 
+  _description: 'On destruction summon 2 [Tiger fish]'
   _manaCost: 6
   _manaGenerated: 4
   _cardType: 2

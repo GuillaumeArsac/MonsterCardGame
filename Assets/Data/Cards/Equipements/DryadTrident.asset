@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DryadTrident
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
   _cardName: Dryad trident
-  _region: 0
+  _region: 5
   _artwork: {fileID: 5034473420953380817, guid: c48b1d66d5713c249a19529006073e07, type: 3}
   _description: 'On attack summon 2 [Living root]'
   _manaCost: 3
   _manaGenerated: 0
   _cardType: 3
-  _rarity: 1
+  _rarity: 0
   _keywords: 
   _ritualValue: 0
   _attack: 2

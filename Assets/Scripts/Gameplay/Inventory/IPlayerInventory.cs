@@ -30,5 +30,8 @@ namespace MonsterCardGame.Gameplay.Inventory
         bool RemoveCardFromDeck(CardData card);
 
         int GetDeckCardCount(CardData card);
+
+        /// <summary>Remet l'inventaire à zéro — utilisé par SaveService.Load() avant de repeupler.</summary>
+        void Clear();
     }
 }

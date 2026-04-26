@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8abeff89ac2c446946f77e7a7f82bd, type: 3}
+  m_Name: WorldData
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.World.WorldData
+  _zones:
+  - {fileID: 11400000, guid: b527fc0a8708bbf42baae0c239a96d28, type: 2}

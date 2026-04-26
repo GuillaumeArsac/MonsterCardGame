@@ -83,5 +83,12 @@ namespace MonsterCardGame.Gameplay.Inventory
                 if (c == card) count++;
             return count;
         }
+
+        public void Clear()
+        {
+            _materials.Clear();
+            _ownedCards.Clear();
+            _activeDeck.Clear();
+        }
     }
 }

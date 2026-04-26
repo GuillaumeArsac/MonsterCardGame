@@ -19,13 +19,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a14aee1c2d3983f4ca6c309c8c1804fe, type: 2}
   - {fileID: 11400000, guid: a14aee1c2d3983f4ca6c309c8c1804fe, type: 2}
   - {fileID: 11400000, guid: a14aee1c2d3983f4ca6c309c8c1804fe, type: 2}
+  - {fileID: 11400000, guid: a14aee1c2d3983f4ca6c309c8c1804fe, type: 2}
   - {fileID: 11400000, guid: d1c062ab9151f3f4c8f0d6677cd4ec75, type: 2}
-  - {fileID: 11400000, guid: d1c062ab9151f3f4c8f0d6677cd4ec75, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
-  - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
+  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
   - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
   - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
   _lootTable:

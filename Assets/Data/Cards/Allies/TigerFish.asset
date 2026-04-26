@@ -19,7 +19,7 @@ MonoBehaviour:
   _manaCost: 3
   _manaGenerated: 3
   _cardType: 2
-  _rarity: 1
+  _rarity: 0
   _keywords: 
   _ritualValue: 0
   _attack: 3

@@ -19,10 +19,11 @@ MonoBehaviour:
   _manaCost: 2
   _manaGenerated: 0
   _cardType: 3
-  _rarity: 1
+  _rarity: 0
   _keywords: 
   _ritualValue: 0
-  _attack: 7
+  _attack: 5
   _defense: 2
   _onPlayEffects: []
   _onAttackEffects: []
+  _onDestroyEffects: []

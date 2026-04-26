@@ -8,6 +8,7 @@ using MonsterCardGame.Gameplay.Combat.Data;
 using MonsterCardGame.Gameplay.Combat.MonsterAI;
 using MonsterCardGame.Gameplay.Combat.States;
 using MonsterCardGame.Gameplay.Inventory;
+using MonsterCardGame.Gameplay.World;
 
 namespace MonsterCardGame.Gameplay.Combat
 {
@@ -49,11 +50,21 @@ namespace MonsterCardGame.Gameplay.Combat
             InitStates();
             var inventory = Services.Get<IPlayerInventory>();
             SeedStartingInventory(inventory);
+
+            var setup         = Services.Get<ICombatSetupService>();
+            var monsterToFight = setup?.PendingMonster ?? _monsterData;
+
+            if (monsterToFight == null)
+            {
+                Core.GameLog.Error("CombatManager", "Aucun monstre sélectionné — vérifier ICombatSetupService ou _monsterData");
+                return;
+            }
+
             IReadOnlyList<CardData> deckSource =
                 inventory != null && inventory.ActiveDeck.Count > 0
                     ? inventory.ActiveDeck
                     : _playerDeck.Cards;
-            _ctx = new CombatContext(_monsterData, deckSource);
+            _ctx = new CombatContext(monsterToFight, deckSource);
             Shuffle(_ctx.PlayerDeck);
             Shuffle(_ctx.MonsterDeck);
             TransitionTo(_drawState);

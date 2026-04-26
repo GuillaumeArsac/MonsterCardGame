@@ -1,0 +1,38 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="WorldMap.uss" />
+    <ui:VisualElement name="worldmap-root" class="worldmap-root">
+
+        <!-- En-tête -->
+        <ui:VisualElement name="worldmap-header" class="worldmap-header">
+            <ui:Label text="Carte du Monde" class="worldmap-title" />
+            <ui:VisualElement class="header-actions">
+                <ui:Button name="deckbuilder-btn" text="Deck Builder" class="nav-btn" />
+                <ui:Button name="forge-btn"       text="Forge"        class="nav-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Contenu principal -->
+        <ui:VisualElement name="worldmap-content" class="worldmap-content">
+
+            <!-- Panneau gauche : liste des zones -->
+            <ui:VisualElement name="zone-panel" class="wm-panel zone-panel">
+                <ui:Label text="Zones" class="panel-title" />
+                <ui:ScrollView name="zone-scroll" class="wm-scroll">
+                    <ui:VisualElement name="zone-list" class="wm-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+            <!-- Panneau droit : monstres de la zone sélectionnée -->
+            <ui:VisualElement name="monster-panel" class="wm-panel monster-panel">
+                <ui:Label name="zone-name-label" text="— Sélectionnez une zone —" class="panel-title" />
+                <ui:Label name="zone-desc-label" text="" class="zone-desc" />
+                <ui:ScrollView name="monster-scroll" class="wm-scroll">
+                    <ui:VisualElement name="monster-list" class="wm-list" />
+                </ui:ScrollView>
+                <ui:Button name="fight-btn" text="Combattre" class="nav-btn nav-btn--primary" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

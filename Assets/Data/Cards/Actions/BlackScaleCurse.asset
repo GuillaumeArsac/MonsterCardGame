@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardName: Black scale curse
   _region: 2
   _artwork: {fileID: -6975572217993813335, guid: bd9b6f7a36576a74d9bb405b91f19717, type: 3}
-  _description: 'Inflige '
+  _description: 
   _manaCost: 1
   _manaGenerated: 2
   _cardType: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   _defense: 0
   _onPlayEffects: []
   _onAttackEffects: []
+  _onDestroyEffects: []

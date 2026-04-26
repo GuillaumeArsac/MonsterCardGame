@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LivingRoot
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
   _cardName: Living root
-  _region: 0
+  _region: 5
   _artwork: {fileID: 296712912865498188, guid: d009f8b420e720c4ea74c9cf9cee19aa, type: 3}
   _description: Taunt
   _manaCost: 1

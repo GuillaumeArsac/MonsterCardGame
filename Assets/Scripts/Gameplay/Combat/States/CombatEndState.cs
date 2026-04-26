@@ -1,5 +1,6 @@
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Inventory;
+using MonsterCardGame.Gameplay.World;
 
 namespace MonsterCardGame.Gameplay.Combat.States
 {
@@ -12,6 +13,8 @@ namespace MonsterCardGame.Gameplay.Combat.States
             {
                 case CombatResult.PlayerWin:
                     ResolveLoot(ctx);
+                    RecordVictory(ctx);
+                    Services.Get<ISaveService>()?.Save();
                     Core.GameLog.Info("CombatEndState", $"VICTOIRE — {ctx.DroppedMaterials.Count} matériau(x) obtenu(s)");
                     break;
                 case CombatResult.PlayerLose:
@@ -28,7 +31,7 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
         private static void ResolveLoot(CombatContext ctx)
         {
-            var drops = LootResolver.Resolve(ctx.MonsterData);
+            var drops     = LootResolver.Resolve(ctx.MonsterData);
             var inventory = Services.Get<IPlayerInventory>();
 
             foreach (var mat in drops)
@@ -36,6 +39,11 @@ namespace MonsterCardGame.Gameplay.Combat.States
                 ctx.DroppedMaterials.Add(mat);
                 inventory?.AddMaterial(mat);
             }
+        }
+
+        private static void RecordVictory(CombatContext ctx)
+        {
+            Services.Get<IWorldProgressionService>()?.RecordVictory(ctx.MonsterData);
         }
     }
 }

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8be0f5a08dcfc418faabbef5d966f4, type: 3}
+  m_Name: GameRegistry
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.World.GameRegistry
+  _allCards:
+  - {fileID: 11400000, guid: 64949976a4b42084eae41a9affa6f62c, type: 2}
+  - {fileID: 11400000, guid: 8f41266bbfb8715499c8f620e607c05e, type: 2}
+  - {fileID: 11400000, guid: a14aee1c2d3983f4ca6c309c8c1804fe, type: 2}
+  - {fileID: 11400000, guid: d1c062ab9151f3f4c8f0d6677cd4ec75, type: 2}
+  - {fileID: 11400000, guid: cccc97b288bd0444e8eba42a3e29571a, type: 2}
+  - {fileID: 11400000, guid: 2d74dceac8988d6478b95c50f961cef9, type: 2}
+  - {fileID: 11400000, guid: c06aa5448a3ccfa44a18b08f664d5aa0, type: 2}
+  - {fileID: 11400000, guid: 6569d558216338347822740859414d81, type: 2}
+  - {fileID: 11400000, guid: 32d2fd5398047b546949dbb361205d93, type: 2}
+  - {fileID: 11400000, guid: d77782e72b33724469a4e0e0cb58e6d1, type: 2}
+  - {fileID: 11400000, guid: 626e442a2afb47445a81567a95fa78a5, type: 2}
+  - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
+  - {fileID: 11400000, guid: f5f83c428dcfa9b4598e075291f21482, type: 2}
+  - {fileID: 11400000, guid: 331a4403a05f0d14da143e1b4708dd42, type: 2}
+  - {fileID: 11400000, guid: 6f586f975a75f1b4e81ef49d5187f2dd, type: 2}
+  - {fileID: 11400000, guid: 1f92caabedd98924c8fde690edf7716c, type: 2}
+  - {fileID: 11400000, guid: df71aa196a73ea7408b58bb201727195, type: 2}
+  - {fileID: 11400000, guid: 752488dc135779c489a641c259943e7b, type: 2}
+  _allMaterials:
+  - {fileID: 11400000, guid: 979ef2487e001a847ae15edfa4bcca22, type: 2}
+  - {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
+  _allMonsters:
+  - {fileID: 11400000, guid: 85dc6c8f403a37644a1a63783c6f0e9f, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Goblin
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
   _cardName: Goblin
-  _region: 0
+  _region: 1
   _artwork: {fileID: 8749302817991680212, guid: 2b2cfa07211e5b24aa3089656ccf72f5, type: 3}
   _description: 
   _manaCost: 0
@@ -24,3 +24,6 @@ MonoBehaviour:
   _ritualValue: 0
   _attack: 1
   _defense: 1
+  _onPlayEffects: []
+  _onAttackEffects: []
+  _onDestroyEffects: []
