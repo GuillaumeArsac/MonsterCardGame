@@ -30,7 +30,6 @@ namespace MonsterCardGame.UI.Combat
         private VisualElement _handCards;
         private Button        _sacrificeBtn;
         private Button        _endPlayBtn;
-        private Button        _attackBtn;
         private Button        _blockBtn;
         private Button        _passBtn;
         private VisualElement _pendingActionBanner;
@@ -81,7 +80,6 @@ namespace MonsterCardGame.UI.Combat
             _handCards             = root.Q<VisualElement>("hand-cards");
             _sacrificeBtn          = root.Q<Button>("sacrifice-btn");
             _endPlayBtn            = root.Q<Button>("end-play-btn");
-            _attackBtn             = root.Q<Button>("attack-btn");
             _blockBtn              = root.Q<Button>("block-btn");
             _passBtn               = root.Q<Button>("pass-btn");
             _pendingActionBanner   = root.Q<VisualElement>("pending-action-banner");
@@ -99,19 +97,25 @@ namespace MonsterCardGame.UI.Combat
 
             _sacrificeBtn.clicked += OnSacrificeClicked;
             _endPlayBtn.clicked   += OnEndPlayClicked;
-            _attackBtn.clicked    += OnAttackClicked;
             _blockBtn.clicked     += OnBlockClicked;
             _passBtn.clicked      += OnPassClicked;
-            root.Q<Button>("cancel-target-btn").clicked += ExitTargetingMode;
+            root.Q<Button>("cancel-target-btn").clicked += OnCancelTargeting;
             root.Q<Button>("forge-btn").clicked         += () => SceneManager.LoadScene("Forge");
             _cemeteryBtn.clicked                        += ToggleCemeteryPanel;
             root.Q<Button>("cemetery-close-btn").clicked += CloseCemeteryPanel;
 
             _monsterZone.RegisterCallback<PointerDownEvent>(evt =>
             {
-                if (evt.button == 0 && _isTargeting)
+                if (evt.button != 0) return;
+                if (_isTargeting)
                 {
                     ResolveTargeting(CombatTarget.Monster);
+                    evt.StopPropagation();
+                }
+                else if (_selectedAttacker != null)
+                {
+                    _combatManager.PlayState?.TryAttackMonsterDirectly(_combatManager.Context, _selectedAttacker);
+                    ClearAttackerSelection();
                     evt.StopPropagation();
                 }
             });
@@ -124,7 +128,6 @@ namespace MonsterCardGame.UI.Combat
         {
             if (_sacrificeBtn != null) _sacrificeBtn.clicked -= OnSacrificeClicked;
             if (_endPlayBtn   != null) _endPlayBtn.clicked   -= OnEndPlayClicked;
-            if (_attackBtn    != null) _attackBtn.clicked    -= OnAttackClicked;
             if (_blockBtn     != null) _blockBtn.clicked     -= OnBlockClicked;
             if (_passBtn      != null) _passBtn.clicked      -= OnPassClicked;
         }
@@ -254,6 +257,9 @@ namespace MonsterCardGame.UI.Combat
                     }
                 });
 
+                if (_selectedAttacker != null || _isTargeting)
+                    view.AddToClassList("targeting-highlight");
+
                 _monsterAlliesZone.Add(view);
                 _monsterAllyViews.Add(view);
             }
@@ -292,6 +298,7 @@ namespace MonsterCardGame.UI.Combat
             _selectedAttacker     = ally;
             _selectedAttackerView = view;
             view.AddToClassList("attacker-selected");
+            ApplyAttackHighlights();
         }
 
         private void ClearAttackerSelection()
@@ -299,6 +306,37 @@ namespace MonsterCardGame.UI.Combat
             _selectedAttackerView?.RemoveFromClassList("attacker-selected");
             _selectedAttacker     = null;
             _selectedAttackerView = null;
+            RemoveAttackHighlights();
+            if (!_isTargeting) HideTargetingBanner();
+        }
+
+        private void ApplyAttackHighlights()
+        {
+            var ctx = _combatManager.Context;
+
+            _targetingBanner.RemoveFromClassList("hidden");
+            _targetingLabel.text = $"{_selectedAttacker.Data.CardName} ({_selectedAttacker.ATK} ATK) — choisissez une cible";
+
+            bool canGoDirectly = !HasProvocationBlocker(ctx);
+            if (canGoDirectly) _monsterZone.AddToClassList("targeting-highlight");
+
+            foreach (var v in _monsterAllyViews) v.AddToClassList("targeting-highlight");
+        }
+
+        private void RemoveAttackHighlights()
+        {
+            _monsterZone.RemoveFromClassList("targeting-highlight");
+            foreach (var v in _monsterAllyViews) v.RemoveFromClassList("targeting-highlight");
+        }
+
+        private void HideTargetingBanner() => _targetingBanner.AddToClassList("hidden");
+
+        private static bool HasProvocationBlocker(CombatContext ctx)
+        {
+            if (ctx == null) return false;
+            foreach (var ally in ctx.MonsterAllies)
+                if (ally.Data.HasKeyword(Keyword.Provocation)) return true;
+            return false;
         }
 
         private void TryPlaySelectedCard()
@@ -328,10 +366,16 @@ namespace MonsterCardGame.UI.Combat
         {
             _isTargeting       = false;
             _pendingActionCard = null;
-            _targetingBanner.AddToClassList("hidden");
             _monsterZone.RemoveFromClassList("targeting-highlight");
             foreach (var v in _playerAllyViews)  v.RemoveFromClassList("targeting-highlight");
             foreach (var v in _monsterAllyViews) v.RemoveFromClassList("targeting-highlight");
+            if (_selectedAttacker == null) HideTargetingBanner();
+        }
+
+        private void OnCancelTargeting()
+        {
+            if (_isTargeting) ExitTargetingMode();
+            ClearAttackerSelection();
         }
 
         private void ResolveTargeting(CombatTarget target)
@@ -347,12 +391,6 @@ namespace MonsterCardGame.UI.Combat
             _selectedCard = null;
         }
 
-        private void OnAttackClicked()
-        {
-            if (_selectedAttacker == null) return;
-            _combatManager.PlayState?.TryAttackMonsterDirectly(_combatManager.Context, _selectedAttacker);
-            ClearAttackerSelection();
-        }
 
         private void RefreshPhaseBanner(CombatContext ctx, ICombatState state)
         {
@@ -383,11 +421,8 @@ namespace MonsterCardGame.UI.Combat
             bool inReactive   = state is ReactiveWindowState;
             bool hasPending   = ctx.PendingMonsterAction != null;
             bool hasBlockCard = _selectedCard?.Data.CardType == CardType.Blocage;
-            bool hasAttacker  = _selectedAttacker != null;
-
             _sacrificeBtn.SetEnabled(inSacrifice);
             _endPlayBtn.SetEnabled(inSacrifice || inPlay);
-            _attackBtn.SetEnabled(inPlay && hasAttacker && !_isTargeting);
             _blockBtn.SetEnabled(inReactive && hasPending && hasBlockCard);
             _passBtn.SetEnabled(inReactive);
         }

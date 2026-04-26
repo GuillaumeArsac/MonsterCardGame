@@ -58,7 +58,6 @@
             <ui:Button name="cemetery-btn"  text="Cimetière (0)" class="action-btn action-btn--cemetery" />
             <ui:Button name="sacrifice-btn" text="Sacrifier"     class="action-btn" />
             <ui:Button name="end-play-btn"  text="Fin de phase"  class="action-btn" />
-            <ui:Button name="attack-btn"    text="Attaquer"      class="action-btn action-btn--attack" />
             <ui:Button name="block-btn"     text="Bloquer"       class="action-btn action-btn--block" />
             <ui:Button name="pass-btn"      text="Passer"        class="action-btn" />
         </ui:VisualElement>
