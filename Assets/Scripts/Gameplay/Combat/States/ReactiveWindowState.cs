@@ -1,5 +1,6 @@
 using System;
 using MonsterCardGame.Gameplay.Cards;
+using MonsterCardGame.Gameplay.Cards.Effects;
 
 namespace MonsterCardGame.Gameplay.Combat.States
 {
@@ -77,6 +78,9 @@ namespace MonsterCardGame.Gameplay.Combat.States
 
             Core.GameLog.Info("ReactiveWindowState",
                 $"{blockCard.CardName} bloque {ctx.PendingMonsterAction.CardName} — aucun dégât !");
+
+            foreach (var effect in blockCard.OnPlayEffects)
+                effect.Apply(new CardEffectContext(ctx, source: null, isPlayer: true));
 
             ctx.PendingMonsterAction = null;
             ctx.PendingMonsterTarget = null;

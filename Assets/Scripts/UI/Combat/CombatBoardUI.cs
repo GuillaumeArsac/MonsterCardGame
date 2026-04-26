@@ -56,6 +56,11 @@ namespace MonsterCardGame.UI.Combat
         private bool            _isTargeting;
         private CardData        _pendingActionCard;
 
+        private Button          _cemeteryBtn;
+        private VisualElement   _cemeteryPanel;
+        private VisualElement   _cemeteryList;
+        private int             _lastCemeteryCount = -1;
+
         private CardDetailPopup _cardDetailPopup;
 
         private void OnEnable()
@@ -88,6 +93,9 @@ namespace MonsterCardGame.UI.Combat
             _monsterZone     = root.Q<VisualElement>("monster-zone");
             _targetingBanner = root.Q<VisualElement>("targeting-banner");
             _targetingLabel  = root.Q<Label>("targeting-label");
+            _cemeteryBtn     = root.Q<Button>("cemetery-btn");
+            _cemeteryPanel   = root.Q<VisualElement>("cemetery-panel");
+            _cemeteryList    = root.Q<VisualElement>("cemetery-list");
 
             _sacrificeBtn.clicked += OnSacrificeClicked;
             _endPlayBtn.clicked   += OnEndPlayClicked;
@@ -95,7 +103,9 @@ namespace MonsterCardGame.UI.Combat
             _blockBtn.clicked     += OnBlockClicked;
             _passBtn.clicked      += OnPassClicked;
             root.Q<Button>("cancel-target-btn").clicked += ExitTargetingMode;
-            root.Q<Button>("forge-btn").clicked += () => SceneManager.LoadScene("Forge");
+            root.Q<Button>("forge-btn").clicked         += () => SceneManager.LoadScene("Forge");
+            _cemeteryBtn.clicked                        += ToggleCemeteryPanel;
+            root.Q<Button>("cemetery-close-btn").clicked += CloseCemeteryPanel;
 
             _monsterZone.RegisterCallback<PointerDownEvent>(evt =>
             {
@@ -138,6 +148,7 @@ namespace MonsterCardGame.UI.Combat
             RefreshButtons(ctx, _combatManager.CurrentState);
             RefreshPendingActionBanner(ctx);
             RefreshResultOverlay(ctx);
+            RefreshCemeteryButton(ctx);
         }
 
         private void RefreshLabels(CombatContext ctx)
@@ -448,6 +459,90 @@ namespace MonsterCardGame.UI.Combat
                 label.AddToClassList("loot-item");
                 label.AddToClassList(mat.Rarity == MaterialRarity.Rare ? "loot-item--rare" : "loot-item--commun");
                 _lootList.Add(label);
+            }
+        }
+
+        // ── Cimetière ─────────────────────────────────────────────────────
+
+        private void RefreshCemeteryButton(CombatContext ctx)
+        {
+            int count = ctx.PlayerCemetery.Count;
+            _cemeteryBtn.text = $"Cimetière ({count})";
+
+            if (count == _lastCemeteryCount) return;
+            _lastCemeteryCount = count;
+
+            if (_cemeteryPanel != null && !_cemeteryPanel.ClassListContains("hidden"))
+                BuildCemeteryList(ctx);
+        }
+
+        private void ToggleCemeteryPanel()
+        {
+            if (_cemeteryPanel.ClassListContains("hidden"))
+            {
+                BuildCemeteryList(_combatManager.Context);
+                _cemeteryPanel.RemoveFromClassList("hidden");
+            }
+            else
+            {
+                CloseCemeteryPanel();
+            }
+        }
+
+        private void CloseCemeteryPanel() => _cemeteryPanel.AddToClassList("hidden");
+
+        private void BuildCemeteryList(CombatContext ctx)
+        {
+            _cemeteryList.Clear();
+
+            if (ctx.PlayerCemetery.Count == 0)
+            {
+                var empty = new Label("Cimetière vide.");
+                empty.AddToClassList("cemetery-card-name");
+                _cemeteryList.Add(empty);
+                return;
+            }
+
+            bool inPlay = _combatManager.CurrentState is PlayState;
+
+            foreach (var card in ctx.PlayerCemetery)
+            {
+                var c        = card;
+                bool rampant = card.HasKeyword(Keyword.Rampant) && card.CardType == CardType.Allie;
+                bool canPlay = rampant && inPlay && ctx.PlayerMana >= card.ManaCost;
+
+                var row = new VisualElement();
+                row.AddToClassList("cemetery-row");
+                if (rampant) row.AddToClassList("cemetery-row--rampant");
+
+                var nameLabel = new Label(card.CardName);
+                nameLabel.AddToClassList("cemetery-card-name");
+                row.Add(nameLabel);
+
+                if (rampant)
+                {
+                    var badge = new Label("Rampant");
+                    badge.AddToClassList("cemetery-rampant-badge");
+                    row.Add(badge);
+
+                    var costLabel = new Label($"{card.ManaCost}m");
+                    costLabel.AddToClassList("cemetery-cost-label");
+                    if (!canPlay) costLabel.style.opacity = 0.45f;
+                    row.Add(costLabel);
+                }
+
+                if (canPlay)
+                {
+                    row.RegisterCallback<PointerDownEvent>(evt =>
+                    {
+                        if (evt.button != 0) return;
+                        _combatManager.PlayState.TryPlayFromCemetery(_combatManager.Context, c);
+                        CloseCemeteryPanel();
+                        evt.StopPropagation();
+                    });
+                }
+
+                _cemeteryList.Add(row);
             }
         }
 

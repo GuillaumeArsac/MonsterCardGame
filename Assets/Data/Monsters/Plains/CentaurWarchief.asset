@@ -21,22 +21,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c041860988df1ed409e137d881b62dfa, type: 2}
   - {fileID: 11400000, guid: d1c062ab9151f3f4c8f0d6677cd4ec75, type: 2}
   - {fileID: 11400000, guid: d1c062ab9151f3f4c8f0d6677cd4ec75, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
+  - {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
+  - {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
+  - {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
   _lootTable:
   - Material: {fileID: 11400000, guid: 5c8a53a4ebc2e35488fbb90db3b22f75, type: 2}
     DropChance: 0.9
   - Material: {fileID: 11400000, guid: 5c8a53a4ebc2e35488fbb90db3b22f75, type: 2}
-    DropChance: 0.5
+    DropChance: 0.6
   - Material: {fileID: 11400000, guid: 35b393db15f7d37498db1ca6f46f32a2, type: 2}
     DropChance: 0.8
   - Material: {fileID: 11400000, guid: 35b393db15f7d37498db1ca6f46f32a2, type: 2}
-    DropChance: 0.4
+    DropChance: 0.5
+  - Material: {fileID: 11400000, guid: 83a9ce029fb4f104cac812a4c1a22be0, type: 2}
+    DropChance: 0.5
+  - Material: {fileID: 11400000, guid: 971bbceb5dda08e4681d520675d0710b, type: 2}
+    DropChance: 0.9
+  - Material: {fileID: 11400000, guid: 971bbceb5dda08e4681d520675d0710b, type: 2}
+    DropChance: 0.6
   _bossPassive: {fileID: 0}

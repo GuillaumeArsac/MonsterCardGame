@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Forge.ForgeData
   _recipes:
   - {fileID: 11400000, guid: dfc94c5781484de428b6f6ea63de7520, type: 2}
+  - {fileID: 11400000, guid: d56244089b81f1648b8df57659fc183f, type: 2}
+  - {fileID: 11400000, guid: 92d2868626a468c4b997dd90917b8042, type: 2}

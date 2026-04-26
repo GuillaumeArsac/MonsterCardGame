@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 310dc5a0ed7bab84aa61fdb6055c2ae4, type: 3}
   m_Name: SvathurimDamageEffect
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.DamageEnemyEffect
-  _quantity: 0
+  _quantity: 4

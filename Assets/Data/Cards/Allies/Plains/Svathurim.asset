@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Svathurim
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
   _cardName: Svathurim
-  _region: 0
+  _region: 3
   _artwork: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
-  _description: 
-  _manaCost: 0
-  _manaGenerated: 0
+  _description: On death deal 4 damage to the enemy
+  _manaCost: 4
+  _manaGenerated: 2
   _cardType: 0
-  _rarity: 0
-  _keywords: 
+  _rarity: 2
+  _keywords: 0700000001000000
   _ritualValue: 0
-  _attack: 0
-  _defense: 0
+  _attack: 6
+  _defense: 2
   _onPlayEffects: []
   _onAttackEffects: []
-  _onDestroyEffects: []
+  _onDestroyEffects:
+  - {fileID: 11400000, guid: b431ba89fccfd2048926ce5c76e86f54, type: 2}

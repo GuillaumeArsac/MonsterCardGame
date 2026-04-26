@@ -7,7 +7,7 @@ namespace MonsterCardGame.Core
 
         public const int MaxDeckWeight = 15;
         public const int MaxHandSize = 10;
-        public const int StartOfTurnHandSize = 4;
+        public const int StartOfTurnHandSize = 6;
         public const int MaxCopiesCommon = 3;
         public const int MaxCopiesRare = 3;
         public const int MaxCopiesLegendary = 1;

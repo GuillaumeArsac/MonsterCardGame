@@ -6,6 +6,7 @@ using MonsterCardGame.Core;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
 using MonsterCardGame.Gameplay.Inventory;
+using MonsterCardGame.UI.Combat;
 
 namespace MonsterCardGame.UI.DeckBuilder
 {
@@ -14,11 +15,11 @@ namespace MonsterCardGame.UI.DeckBuilder
     {
         private IPlayerInventory _inventory;
 
-        private VisualElement _collectionList;
-        private VisualElement _deckList;
-        private Label         _cardsCountLabel;
-        private Label         _weightLabel;
-        private Button        _playBtn;
+        private VisualElement   _collectionList;
+        private VisualElement   _deckList;
+        private Label           _cardsCountLabel;
+        private Label           _weightLabel;
+        private CardDetailPopup _cardDetailPopup;
 
         private void OnEnable()
         {
@@ -30,11 +31,12 @@ namespace MonsterCardGame.UI.DeckBuilder
             _deckList        = root.Q<VisualElement>("deck-list");
             _cardsCountLabel = root.Q<Label>("cards-count-label");
             _weightLabel     = root.Q<Label>("weight-label");
-            _playBtn         = root.Q<Button>("play-btn");
 
             root.Q<Button>("worldmap-btn").clicked += () => SceneManager.LoadScene("WorldMap");
             root.Q<Button>("forge-btn").clicked    += () => SceneManager.LoadScene("Forge");
-            _playBtn.clicked += () => SceneManager.LoadScene("Combat");
+
+            _cardDetailPopup = new CardDetailPopup();
+            root.Add(_cardDetailPopup);
         }
 
         private void Start()
@@ -119,6 +121,11 @@ namespace MonsterCardGame.UI.DeckBuilder
                 row.Add(removeBtn);
                 row.Add(addBtn);
 
+                row.RegisterCallback<PointerDownEvent>(evt =>
+                {
+                    if (evt.button == 1) { _cardDetailPopup.Show(card); evt.StopPropagation(); }
+                });
+
                 _collectionList.Add(row);
             }
         }
@@ -176,6 +183,11 @@ namespace MonsterCardGame.UI.DeckBuilder
                 row.Add(nameLabel);
                 row.Add(removeBtn);
 
+                row.RegisterCallback<PointerDownEvent>(evt =>
+                {
+                    if (evt.button == 1) { _cardDetailPopup.Show(card); evt.StopPropagation(); }
+                });
+
                 _deckList.Add(row);
             }
         }
@@ -200,7 +212,6 @@ namespace MonsterCardGame.UI.DeckBuilder
             _weightLabel.RemoveFromClassList("stat--error");
             _weightLabel.AddToClassList(weight <= GameRules.MaxDeckWeight ? "stat--ok" : "stat--error");
 
-            _playBtn.SetEnabled(valid);
         }
 
         private int ComputeTotalWeight()

@@ -201,3 +201,103 @@
     color: rgb(80, 100, 80);
     border-color: rgb(45, 60, 45);
 }
+
+/* ── Popup détail carte ──────────────────────── */
+
+.card-detail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    align-items: center;
+    justify-content: center;
+}
+
+.card-detail-panel {
+    width: 220px;
+    background-color: rgb(28, 32, 42);
+    border-width: 2px;
+    border-color: rgb(120, 120, 180);
+    border-radius: 8px;
+    padding: 12px;
+    align-items: stretch;
+}
+
+#card-detail-artwork {
+    height: 130px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgb(15, 15, 20);
+}
+
+.card-detail-name {
+    font-size: 16px;
+    color: rgb(240, 240, 255);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.card-detail-type {
+    font-size: 11px;
+    color: rgb(160, 160, 200);
+    -unity-font-style: italic;
+    -unity-text-align: upper-center;
+    margin-bottom: 2px;
+}
+
+.card-detail-region {
+    font-size: 11px;
+    color: rgb(180, 210, 160);
+    -unity-font-style: italic;
+    -unity-text-align: upper-center;
+    margin-bottom: 2px;
+}
+
+.card-detail-cost {
+    font-size: 12px;
+    color: rgb(80, 180, 255);
+    -unity-text-align: upper-center;
+    margin-bottom: 4px;
+}
+
+.card-detail-mana-gen {
+    font-size: 12px;
+    color: rgb(100, 210, 120);
+    -unity-text-align: upper-center;
+    margin-bottom: 2px;
+}
+
+.card-detail-stats {
+    font-size: 13px;
+    color: rgb(220, 220, 80);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    margin-bottom: 4px;
+}
+
+.card-detail-separator {
+    height: 1px;
+    background-color: rgb(70, 70, 100);
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+
+.card-detail-desc {
+    font-size: 12px;
+    color: rgb(200, 200, 200);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.card-detail-keywords {
+    font-size: 11px;
+    color: rgb(180, 140, 255);
+    -unity-font-style: italic;
+    white-space: normal;
+}

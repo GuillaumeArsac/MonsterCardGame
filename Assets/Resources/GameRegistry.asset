@@ -25,6 +25,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d77782e72b33724469a4e0e0cb58e6d1, type: 2}
   - {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
   - {fileID: 11400000, guid: c041860988df1ed409e137d881b62dfa, type: 2}
+  - {fileID: 11400000, guid: 7c6c6397f765aaf41b0ee6e2b153e5e3, type: 2}
   - {fileID: 11400000, guid: 626e442a2afb47445a81567a95fa78a5, type: 2}
   - {fileID: 11400000, guid: 6835db0af8aaf6b46b5711a567bd82f4, type: 2}
   - {fileID: 11400000, guid: f5f83c428dcfa9b4598e075291f21482, type: 2}
@@ -37,6 +38,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 979ef2487e001a847ae15edfa4bcca22, type: 2}
   - {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
   - {fileID: 11400000, guid: 35b393db15f7d37498db1ca6f46f32a2, type: 2}
+  - {fileID: 11400000, guid: 971bbceb5dda08e4681d520675d0710b, type: 2}
   - {fileID: 11400000, guid: 5c8a53a4ebc2e35488fbb90db3b22f75, type: 2}
   - {fileID: 11400000, guid: 83a9ce029fb4f104cac812a4c1a22be0, type: 2}
   _allMonsters:

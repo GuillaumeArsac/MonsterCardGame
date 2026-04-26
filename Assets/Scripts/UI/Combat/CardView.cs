@@ -13,9 +13,11 @@ namespace MonsterCardGame.UI.Combat
     {
         public CardData Data { get; private set; }
 
-        private readonly Label _nameLabel;
+        private readonly Label         _costLabel;
+        private readonly Label         _manaGenLabel;
+        private readonly Label         _nameLabel;
         private readonly VisualElement _artworkImage;
-        private readonly Label _chargeLabel;
+        private readonly Label         _chargeLabel;
 
         private string _currentTypeClass;
 
@@ -23,12 +25,24 @@ namespace MonsterCardGame.UI.Combat
         {
             AddToClassList("card-view");
 
-            _nameLabel = new Label { name = "card-name" };
+            var topBar = new VisualElement();
+            topBar.AddToClassList("card-top-bar");
+
+            _costLabel    = new Label { name = "card-cost" };
+            _manaGenLabel = new Label { name = "card-mana-gen" };
+            _costLabel.AddToClassList("card-mana-cost");
+            _manaGenLabel.AddToClassList("card-mana-gen");
+
+            topBar.Add(_costLabel);
+            topBar.Add(_manaGenLabel);
+
+            _nameLabel    = new Label { name = "card-name" };
             _artworkImage = new VisualElement { name = "card-artwork" };
-            _chargeLabel = new Label { name = "card-charges" };
+            _chargeLabel  = new Label { name = "card-charges" };
             _chargeLabel.AddToClassList("card-charges");
             _chargeLabel.AddToClassList("hidden");
 
+            Add(topBar);
             Add(_nameLabel);
             Add(_artworkImage);
             Add(_chargeLabel);
@@ -39,6 +53,17 @@ namespace MonsterCardGame.UI.Combat
         public void Refresh(CardData data)
         {
             Data = data;
+
+            _costLabel.text = $"{data.ManaCost}";
+            if (data.ManaGenerated > 0)
+            {
+                _manaGenLabel.text = $"+{data.ManaGenerated}";
+                _manaGenLabel.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                _manaGenLabel.style.display = DisplayStyle.None;
+            }
 
             _nameLabel.text = data.CardName;
 

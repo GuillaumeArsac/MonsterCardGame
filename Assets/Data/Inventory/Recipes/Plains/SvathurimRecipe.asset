@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 454430634f10a974c80f37a33e27d35d, type: 3}
-  m_Name: CentaurArcherRecipe
+  m_Name: SvathurimRecipe
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Inventory.CraftRecipe
-  _recipeName: Centaur archer
+  _recipeName: 
   _ingredients:
   - Material: {fileID: 11400000, guid: 5c8a53a4ebc2e35488fbb90db3b22f75, type: 2}
+    Quantity: 2
+  - Material: {fileID: 11400000, guid: 83a9ce029fb4f104cac812a4c1a22be0, type: 2}
     Quantity: 1
   - Material: {fileID: 11400000, guid: 971bbceb5dda08e4681d520675d0710b, type: 2}
-    Quantity: 1
-  _result: {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
+    Quantity: 2
+  _result: {fileID: 11400000, guid: 7c6c6397f765aaf41b0ee6e2b153e5e3, type: 2}
   _isDiscoveredByDefault: 0

@@ -176,6 +176,47 @@ namespace MonsterCardGame.Gameplay.Combat.States
             return true;
         }
 
+        /// <summary>
+        /// Rejoue un allié depuis le cimetière grâce au mot-clé Rampant.
+        /// Coûte son ManaCost normal. Retourne true si réussi.
+        /// </summary>
+        public bool TryPlayFromCemetery(CombatContext ctx, CardData card)
+        {
+            if (!ctx.PlayerCemetery.Contains(card))
+            {
+                Core.GameLog.Warning("PlayState", $"{card.CardName} introuvable au cimetière");
+                return false;
+            }
+            if (!card.HasKeyword(Keyword.Rampant))
+            {
+                Core.GameLog.Warning("PlayState", $"{card.CardName} n'a pas le mot-clé Rampant");
+                return false;
+            }
+            if (card.CardType != CardType.Allie)
+            {
+                Core.GameLog.Warning("PlayState", "Rampant : seuls les alliés peuvent revenir du cimetière");
+                return false;
+            }
+            if (ctx.PlayerMana < card.ManaCost)
+            {
+                Core.GameLog.Warning("PlayState", $"Mana insuffisant pour {card.CardName} (coût {card.ManaCost}, dispo {ctx.PlayerMana})");
+                return false;
+            }
+
+            ctx.PlayerMana -= card.ManaCost;
+            ctx.PlayerCemetery.Remove(card);
+
+            var ally = new AlliedInstance(card);
+            ctx.PlayerAllies.Add(ally);
+            Core.GameLog.Info("PlayState", $"[Rampant] {card.CardName} revient du cimetière");
+
+            foreach (var effect in card.OnPlayEffects)
+                effect.Apply(new CardEffectContext(ctx, ally, isPlayer: true));
+
+            CheckCombatEnd(ctx);
+            return true;
+        }
+
         /// <summary>Le joueur termine sa phase de jeu → ReactiveWindowState.</summary>
         public void EndPlay(CombatContext ctx)
         {

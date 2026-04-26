@@ -55,11 +55,23 @@
 
         <!-- Boutons d'action -->
         <ui:VisualElement name="action-buttons" class="action-bar">
-            <ui:Button name="sacrifice-btn" text="Sacrifier"    class="action-btn" />
-            <ui:Button name="end-play-btn"  text="Fin de phase" class="action-btn" />
-            <ui:Button name="attack-btn"    text="Attaquer"     class="action-btn action-btn--attack" />
-            <ui:Button name="block-btn"     text="Bloquer"      class="action-btn action-btn--block" />
-            <ui:Button name="pass-btn"      text="Passer"       class="action-btn" />
+            <ui:Button name="cemetery-btn"  text="Cimetière (0)" class="action-btn action-btn--cemetery" />
+            <ui:Button name="sacrifice-btn" text="Sacrifier"     class="action-btn" />
+            <ui:Button name="end-play-btn"  text="Fin de phase"  class="action-btn" />
+            <ui:Button name="attack-btn"    text="Attaquer"      class="action-btn action-btn--attack" />
+            <ui:Button name="block-btn"     text="Bloquer"       class="action-btn action-btn--block" />
+            <ui:Button name="pass-btn"      text="Passer"        class="action-btn" />
+        </ui:VisualElement>
+
+        <!-- Panneau cimetière (overlay) -->
+        <ui:VisualElement name="cemetery-panel" class="cemetery-panel hidden">
+            <ui:VisualElement class="cemetery-header">
+                <ui:Label text="Cimetière" class="cemetery-title" />
+                <ui:Button name="cemetery-close-btn" text="✕" class="cemetery-close-btn" />
+            </ui:VisualElement>
+            <ui:ScrollView name="cemetery-scroll" class="cemetery-scroll">
+                <ui:VisualElement name="cemetery-list" class="cemetery-list" />
+            </ui:ScrollView>
         </ui:VisualElement>
 
         <!-- Overlay résultat combat -->
