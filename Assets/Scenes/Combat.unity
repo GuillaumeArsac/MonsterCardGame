@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Combat.CombatManager
   _playerDeck: {fileID: 11400000, guid: db8f9dfb0797e8b4187873f2da68a204, type: 2}
-  _monsterData: {fileID: 11400000, guid: 85dc6c8f403a37644a1a63783c6f0e9f, type: 2}
+  _monsterData: {fileID: 11400000, guid: 21fb22dd553a21d459d6af40e0d165cd, type: 2}
 --- !u!4 &2099882587
 Transform:
   m_ObjectHideFlags: 0

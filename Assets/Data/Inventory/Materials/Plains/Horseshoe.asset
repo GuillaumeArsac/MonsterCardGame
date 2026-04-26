@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a822a44c0ed35d54592100a39060f23c, type: 3}
+  m_Name: Horseshoe
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Inventory.MaterialData
+  _materialName: Horseshoe
+  _rarity: 0
+  _region: 3
+  _icon: {fileID: -4646982216538462501, guid: 0af78d3adb47d0847a3b17b60da8fd42, type: 3}

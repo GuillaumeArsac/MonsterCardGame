@@ -32,7 +32,8 @@ namespace MonsterCardGame.UI.DeckBuilder
             _weightLabel     = root.Q<Label>("weight-label");
             _playBtn         = root.Q<Button>("play-btn");
 
-            root.Q<Button>("forge-btn").clicked += () => SceneManager.LoadScene("Forge");
+            root.Q<Button>("worldmap-btn").clicked += () => SceneManager.LoadScene("WorldMap");
+            root.Q<Button>("forge-btn").clicked    += () => SceneManager.LoadScene("Forge");
             _playBtn.clicked += () => SceneManager.LoadScene("Combat");
         }
 

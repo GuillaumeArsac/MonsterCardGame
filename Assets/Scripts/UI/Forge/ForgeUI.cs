@@ -35,7 +35,7 @@ namespace MonsterCardGame.UI.Forge
             _ingredientsList = root.Q<VisualElement>("ingredients-list");
             _craftBtn        = root.Q<Button>("craft-btn");
 
-            root.Q<Button>("back-btn").clicked        += () => SceneManager.LoadScene("Combat");
+            root.Q<Button>("worldmap-btn").clicked    += () => SceneManager.LoadScene("WorldMap");
             root.Q<Button>("deckbuilder-btn").clicked += () => SceneManager.LoadScene("DeckBuilder");
             _craftBtn.clicked += OnCraftClicked;
         }

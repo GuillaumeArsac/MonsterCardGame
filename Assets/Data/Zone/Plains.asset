@@ -15,6 +15,7 @@ MonoBehaviour:
   _zoneName: Plains
   _description: 
   _artwork: {fileID: -9102900633203978818, guid: 6a67a921775262f4c8bc5ea364456f7c, type: 3}
-  _monsters: []
+  _monsters:
+  - {fileID: 11400000, guid: 21fb22dd553a21d459d6af40e0d165cd, type: 2}
   _boss: {fileID: 0}
   _requiresAllOtherBossesDefeated: 0

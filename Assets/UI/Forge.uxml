@@ -35,8 +35,8 @@
 
         <!-- Pied de page : navigation -->
         <ui:VisualElement name="forge-footer" class="forge-footer">
-            <ui:Button name="back-btn"        text="Retour au combat" class="nav-btn" />
-            <ui:Button name="deckbuilder-btn" text="Deck Builder"     class="nav-btn nav-btn--primary" />
+            <ui:Button name="worldmap-btn"    text="Carte du Monde" class="nav-btn" />
+            <ui:Button name="deckbuilder-btn" text="Deck Builder"   class="nav-btn nav-btn--primary" />
         </ui:VisualElement>
 
     </ui:VisualElement>
