@@ -27,13 +27,24 @@ namespace MonsterCardGame.Gameplay.Combat.Keywords
         {
             if (allies == null || allies.Count == 0) return null;
 
-            // Provocation : cible prioritaire (jamais un équipement)
             foreach (var ally in allies)
                 if (ally.Data.HasKeyword(Keyword.Provocation) && ally.Data.CardType != CardType.Equipement)
                     return ally;
 
-            // Sinon premier allié non-équipement
             return allies.FirstOrDefault(a => a.Data.CardType != CardType.Equipement);
+        }
+
+        public AlliedInstance GetPriorityTarget(AlliedInstance attacker, IReadOnlyList<AlliedInstance> allies)
+        {
+            if (allies == null || allies.Count == 0) return null;
+
+            // Provocation parmi les cibles accessibles
+            foreach (var ally in allies)
+                if (CanTarget(attacker, ally) && ally.Data.HasKeyword(Keyword.Provocation))
+                    return ally;
+
+            // Sinon première cible accessible
+            return allies.FirstOrDefault(a => CanTarget(attacker, a));
         }
 
         public bool CanBeBlocked(AlliedInstance source)

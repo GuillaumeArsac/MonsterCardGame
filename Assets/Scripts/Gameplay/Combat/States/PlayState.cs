@@ -151,8 +151,8 @@ namespace MonsterCardGame.Gameplay.Combat.States
         {
             if (!ValidateAttacker(ctx, attacker)) return false;
 
-            // Provocation : doit attaquer l'allié prioritaire en premier
-            var blocker = _resolver.GetPriorityTarget(ctx.MonsterAllies);
+            // Provocation : doit attaquer l'allié prioritaire accessible en premier
+            var blocker = _resolver.GetPriorityTarget(attacker, ctx.MonsterAllies);
             if (blocker != null && blocker.Data.HasKeyword(Keyword.Provocation))
             {
                 Core.GameLog.Warning("PlayState",

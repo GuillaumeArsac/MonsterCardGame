@@ -10,21 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebbb2c3b57ec3d4899cd2de732e1b1f, type: 3}
-  m_Name: Svathurim
+  m_Name: Griffin
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Cards.CardData
-  _cardName: Svathurim
+  _cardName: Griffin
   _region: 3
-  _artwork: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
-  _description: On death deal 4 damage to the enemy
-  _manaCost: 4
-  _manaGenerated: 2
+  _artwork: {fileID: -5838028541306521313, guid: 106f0dfe7d33bb442aa9170bca549836, type: 3}
+  _description: 
+  _manaCost: 1
+  _manaGenerated: 1
   _cardType: 2
-  _rarity: 2
-  _keywords: 0700000001000000
+  _rarity: 0
+  _keywords: 00000000
   _ritualValue: 0
-  _attack: 6
-  _defense: 2
+  _attack: 0
+  _defense: 0
   _onPlayEffects: []
   _onAttackEffects: []
-  _onDestroyEffects:
-  - {fileID: 11400000, guid: b431ba89fccfd2048926ce5c76e86f54, type: 2}
+  _onDestroyEffects: []

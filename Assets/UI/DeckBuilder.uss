@@ -60,6 +60,41 @@
     margin-right: 0;
 }
 
+.collection-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-color: rgb(50, 60, 50);
+}
+
+.collection-header .panel-title {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom-width: 0;
+    flex-grow: 1;
+}
+
+.sort-dropdown {
+    width: 140px;
+    background-color: rgb(30, 40, 30);
+    border-color: rgb(60, 80, 60);
+    border-width: 1px;
+    border-radius: 4px;
+    color: rgb(180, 200, 170);
+    font-size: 11px;
+}
+
+.sort-dropdown .unity-base-field__input {
+    background-color: rgb(30, 40, 30);
+    border-color: rgb(60, 80, 60);
+    color: rgb(180, 200, 170);
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
 .panel-title {
     font-size: 13px;
     color: rgb(150, 150, 150);

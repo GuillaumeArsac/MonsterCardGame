@@ -49,7 +49,7 @@ namespace MonsterCardGame.Gameplay.Combat.MonsterAI
         {
             attacker.SetSleeping(true);
 
-            var target = _resolver.GetPriorityTarget(ctx.PlayerAllies);
+            var target = _resolver.GetPriorityTarget(attacker, ctx.PlayerAllies);
             ctx.PendingMonsterAction = attacker.Data;
             ctx.PendingMonsterTarget = target;
 

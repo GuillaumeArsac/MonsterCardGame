@@ -20,6 +20,16 @@ namespace MonsterCardGame.UI.DeckBuilder
         private Label           _cardsCountLabel;
         private Label           _weightLabel;
         private CardDetailPopup _cardDetailPopup;
+        private DropdownField   _sortDropdown;
+
+        private static readonly string[] SortChoices =
+        {
+            "Alphabétique",
+            "Coût mana ↑",
+            "Mana généré ↓",
+            "Attaque ↓",
+            "Défense ↓"
+        };
 
         private void OnEnable()
         {
@@ -31,6 +41,11 @@ namespace MonsterCardGame.UI.DeckBuilder
             _deckList        = root.Q<VisualElement>("deck-list");
             _cardsCountLabel = root.Q<Label>("cards-count-label");
             _weightLabel     = root.Q<Label>("weight-label");
+
+            _sortDropdown = root.Q<DropdownField>("sort-dropdown");
+            _sortDropdown.choices = new List<string>(SortChoices);
+            _sortDropdown.value   = SortChoices[0];
+            _sortDropdown.RegisterValueChangedCallback(_ => BuildCollectionList());
 
             root.Q<Button>("worldmap-btn").clicked += () => SceneManager.LoadScene("WorldMap");
             root.Q<Button>("forge-btn").clicked    += () => SceneManager.LoadScene("Forge");
@@ -67,12 +82,23 @@ namespace MonsterCardGame.UI.DeckBuilder
                 return;
             }
 
-            // Tri : type puis nom
             var sorted = new List<KeyValuePair<CardData, int>>(_inventory.OwnedCards);
-            sorted.Sort((a, b) =>
+            int sortIndex = _sortDropdown != null ? _sortDropdown.index : 0;
+            sorted.Sort((a, b) => sortIndex switch
             {
-                int typeComp = a.Key.CardType.CompareTo(b.Key.CardType);
-                return typeComp != 0 ? typeComp : string.Compare(a.Key.CardName, b.Key.CardName);
+                1 => a.Key.ManaCost != b.Key.ManaCost
+                        ? a.Key.ManaCost.CompareTo(b.Key.ManaCost)
+                        : string.Compare(a.Key.CardName, b.Key.CardName),
+                2 => a.Key.ManaGenerated != b.Key.ManaGenerated
+                        ? b.Key.ManaGenerated.CompareTo(a.Key.ManaGenerated)
+                        : string.Compare(a.Key.CardName, b.Key.CardName),
+                3 => a.Key.Attack != b.Key.Attack
+                        ? b.Key.Attack.CompareTo(a.Key.Attack)
+                        : string.Compare(a.Key.CardName, b.Key.CardName),
+                4 => a.Key.Defense != b.Key.Defense
+                        ? b.Key.Defense.CompareTo(a.Key.Defense)
+                        : string.Compare(a.Key.CardName, b.Key.CardName),
+                _ => string.Compare(a.Key.CardName, b.Key.CardName)
             });
 
             foreach (var (card, owned) in sorted)

@@ -10,18 +10,20 @@ namespace MonsterCardGame.UI.WorldMap
     [RequireComponent(typeof(UIDocument))]
     public class WorldMapUI : MonoBehaviour
     {
+
         private IWorldProgressionService _progression;
         private ICombatSetupService      _setup;
 
-        private VisualElement _zoneList;
-        private VisualElement _monsterList;
+        private VisualElement _mapArea;
+        private VisualElement _zoneArtwork;
         private Label         _zoneNameLabel;
         private Label         _zoneDescLabel;
+        private VisualElement _monsterList;
         private Button        _fightBtn;
 
-        private ZoneData    _selectedZone    = null;
-        private MonsterData _selectedMonster = null;
-        private VisualElement _selectedZoneRow    = null;
+        private ZoneData      _selectedZone       = null;
+        private MonsterData   _selectedMonster    = null;
+        private VisualElement _selectedMarker     = null;
         private VisualElement _selectedMonsterRow = null;
 
         private void OnEnable()
@@ -31,10 +33,11 @@ namespace MonsterCardGame.UI.WorldMap
 
             var root = GetComponent<UIDocument>().rootVisualElement;
 
-            _zoneList      = root.Q<VisualElement>("zone-list");
-            _monsterList   = root.Q<VisualElement>("monster-list");
+            _mapArea       = root.Q<VisualElement>("map-area");
+            _zoneArtwork   = root.Q<VisualElement>("zone-artwork");
             _zoneNameLabel = root.Q<Label>("zone-name-label");
             _zoneDescLabel = root.Q<Label>("zone-desc-label");
+            _monsterList   = root.Q<VisualElement>("monster-list");
             _fightBtn      = root.Q<Button>("fight-btn");
 
             root.Q<Button>("deckbuilder-btn").clicked += () => SceneManager.LoadScene("DeckBuilder");
@@ -44,118 +47,144 @@ namespace MonsterCardGame.UI.WorldMap
 
         private void Start()
         {
-            BuildZoneList();
+            BuildZoneMarkers();
             _fightBtn.SetEnabled(false);
         }
 
-        // ── Construction de la liste des zones ────────────────────────────
+        // ── Marqueurs de zones ────────────────────────────────────────────
 
-        private void BuildZoneList()
+        private void BuildZoneMarkers()
         {
-            _zoneList.Clear();
+            _mapArea.Clear();
 
             if (_progression == null || _progression.AllZones.Count == 0)
-            {
-                var empty = new Label("Aucune zone configurée.");
-                empty.AddToClassList("zone-desc");
-                _zoneList.Add(empty);
                 return;
-            }
 
             foreach (var zone in _progression.AllZones)
             {
-                var z       = zone;
+                var z      = zone;
                 bool locked = !_progression.IsZoneUnlocked(zone);
 
-                var row = new VisualElement();
-                row.AddToClassList("zone-row");
-                if (locked) row.AddToClassList("zone-row--locked");
+                var marker = new VisualElement();
+                marker.AddToClassList("zone-marker");
+                if (locked) marker.AddToClassList("zone-marker--locked");
 
-                var nameLabel = new Label(zone.ZoneName);
-                nameLabel.AddToClassList("zone-row-name");
-                row.Add(nameLabel);
+                // Positionne le marqueur sur la carte (0–1 → %)
+                // Le translate CSS (-50% -50%) n'étant pas disponible en USS,
+                // on décale manuellement de la moitié de la largeur du marqueur (90px/2 = 45px).
+                marker.style.left      = Length.Percent(zone.MapPosition.x * 100f);
+                marker.style.top       = Length.Percent(zone.MapPosition.y * 100f);
+                marker.style.marginLeft = -45;
+                marker.style.marginTop  = -12;
 
-                if (locked)
-                {
-                    var lockLabel = new Label("Vaincre tous les boss");
-                    lockLabel.AddToClassList("zone-lock-label");
-                    row.Add(lockLabel);
-                }
+                var dot = new VisualElement();
+                dot.AddToClassList("zone-marker-dot");
+                marker.Add(dot);
+
+                var label = new Label(zone.ZoneName);
+                label.AddToClassList("zone-marker-label");
+                marker.Add(label);
 
                 if (!locked)
                 {
-                    row.RegisterCallback<PointerDownEvent>(evt =>
+                    marker.RegisterCallback<PointerDownEvent>(evt =>
                     {
-                        if (evt.button == 0) SelectZone(z, row);
+                        if (evt.button == 0) SelectZone(z, marker);
                     });
                 }
 
-                _zoneList.Add(row);
+                _mapArea.Add(marker);
             }
         }
 
         // ── Sélection d'une zone ──────────────────────────────────────────
 
-        private void SelectZone(ZoneData zone, VisualElement row)
+        private void SelectZone(ZoneData zone, VisualElement marker)
         {
-            _selectedZoneRow?.RemoveFromClassList("zone-row--selected");
-            _selectedZone    = zone;
-            _selectedZoneRow = row;
-            row.AddToClassList("zone-row--selected");
+            _selectedMarker?.RemoveFromClassList("zone-marker--selected");
+            _selectedZone   = zone;
+            _selectedMarker = marker;
+            marker.AddToClassList("zone-marker--selected");
 
             _zoneNameLabel.text = zone.ZoneName;
             _zoneDescLabel.text = zone.Description;
+
+            _zoneArtwork.style.backgroundImage = zone.Artwork != null
+                ? new StyleBackground(zone.Artwork)
+                : StyleKeyword.None;
 
             ClearMonsterSelection();
             BuildMonsterList(zone);
         }
 
-        // ── Construction de la liste des monstres ─────────────────────────
+        // ── Liste des monstres ────────────────────────────────────────────
 
         private void BuildMonsterList(ZoneData zone)
         {
             _monsterList.Clear();
 
             foreach (var monster in zone.Monsters)
-                AddMonsterRow(monster, isBoss: false);
+                _monsterList.Add(CreateMonsterRow(monster, isBoss: false));
 
             if (zone.Boss != null)
-                AddMonsterRow(zone.Boss, isBoss: true);
+                _monsterList.Add(CreateMonsterRow(zone.Boss, isBoss: true));
         }
 
-        private void AddMonsterRow(MonsterData monster, bool isBoss)
+        private VisualElement CreateMonsterRow(MonsterData monster, bool isBoss)
         {
-            var m   = monster;
+            var m        = monster;
             bool defeated = _progression?.IsMonsterDefeated(monster) ?? false;
 
             var row = new VisualElement();
             row.AddToClassList("monster-row");
             if (isBoss) row.AddToClassList("monster-row--boss");
 
+            // Portrait à gauche
+            var portrait = new VisualElement();
+            portrait.AddToClassList("monster-portrait");
+            if (monster.Portrait != null)
+                portrait.style.backgroundImage = new StyleBackground(monster.Portrait);
+            row.Add(portrait);
+
+            // Infos à droite
+            var info = new VisualElement();
+            info.AddToClassList("monster-info");
+
+            var header = new VisualElement();
+            header.AddToClassList("monster-row-header");
+
             var nameLabel = new Label(monster.MonsterName);
             nameLabel.AddToClassList("monster-row-name");
-            row.Add(nameLabel);
+            header.Add(nameLabel);
 
             if (isBoss)
             {
-                var bossLabel = new Label("BOSS");
-                bossLabel.AddToClassList("monster-boss-label");
-                row.Add(bossLabel);
+                var bossBadge = new Label("BOSS");
+                bossBadge.AddToClassList("monster-boss-badge");
+                header.Add(bossBadge);
             }
 
             if (defeated)
             {
-                var defeatedLabel = new Label("✓ Vaincu");
-                defeatedLabel.AddToClassList("monster-defeated-label");
-                row.Add(defeatedLabel);
+                var defeatedBadge = new Label("✓ Vaincu");
+                defeatedBadge.AddToClassList("monster-defeated-badge");
+                header.Add(defeatedBadge);
             }
+
+            info.Add(header);
+
+            var hpLabel = new Label($"PV : {monster.StartingHP}");
+            hpLabel.AddToClassList("monster-hp-label");
+            info.Add(hpLabel);
+
+            row.Add(info);
 
             row.RegisterCallback<PointerDownEvent>(evt =>
             {
                 if (evt.button == 0) SelectMonster(m, row);
             });
 
-            _monsterList.Add(row);
+            return row;
         }
 
         // ── Sélection d'un monstre ────────────────────────────────────────
@@ -166,7 +195,6 @@ namespace MonsterCardGame.UI.WorldMap
             _selectedMonster    = monster;
             _selectedMonsterRow = row;
             row.AddToClassList("monster-row--selected");
-
             _fightBtn.SetEnabled(true);
         }
 

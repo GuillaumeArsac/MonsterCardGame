@@ -9,8 +9,11 @@ namespace MonsterCardGame.Gameplay.Combat.Keywords
         /// <summary>L'attaquant peut-il cibler la cible ? Respecte Vol et Portée.</summary>
         bool CanTarget(AlliedInstance attacker, AlliedInstance target);
 
-        /// <summary>Retourne la cible prioritaire parmi les alliés adverses (Provocation en premier).</summary>
+        /// <summary>Retourne la cible prioritaire parmi les alliés adverses (Provocation en premier), sans filtre Vol.</summary>
         AlliedInstance GetPriorityTarget(IReadOnlyList<AlliedInstance> allies);
+
+        /// <summary>Retourne la cible prioritaire accessible par l'attaquant (respecte Vol).</summary>
+        AlliedInstance GetPriorityTarget(AlliedInstance attacker, IReadOnlyList<AlliedInstance> allies);
 
         /// <summary>La source peut-elle être bloquée ? Les Instantané ne peuvent pas.</summary>
         bool CanBeBlocked(AlliedInstance source);

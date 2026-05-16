@@ -19,4 +19,4 @@ MonoBehaviour:
   - Material: {fileID: 11400000, guid: 971bbceb5dda08e4681d520675d0710b, type: 2}
     Quantity: 1
   _result: {fileID: 11400000, guid: 4cd390c73fdd49940af7a0070ec5b781, type: 2}
-  _isDiscoveredByDefault: 0
+  _isDiscoveredByDefault: 1

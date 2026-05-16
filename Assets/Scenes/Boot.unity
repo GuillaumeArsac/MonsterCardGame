@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc9190b9584e0241b0c5cf2d00100a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterCardGame.Core::MonsterCardGame.Core.Services.BootLoader
-  _nextScene: MainMenu
+  _nextScene: DeckBuilder
 --- !u!4 &1550758293
 Transform:
   m_ObjectHideFlags: 0

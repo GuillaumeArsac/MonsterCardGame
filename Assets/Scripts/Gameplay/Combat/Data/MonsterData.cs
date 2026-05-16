@@ -12,6 +12,9 @@ namespace MonsterCardGame.Gameplay.Combat.Data
         [SerializeField, Tooltip("Nom du monstre affiché en combat")]
         private string _monsterName = "Monstre";
 
+        [SerializeField, Tooltip("Portrait affiché sur la carte du monde")]
+        private Sprite _portrait;
+
         [Header("Combat")]
         [SerializeField, Tooltip("Points de vie de départ du monstre")]
         private int _startingHP = 30;
@@ -28,6 +31,7 @@ namespace MonsterCardGame.Gameplay.Combat.Data
         private ScriptableObject _bossPassive = null;
 
         public string                   MonsterName => _monsterName;
+        public Sprite                   Portrait    => _portrait;
         public int                      StartingHP  => _startingHP;
         public IReadOnlyList<CardData>  Deck        => _deck;
         public IReadOnlyList<LootEntry> LootTable   => _lootTable;

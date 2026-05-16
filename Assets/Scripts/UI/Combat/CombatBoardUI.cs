@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using MonsterCardGame.Core;
+using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
 using MonsterCardGame.Gameplay.Combat;
+using MonsterCardGame.Gameplay.Combat.Keywords;
 using MonsterCardGame.Gameplay.Combat.States;
 using MonsterCardGame.Gameplay.Inventory;
 
@@ -60,7 +62,8 @@ namespace MonsterCardGame.UI.Combat
         private VisualElement   _cemeteryList;
         private int             _lastCemeteryCount = -1;
 
-        private CardDetailPopup _cardDetailPopup;
+        private CardDetailPopup  _cardDetailPopup;
+        private IKeywordResolver _resolver;
 
         private void OnEnable()
         {
@@ -257,8 +260,14 @@ namespace MonsterCardGame.UI.Combat
                     }
                 });
 
-                if (_selectedAttacker != null || _isTargeting)
+                if (_isTargeting)
                     view.AddToClassList("targeting-highlight");
+                else if (_selectedAttacker != null)
+                {
+                    _resolver ??= Services.Get<IKeywordResolver>();
+                    if (_resolver.CanTarget(_selectedAttacker, instance))
+                        view.AddToClassList("targeting-highlight");
+                }
 
                 _monsterAlliesZone.Add(view);
                 _monsterAllyViews.Add(view);
@@ -312,15 +321,20 @@ namespace MonsterCardGame.UI.Combat
 
         private void ApplyAttackHighlights()
         {
+            _resolver ??= Services.Get<IKeywordResolver>();
             var ctx = _combatManager.Context;
 
             _targetingBanner.RemoveFromClassList("hidden");
             _targetingLabel.text = $"{_selectedAttacker.Data.CardName} ({_selectedAttacker.ATK} ATK) — choisissez une cible";
 
-            bool canGoDirectly = !HasProvocationBlocker(ctx);
+            bool canGoDirectly = !HasProvocationBlocker(ctx, _selectedAttacker);
             if (canGoDirectly) _monsterZone.AddToClassList("targeting-highlight");
 
-            foreach (var v in _monsterAllyViews) v.AddToClassList("targeting-highlight");
+            for (int i = 0; i < ctx.MonsterAllies.Count && i < _monsterAllyViews.Count; i++)
+            {
+                if (_resolver.CanTarget(_selectedAttacker, ctx.MonsterAllies[i]))
+                    _monsterAllyViews[i].AddToClassList("targeting-highlight");
+            }
         }
 
         private void RemoveAttackHighlights()
@@ -331,11 +345,13 @@ namespace MonsterCardGame.UI.Combat
 
         private void HideTargetingBanner() => _targetingBanner.AddToClassList("hidden");
 
-        private static bool HasProvocationBlocker(CombatContext ctx)
+        private bool HasProvocationBlocker(CombatContext ctx, AlliedInstance attacker)
         {
+            _resolver ??= Services.Get<IKeywordResolver>();
             if (ctx == null) return false;
             foreach (var ally in ctx.MonsterAllies)
-                if (ally.Data.HasKeyword(Keyword.Provocation)) return true;
+                if (ally.Data.HasKeyword(Keyword.Provocation) && _resolver.CanTarget(attacker, ally))
+                    return true;
             return false;
         }
 

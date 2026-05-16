@@ -16,7 +16,10 @@
 
             <!-- Panneau gauche : collection -->
             <ui:VisualElement name="collection-panel" class="db-panel">
-                <ui:Label text="Collection" class="panel-title" />
+                <ui:VisualElement class="collection-header">
+                    <ui:Label text="Collection" class="panel-title" />
+                    <ui:DropdownField name="sort-dropdown" class="sort-dropdown" />
+                </ui:VisualElement>
                 <ui:ScrollView name="collection-scroll" class="db-scroll">
                     <ui:VisualElement name="collection-list" class="card-list" />
                 </ui:ScrollView>

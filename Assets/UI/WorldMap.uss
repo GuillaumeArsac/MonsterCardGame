@@ -1,7 +1,7 @@
 .worldmap-root {
     flex-direction: column;
     flex-grow: 1;
-    background-color: rgb(15, 20, 15);
+    background-color: rgb(10, 15, 10);
     padding: 12px;
 }
 
@@ -34,136 +34,212 @@
     flex-grow: 1;
 }
 
-.wm-panel {
+/* ── Zone de carte ─────────────────────────── */
+
+.map-area {
+    flex-grow: 2;
+    background-color: rgb(14, 28, 18);
+    border-width: 1px;
+    border-color: rgb(40, 70, 40);
+    border-radius: 8px;
+    margin-right: 12px;
+    overflow: hidden;
+}
+
+/* ── Marqueurs de zones ─────────────────────── */
+
+.zone-marker {
+    position: absolute;
     flex-direction: column;
+    align-items: center;
+    width: 90px;
+    cursor: link;
+}
+
+.zone-marker--locked {
+    opacity: 0.35;
+    cursor: arrow;
+}
+
+.zone-marker-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: rgb(70, 170, 70);
+    border-width: 2px;
+    border-color: rgb(150, 220, 150);
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.zone-marker:hover .zone-marker-dot {
+    background-color: rgb(110, 210, 110);
+    border-color: rgb(190, 255, 190);
+}
+
+.zone-marker--selected .zone-marker-dot {
+    background-color: rgb(200, 255, 90);
+    border-color: rgb(230, 255, 170);
+}
+
+.zone-marker--locked .zone-marker-dot {
+    background-color: rgb(70, 70, 70);
+    border-color: rgb(110, 110, 110);
+}
+
+.zone-marker-label {
+    font-size: 10px;
+    color: rgb(190, 220, 170);
+    -unity-text-align: middle-center;
+    margin-top: 3px;
+    white-space: normal;
+}
+
+.zone-marker--selected .zone-marker-label {
+    color: rgb(230, 255, 170);
+    -unity-font-style: bold;
+}
+
+.zone-marker--locked .zone-marker-label {
+    color: rgb(110, 110, 110);
+}
+
+/* ── Panneau de détail ─────────────────────── */
+
+.detail-panel {
+    flex-direction: column;
+    width: 280px;
+    flex-shrink: 0;
     background-color: rgb(20, 28, 20);
     border-width: 1px;
     border-color: rgb(45, 65, 45);
-    border-radius: 6px;
-    padding: 10px;
-    margin-right: 10px;
+    border-radius: 8px;
 }
 
-.wm-panel:last-child {
-    margin-right: 0;
+.zone-artwork {
+    height: 150px;
+    border-radius: 7px 7px 0 0;
+    background-color: rgb(12, 22, 12);
+    -unity-background-scale-mode: scale-and-crop;
+    flex-shrink: 0;
 }
 
-.zone-panel    { flex-grow: 1; }
-.monster-panel { flex-grow: 2; }
-
-.panel-title {
-    font-size: 14px;
-    color: rgb(160, 200, 140);
+.detail-zone-name {
+    font-size: 15px;
+    color: rgb(200, 230, 170);
     -unity-font-style: bold;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
-    border-bottom-width: 1px;
-    border-color: rgb(50, 70, 50);
+    padding: 10px 12px 2px 12px;
 }
 
-.zone-desc {
-    font-size: 12px;
-    color: rgb(140, 160, 130);
+.detail-zone-desc {
+    font-size: 11px;
+    color: rgb(130, 155, 120);
     -unity-font-style: italic;
     white-space: normal;
-    margin-bottom: 8px;
+    padding: 0 12px 8px 12px;
+    border-bottom-width: 1px;
+    border-color: rgb(40, 58, 40);
 }
 
-.wm-scroll { flex-grow: 1; }
+.wm-scroll {
+    flex-grow: 1;
+    padding: 6px 8px;
+}
 
 .wm-list { flex-direction: column; }
 
-/* ── Ligne de zone ──────────────────���────── */
-
-.zone-row {
-    flex-direction: row;
-    align-items: center;
-    padding: 8px 6px;
-    margin-bottom: 4px;
-    background-color: rgb(28, 38, 28);
-    border-radius: 4px;
-    border-width: 1px;
-    border-color: rgb(50, 70, 50);
-}
-
-.zone-row:hover {
-    background-color: rgb(35, 50, 35);
-}
-
-.zone-row--selected {
-    border-color: rgb(100, 180, 100);
-    background-color: rgb(30, 55, 30);
-}
-
-.zone-row--locked {
-    opacity: 0.45;
-}
-
-.zone-row-name {
-    flex-grow: 1;
-    font-size: 14px;
-    color: rgb(200, 220, 190);
-}
-
-.zone-lock-label {
-    font-size: 11px;
-    color: rgb(180, 120, 60);
-    -unity-font-style: italic;
-}
-
-.zone-boss-badge {
-    font-size: 10px;
-    color: rgb(200, 160, 60);
-    -unity-font-style: bold;
-    background-color: rgb(50, 40, 10);
-    border-radius: 3px;
-    padding: 1px 4px;
-    margin-left: 6px;
-}
-
-/* ── Ligne de monstre ────────────────────── */
+/* ── Rangée de monstre ────────────────────── */
 
 .monster-row {
     flex-direction: row;
     align-items: center;
-    padding: 8px 6px;
-    margin-bottom: 4px;
-    background-color: rgb(28, 38, 28);
-    border-radius: 4px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    background-color: rgb(26, 36, 26);
+    border-radius: 5px;
     border-width: 1px;
-    border-color: rgb(50, 70, 50);
+    border-color: rgb(48, 68, 48);
+    transition-property: background-color, border-color;
+    transition-duration: 0.12s;
+    cursor: link;
 }
 
 .monster-row:hover {
-    background-color: rgb(35, 50, 35);
+    background-color: rgb(33, 47, 33);
+    border-color: rgb(75, 105, 75);
 }
 
 .monster-row--selected {
-    border-color: rgb(100, 180, 100);
-    background-color: rgb(30, 55, 30);
+    border-color: rgb(110, 195, 110);
+    background-color: rgb(28, 52, 28);
 }
 
 .monster-row--boss {
-    border-color: rgb(180, 140, 40);
-    background-color: rgb(35, 32, 18);
+    border-color: rgb(160, 130, 35);
+    background-color: rgb(32, 30, 16);
+}
+
+.monster-row--boss:hover {
+    border-color: rgb(210, 165, 55);
+    background-color: rgb(40, 36, 18);
+}
+
+.monster-row--boss.monster-row--selected {
+    border-color: rgb(245, 195, 75);
+}
+
+.monster-portrait {
+    width: 52px;
+    height: 52px;
+    border-radius: 4px;
+    background-color: rgb(15, 22, 15);
+    -unity-background-scale-mode: scale-and-crop;
+    flex-shrink: 0;
+    margin-right: 10px;
+    border-width: 1px;
+    border-color: rgb(55, 75, 55);
+}
+
+.monster-info {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.monster-row-header {
+    flex-direction: row;
+    align-items: center;
 }
 
 .monster-row-name {
     flex-grow: 1;
     font-size: 13px;
-    color: rgb(200, 220, 190);
-}
-
-.monster-boss-label {
-    font-size: 10px;
-    color: rgb(220, 170, 60);
+    color: rgb(200, 218, 188);
     -unity-font-style: bold;
-    margin-right: 6px;
 }
 
-.monster-defeated-label {
+.monster-boss-badge {
+    font-size: 9px;
+    color: rgb(215, 165, 55);
+    -unity-font-style: bold;
+    background-color: rgb(48, 38, 8);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-left: 6px;
+}
+
+.monster-defeated-badge {
+    font-size: 9px;
+    color: rgb(75, 195, 75);
+    background-color: rgb(8, 38, 8);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-left: 4px;
+}
+
+.monster-hp-label {
     font-size: 10px;
-    color: rgb(80, 180, 80);
+    color: rgb(130, 155, 120);
+    margin-top: 3px;
 }
 
 /* ── Boutons ─────────────────────────────── */
@@ -171,8 +247,8 @@
 .nav-btn {
     padding: 8px 20px;
     background-color: rgb(40, 55, 40);
-    color: rgb(180, 200, 170);
-    border-color: rgb(70, 90, 70);
+    color: rgb(175, 198, 165);
+    border-color: rgb(68, 88, 68);
     border-width: 1px;
     border-radius: 4px;
     font-size: 13px;
@@ -180,15 +256,18 @@
 }
 
 .nav-btn--primary {
-    margin-top: 10px;
-    background-color: rgb(40, 90, 50);
-    color: rgb(160, 240, 180);
-    border-color: rgb(80, 170, 100);
+    margin: 10px 12px 12px 12px;
+    background-color: rgb(38, 88, 48);
+    color: rgb(155, 235, 175);
+    border-color: rgb(75, 165, 95);
+    border-width: 1px;
+    border-radius: 5px;
     -unity-font-style: bold;
+    font-size: 14px;
 }
 
 .nav-btn--primary:disabled {
-    background-color: rgb(25, 35, 25);
-    color: rgb(70, 90, 70);
-    border-color: rgb(40, 55, 40);
+    background-color: rgb(22, 32, 22);
+    color: rgb(65, 85, 65);
+    border-color: rgb(38, 52, 38);
 }

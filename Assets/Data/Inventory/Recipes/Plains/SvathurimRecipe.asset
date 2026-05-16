@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454430634f10a974c80f37a33e27d35d, type: 3}
   m_Name: SvathurimRecipe
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Inventory.CraftRecipe
-  _recipeName: 
+  _recipeName: Svathurim
   _ingredients:
   - Material: {fileID: 11400000, guid: 5c8a53a4ebc2e35488fbb90db3b22f75, type: 2}
     Quantity: 2
