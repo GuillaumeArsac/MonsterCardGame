@@ -3,7 +3,11 @@
     "rootNamespace": "MonsterCardGame.UI",
     "references": [
         "MonsterCardGame.Core",
-        "MonsterCardGame.Gameplay"
+        "MonsterCardGame.Gameplay",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem",
+        "DOTween",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

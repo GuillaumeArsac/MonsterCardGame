@@ -17,5 +17,7 @@ MonoBehaviour:
   _artwork: {fileID: -9102900633203978818, guid: 6a67a921775262f4c8bc5ea364456f7c, type: 3}
   _monsters:
   - {fileID: 11400000, guid: 21fb22dd553a21d459d6af40e0d165cd, type: 2}
+  - {fileID: 11400000, guid: c0701d3d76ff7ab43a1096f3de436dad, type: 2}
   _boss: {fileID: 0}
+  _mapPosition: {x: 0.5, y: 0.5}
   _requiresAllOtherBossesDefeated: 0

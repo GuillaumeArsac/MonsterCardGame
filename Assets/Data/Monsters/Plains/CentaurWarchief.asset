@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CentaurWarchief
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Combat.Data.MonsterData
   _monsterName: Centaur Warchief
+  _portrait: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
   _startingHP: 15
   _deck:
   - {fileID: 11400000, guid: c041860988df1ed409e137d881b62dfa, type: 2}

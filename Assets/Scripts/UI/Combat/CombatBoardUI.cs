@@ -9,6 +9,7 @@ using MonsterCardGame.Gameplay.Combat;
 using MonsterCardGame.Gameplay.Combat.Keywords;
 using MonsterCardGame.Gameplay.Combat.States;
 using MonsterCardGame.Gameplay.Inventory;
+using MonsterCardGame.UI.Combat.Board;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -17,6 +18,12 @@ namespace MonsterCardGame.UI.Combat
     {
         [SerializeField, Tooltip("CombatManager de la scène")]
         private CombatManager _combatManager;
+
+        [SerializeField, Tooltip("Optionnel : si assigné, la main du joueur est gérée par des prefabs 2D au lieu d'UI Toolkit")]
+        private PlayerHandController _playerHand;
+
+        // Sélection courante dans la main quand _playerHand est actif (CardData au lieu de CardView)
+        private CardData _selectedHandData;
 
         private Label         _monsterHPLabel;
         private Label         _playerHPLabel;
@@ -125,6 +132,15 @@ namespace MonsterCardGame.UI.Combat
 
             _cardDetailPopup = new CardDetailPopup();
             root.Add(_cardDetailPopup);
+
+            // Délégation main joueur → prefabs 2D si un PlayerHandController est assigné
+            if (_playerHand != null)
+            {
+                _playerHand.SelectionChanged += OnHandSelectionChanged;
+                _playerHand.CardActivated    += OnHandCardActivated;
+                _playerHand.CardRightClicked += OnHandCardRightClicked;
+                _handCards.style.display      = DisplayStyle.None;
+            }
         }
 
         private void OnDisable()
@@ -133,6 +149,48 @@ namespace MonsterCardGame.UI.Combat
             if (_endPlayBtn   != null) _endPlayBtn.clicked   -= OnEndPlayClicked;
             if (_blockBtn     != null) _blockBtn.clicked     -= OnBlockClicked;
             if (_passBtn      != null) _passBtn.clicked      -= OnPassClicked;
+
+            if (_playerHand != null)
+            {
+                _playerHand.SelectionChanged -= OnHandSelectionChanged;
+                _playerHand.CardActivated    -= OnHandCardActivated;
+                _playerHand.CardRightClicked -= OnHandCardRightClicked;
+            }
+        }
+
+        // ── Délégation main 2D ────────────────────────────────────────────
+
+        private void OnHandSelectionChanged(CardData data)
+        {
+            _selectedHandData = data;
+            if (data != null) ClearAttackerSelection();
+        }
+
+        private void OnHandCardActivated(CardData data)
+        {
+            if (_combatManager.CurrentState is not PlayState) return;
+
+            if (data.CardType == CardType.Action)
+            {
+                EnterTargetingMode(data);
+                _playerHand.ClearSelection();
+            }
+            else
+            {
+                _combatManager.PlayState.TryPlayCard(_combatManager.Context, data);
+                _playerHand.ClearSelection();
+            }
+        }
+
+        private void OnHandCardRightClicked(CardData data) => _cardDetailPopup.Show(data);
+
+        private CardData GetSelectedCardData()
+            => _playerHand != null ? _selectedHandData : _selectedCard?.Data;
+
+        private void ClearHandSelection()
+        {
+            if (_playerHand != null) _playerHand.ClearSelection();
+            else ClearSelection();
         }
 
         private void Update()
@@ -169,6 +227,7 @@ namespace MonsterCardGame.UI.Combat
 
         private void RefreshHand(CombatContext ctx)
         {
+            if (_playerHand != null) return; // main gérée par PlayerHandController
             if (ctx.PlayerHand.Count == _lastHandCount) return;
 
             _handCards.Clear();
@@ -302,7 +361,7 @@ namespace MonsterCardGame.UI.Combat
 
         private void SelectAttacker(AlliedInstance ally, CardView view)
         {
-            ClearSelection();
+            ClearHandSelection();
             ClearAttackerSelection();
             _selectedAttacker     = ally;
             _selectedAttackerView = view;
@@ -436,7 +495,7 @@ namespace MonsterCardGame.UI.Combat
             bool inPlay       = state is PlayState;
             bool inReactive   = state is ReactiveWindowState;
             bool hasPending   = ctx.PendingMonsterAction != null;
-            bool hasBlockCard = _selectedCard?.Data.CardType == CardType.Blocage;
+            bool hasBlockCard = GetSelectedCardData()?.CardType == CardType.Blocage;
             _sacrificeBtn.SetEnabled(inSacrifice);
             _endPlayBtn.SetEnabled(inSacrifice || inPlay);
             _blockBtn.SetEnabled(inReactive && hasPending && hasBlockCard);
@@ -599,18 +658,19 @@ namespace MonsterCardGame.UI.Combat
 
         private void OnSacrificeClicked()
         {
-            if (_selectedCard == null)
+            var data = GetSelectedCardData();
+            if (data == null)
             {
                 GameLog.Warning("CombatBoardUI", "Aucune carte sélectionnée pour le sacrifice");
                 return;
             }
-            _combatManager.SacrificeState?.TrySacrifice(_combatManager.Context, _selectedCard.Data);
-            ClearSelection();
+            _combatManager.SacrificeState?.TrySacrifice(_combatManager.Context, data);
+            ClearHandSelection();
         }
 
         private void OnEndPlayClicked()
         {
-            ClearSelection();
+            ClearHandSelection();
             var state = _combatManager.CurrentState;
             if (state is SacrificeState ss)
                 ss.Skip(_combatManager.Context);
@@ -620,13 +680,14 @@ namespace MonsterCardGame.UI.Combat
 
         private void OnBlockClicked()
         {
-            if (_selectedCard == null)
+            var data = GetSelectedCardData();
+            if (data == null)
             {
                 GameLog.Warning("CombatBoardUI", "Aucune carte Blocage sélectionnée");
                 return;
             }
-            _combatManager.ReactiveState?.TryBlock(_combatManager.Context, _selectedCard.Data);
-            ClearSelection();
+            _combatManager.ReactiveState?.TryBlock(_combatManager.Context, data);
+            ClearHandSelection();
         }
 
         private void OnPassClicked()

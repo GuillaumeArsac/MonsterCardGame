@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: GiantRuneEagle
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Combat.Data.MonsterData
   _monsterName: Monstre
+  _portrait: {fileID: 5685368299745277139, guid: 11caa8af49e8fbb49b7ab94c2ed98d22, type: 3}
   _startingHP: 20
   _deck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: a93b8e6752bcf8143b91111be5a79600, type: 2}
+  - {fileID: 11400000, guid: a93b8e6752bcf8143b91111be5a79600, type: 2}
+  - {fileID: 11400000, guid: a93b8e6752bcf8143b91111be5a79600, type: 2}
+  - {fileID: 11400000, guid: a93b8e6752bcf8143b91111be5a79600, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -28,14 +29,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _lootTable:
+  - Material: {fileID: 11400000, guid: 81ad5637d220c854f925fa8f8e4bfcbe, type: 2}
+    DropChance: 1
+  - Material: {fileID: 11400000, guid: 7ed989977f49c2d49a4b39d47d2cb653, type: 2}
+    DropChance: 0.7
+  - Material: {fileID: 11400000, guid: 81ad5637d220c854f925fa8f8e4bfcbe, type: 2}
+    DropChance: 0.5
   - Material: {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
     DropChance: 0.3
-  - Material: {fileID: 0}
-    DropChance: 0
-  - Material: {fileID: 0}
-    DropChance: 0
-  - Material: {fileID: 0}
-    DropChance: 0
-  - Material: {fileID: 0}
-    DropChance: 0
+  - Material: {fileID: 11400000, guid: 7ed989977f49c2d49a4b39d47d2cb653, type: 2}
+    DropChance: 0.3
+  - Material: {fileID: 11400000, guid: 8b37ed4b5992a16448959a1566b85216, type: 2}
+    DropChance: 0.1
   _bossPassive: {fileID: 0}
