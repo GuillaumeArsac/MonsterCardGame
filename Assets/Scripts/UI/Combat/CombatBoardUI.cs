@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using MonsterCardGame.Core;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Cards;
@@ -13,184 +13,89 @@ using MonsterCardGame.UI.Combat.Board;
 
 namespace MonsterCardGame.UI.Combat
 {
-    [RequireComponent(typeof(UIDocument))]
+    /// <summary>
+    /// Binder du combat : relie le <see cref="CombatManager"/> aux composants 2D
+    /// (<see cref="CombatHUD"/>, <see cref="PlayerHandController"/>, <see cref="AlliesController"/>,
+    /// <see cref="CemeteryController"/>, <see cref="CardDetailPopup2D"/>). Lit l'état du
+    /// contexte chaque frame et pilote l'affichage ; les composants ne contiennent
+    /// aucune règle de jeu.
+    /// </summary>
     public class CombatBoardUI : MonoBehaviour
     {
-        [SerializeField, Tooltip("CombatManager de la scène")]
-        private CombatManager _combatManager;
+        [Header("Logique")]
+        [SerializeField] private CombatManager _combatManager;
 
-        [SerializeField, Tooltip("Optionnel : si assigné, la main du joueur est gérée par des prefabs 2D au lieu d'UI Toolkit")]
-        private PlayerHandController _playerHand;
+        [Header("Vues")]
+        [SerializeField] private CombatHUD           _hud;
+        [SerializeField] private PlayerHandController _playerHand;
+        [SerializeField] private AlliesController     _playerAllies;
+        [SerializeField] private AlliesController     _monsterAllies;
+        [SerializeField] private CemeteryController   _cemetery;
+        [SerializeField] private CardDetailPopup2D    _detailPopup;
 
-        // Sélection courante dans la main quand _playerHand est actif (CardData au lieu de CardView)
-        private CardData _selectedHandData;
+        [Header("Loot (overlay résultat)")]
+        [SerializeField] private TMP_Text _lootEntryPrefab;
+        [SerializeField] private Color    _lootCommonColor = new(0.85f, 0.85f, 0.85f);
+        [SerializeField] private Color    _lootRareColor   = new(0.95f, 0.80f, 0.30f);
 
-        private Label         _monsterHPLabel;
-        private Label         _playerHPLabel;
-        private Label         _playerManaLabel;
-        private Label         _turnLabel;
-        private VisualElement _phaseBanner;
-        private Label         _activePlayerLabel;
-        private Label         _phaseNameLabel;
-        private VisualElement _monsterAlliesZone;
-        private VisualElement _playerAlliesZone;
-        private Label         _monsterDeckCountLabel;
-        private Label         _playerHandCountLabel;
-        private VisualElement _handCards;
-        private Button        _sacrificeBtn;
-        private Button        _endPlayBtn;
-        private Button        _blockBtn;
-        private Button        _passBtn;
-        private VisualElement _pendingActionBanner;
-        private Label         _pendingActionLabel;
-        private VisualElement _resultOverlay;
-        private Label         _resultLabel;
-        private VisualElement _lootList;
-        private bool          _lootDisplayed;
+        // ── État ──────────────────────────────────────────────────────────
 
-        private readonly List<CardView> _handViews            = new();
-        private readonly List<CardView> _playerAllyViews      = new();
-        private readonly List<CardView> _monsterAllyViews     = new();
-        private CardView                _selectedCard         = null;
-        private AlliedInstance          _selectedAttacker     = null;
-        private CardView                _selectedAttackerView = null;
-        private int                     _lastHandCount        = -1;
-        private int                     _lastPlayerAllyCount  = -1;
-        private int                     _lastMonsterAllyCount = -1;
-
-        private VisualElement   _monsterZone;
-        private VisualElement   _targetingBanner;
-        private Label           _targetingLabel;
-        private bool            _isTargeting;
-        private CardData        _pendingActionCard;
-
-        private Button          _cemeteryBtn;
-        private VisualElement   _cemeteryPanel;
-        private VisualElement   _cemeteryList;
-        private int             _lastCemeteryCount = -1;
-
-        private CardDetailPopup  _cardDetailPopup;
+        private CardData         _selectedHandData;
+        private AlliedInstance   _selectedAttacker;
+        private bool             _isTargeting;
+        private CardData         _pendingActionCard;
         private IKeywordResolver _resolver;
+        private bool             _lootDisplayed;
+        private int              _lastCemeteryCount = -1;
+
+        // ── Cycle de vie ──────────────────────────────────────────────────
 
         private void OnEnable()
         {
-            var root = GetComponent<UIDocument>().rootVisualElement;
+            _playerHand.SelectionChanged += OnHandSelectionChanged;
+            _playerHand.CardActivated    += OnHandCardActivated;
+            _playerHand.CardRightClicked += OnHandCardRightClicked;
 
-            _monsterHPLabel        = root.Q<Label>("monster-hp-label");
-            _playerHPLabel         = root.Q<Label>("player-hp-label");
-            _playerManaLabel       = root.Q<Label>("player-mana-label");
-            _turnLabel             = root.Q<Label>("turn-label");
-            _phaseBanner           = root.Q<VisualElement>("phase-banner");
-            _activePlayerLabel     = root.Q<Label>("active-player-label");
-            _phaseNameLabel        = root.Q<Label>("phase-name-label");
-            _monsterAlliesZone     = root.Q<VisualElement>("monster-allies-zone");
-            _playerAlliesZone      = root.Q<VisualElement>("player-allies-zone");
-            _monsterDeckCountLabel = root.Q<Label>("monster-deck-count-label");
-            _playerHandCountLabel  = root.Q<Label>("player-hand-count-label");
-            _handCards             = root.Q<VisualElement>("hand-cards");
-            _sacrificeBtn          = root.Q<Button>("sacrifice-btn");
-            _endPlayBtn            = root.Q<Button>("end-play-btn");
-            _blockBtn              = root.Q<Button>("block-btn");
-            _passBtn               = root.Q<Button>("pass-btn");
-            _pendingActionBanner   = root.Q<VisualElement>("pending-action-banner");
-            _pendingActionLabel    = root.Q<Label>("pending-action-label");
-            _resultOverlay         = root.Q<VisualElement>("result-overlay");
-            _resultLabel           = root.Q<Label>("result-label");
-            _lootList              = root.Q<VisualElement>("loot-list");
+            _playerAllies.AllyClicked       += OnPlayerAllyClicked;
+            _playerAllies.AllyRightClicked  += OnPlayerAllyRightClicked;
+            _monsterAllies.AllyClicked      += OnMonsterAllyClicked;
+            _monsterAllies.AllyRightClicked += OnMonsterAllyRightClicked;
 
-            _monsterZone     = root.Q<VisualElement>("monster-zone");
-            _targetingBanner = root.Q<VisualElement>("targeting-banner");
-            _targetingLabel  = root.Q<Label>("targeting-label");
-            _cemeteryBtn     = root.Q<Button>("cemetery-btn");
-            _cemeteryPanel   = root.Q<VisualElement>("cemetery-panel");
-            _cemeteryList    = root.Q<VisualElement>("cemetery-list");
+            _hud.SacrificeClicked       += OnSacrificeClicked;
+            _hud.EndPlayClicked         += OnEndPlayClicked;
+            _hud.BlockClicked           += OnBlockClicked;
+            _hud.PassClicked            += OnPassClicked;
+            _hud.CemeteryOpenClicked    += ToggleCemeteryPanel;
+            _hud.CemeteryCloseClicked   += CloseCemeteryPanel;
+            _hud.CancelTargetingClicked += OnCancelTargeting;
+            _hud.ForgeClicked           += OnForgeClicked;
+            _hud.MonsterZoneClicked     += OnMonsterZoneClicked;
 
-            _sacrificeBtn.clicked += OnSacrificeClicked;
-            _endPlayBtn.clicked   += OnEndPlayClicked;
-            _blockBtn.clicked     += OnBlockClicked;
-            _passBtn.clicked      += OnPassClicked;
-            root.Q<Button>("cancel-target-btn").clicked += OnCancelTargeting;
-            root.Q<Button>("forge-btn").clicked         += () => SceneManager.LoadScene("Forge");
-            _cemeteryBtn.clicked                        += ToggleCemeteryPanel;
-            root.Q<Button>("cemetery-close-btn").clicked += CloseCemeteryPanel;
-
-            _monsterZone.RegisterCallback<PointerDownEvent>(evt =>
-            {
-                if (evt.button != 0) return;
-                if (_isTargeting)
-                {
-                    ResolveTargeting(CombatTarget.Monster);
-                    evt.StopPropagation();
-                }
-                else if (_selectedAttacker != null)
-                {
-                    _combatManager.PlayState?.TryAttackMonsterDirectly(_combatManager.Context, _selectedAttacker);
-                    ClearAttackerSelection();
-                    evt.StopPropagation();
-                }
-            });
-
-            _cardDetailPopup = new CardDetailPopup();
-            root.Add(_cardDetailPopup);
-
-            // Délégation main joueur → prefabs 2D si un PlayerHandController est assigné
-            if (_playerHand != null)
-            {
-                _playerHand.SelectionChanged += OnHandSelectionChanged;
-                _playerHand.CardActivated    += OnHandCardActivated;
-                _playerHand.CardRightClicked += OnHandCardRightClicked;
-                _handCards.style.display      = DisplayStyle.None;
-            }
+            _cemetery.PlayFromCemeteryRequested += OnPlayFromCemetery;
         }
 
         private void OnDisable()
         {
-            if (_sacrificeBtn != null) _sacrificeBtn.clicked -= OnSacrificeClicked;
-            if (_endPlayBtn   != null) _endPlayBtn.clicked   -= OnEndPlayClicked;
-            if (_blockBtn     != null) _blockBtn.clicked     -= OnBlockClicked;
-            if (_passBtn      != null) _passBtn.clicked      -= OnPassClicked;
+            _playerHand.SelectionChanged -= OnHandSelectionChanged;
+            _playerHand.CardActivated    -= OnHandCardActivated;
+            _playerHand.CardRightClicked -= OnHandCardRightClicked;
 
-            if (_playerHand != null)
-            {
-                _playerHand.SelectionChanged -= OnHandSelectionChanged;
-                _playerHand.CardActivated    -= OnHandCardActivated;
-                _playerHand.CardRightClicked -= OnHandCardRightClicked;
-            }
-        }
+            _playerAllies.AllyClicked       -= OnPlayerAllyClicked;
+            _playerAllies.AllyRightClicked  -= OnPlayerAllyRightClicked;
+            _monsterAllies.AllyClicked      -= OnMonsterAllyClicked;
+            _monsterAllies.AllyRightClicked -= OnMonsterAllyRightClicked;
 
-        // ── Délégation main 2D ────────────────────────────────────────────
+            _hud.SacrificeClicked       -= OnSacrificeClicked;
+            _hud.EndPlayClicked         -= OnEndPlayClicked;
+            _hud.BlockClicked           -= OnBlockClicked;
+            _hud.PassClicked            -= OnPassClicked;
+            _hud.CemeteryOpenClicked    -= ToggleCemeteryPanel;
+            _hud.CemeteryCloseClicked   -= CloseCemeteryPanel;
+            _hud.CancelTargetingClicked -= OnCancelTargeting;
+            _hud.ForgeClicked           -= OnForgeClicked;
+            _hud.MonsterZoneClicked     -= OnMonsterZoneClicked;
 
-        private void OnHandSelectionChanged(CardData data)
-        {
-            _selectedHandData = data;
-            if (data != null) ClearAttackerSelection();
-        }
-
-        private void OnHandCardActivated(CardData data)
-        {
-            if (_combatManager.CurrentState is not PlayState) return;
-
-            if (data.CardType == CardType.Action)
-            {
-                EnterTargetingMode(data);
-                _playerHand.ClearSelection();
-            }
-            else
-            {
-                _combatManager.PlayState.TryPlayCard(_combatManager.Context, data);
-                _playerHand.ClearSelection();
-            }
-        }
-
-        private void OnHandCardRightClicked(CardData data) => _cardDetailPopup.Show(data);
-
-        private CardData GetSelectedCardData()
-            => _playerHand != null ? _selectedHandData : _selectedCard?.Data;
-
-        private void ClearHandSelection()
-        {
-            if (_playerHand != null) _playerHand.ClearSelection();
-            else ClearSelection();
+            _cemetery.PlayFromCemeteryRequested -= OnPlayFromCemetery;
         }
 
         private void Update()
@@ -206,245 +111,99 @@ namespace MonsterCardGame.UI.Combat
 
             RefreshLabels(ctx);
             RefreshPhaseBanner(ctx, _combatManager.CurrentState);
-            RefreshHand(ctx);
-            RefreshPlayerAllies(ctx);
-            RefreshMonsterAllies(ctx);
+            _playerAllies.Sync(ctx.PlayerAllies);
+            _monsterAllies.Sync(ctx.MonsterAllies);
+            RefreshHighlights(ctx);
             RefreshButtons(ctx, _combatManager.CurrentState);
             RefreshPendingActionBanner(ctx);
             RefreshResultOverlay(ctx);
             RefreshCemeteryButton(ctx);
         }
 
-        private void RefreshLabels(CombatContext ctx)
+        // ── Main joueur ───────────────────────────────────────────────────
+
+        private void OnHandSelectionChanged(CardData data)
         {
-            _monsterHPLabel.text        = $"PV: {ctx.MonsterHP}";
-            _playerHPLabel.text         = $"PV: {ctx.PlayerHP}";
-            _playerManaLabel.text       = $"Mana: {ctx.PlayerMana}";
-            _turnLabel.text             = $"Tour {ctx.Turn}";
-            _monsterDeckCountLabel.text = $"Deck: {ctx.MonsterDeck.Count}";
-            _playerHandCountLabel.text  = $"{ctx.PlayerHand.Count} carte(s)";
+            _selectedHandData = data;
+            if (data != null) ClearAttackerSelection();
         }
 
-        private void RefreshHand(CombatContext ctx)
+        private void OnHandCardActivated(CardData data)
         {
-            if (_playerHand != null) return; // main gérée par PlayerHandController
-            if (ctx.PlayerHand.Count == _lastHandCount) return;
+            if (_combatManager.CurrentState is not PlayState) return;
 
-            _handCards.Clear();
-            _handViews.Clear();
-            _selectedCard  = null;
-            _lastHandCount = ctx.PlayerHand.Count;
+            if (data.CardType == CardType.Action)
+                EnterTargetingMode(data);
+            else
+                _combatManager.PlayState.TryPlayCard(_combatManager.Context, data);
 
-            foreach (var card in ctx.PlayerHand)
-            {
-                var view = new CardView(card);
-                RegisterCardInteraction(view);
-                _handCards.Add(view);
-                _handViews.Add(view);
-            }
+            _playerHand.ClearSelection();
         }
 
-        private void RefreshPlayerAllies(CombatContext ctx)
+        private void OnHandCardRightClicked(CardData data) => _detailPopup.Show(data);
+
+        // ── Alliés ────────────────────────────────────────────────────────
+
+        private void OnPlayerAllyClicked(AlliedInstance instance)
         {
-            if (ctx.PlayerAllies.Count != _lastPlayerAllyCount)
+            if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); return; }
+            SelectAttacker(instance);
+        }
+
+        private void OnPlayerAllyRightClicked(AlliedInstance instance) => _detailPopup.Show(instance);
+
+        private void OnMonsterAllyClicked(AlliedInstance instance)
+        {
+            if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); return; }
+
+            if (_selectedAttacker != null)
             {
+                _combatManager.PlayState?.TryAttackWithAlly(_combatManager.Context, _selectedAttacker, instance);
                 ClearAttackerSelection();
-                _playerAlliesZone.Clear();
-                _playerAllyViews.Clear();
-                _lastPlayerAllyCount = ctx.PlayerAllies.Count;
-
-                foreach (var ally in ctx.PlayerAllies)
-                {
-                    var instance = ally;
-                    var view     = new CardView(instance.Data);
-                    view.AddToClassList("ally-view");
-
-                    view.RegisterCallback<PointerDownEvent>(evt =>
-                    {
-                        if (evt.button == 1) { _cardDetailPopup.Show(instance); evt.StopPropagation(); return; }
-                        if (evt.button == 0)
-                        {
-                            if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); evt.StopPropagation(); return; }
-                            SelectAttacker(instance, view);
-                            evt.StopPropagation();
-                        }
-                    });
-
-                    _playerAlliesZone.Add(view);
-                    _playerAllyViews.Add(view);
-                }
-            }
-
-            for (int i = 0; i < ctx.PlayerAllies.Count && i < _playerAllyViews.Count; i++)
-            {
-                var ally = ctx.PlayerAllies[i];
-                var view = _playerAllyViews[i];
-
-                if (ally.IsSleeping)
-                    view.AddToClassList("ally-sleeping");
-                else
-                    view.RemoveFromClassList("ally-sleeping");
-
-                view.RefreshInstance(ally);
             }
         }
 
-        private void RefreshMonsterAllies(CombatContext ctx)
+        private void OnMonsterAllyRightClicked(AlliedInstance instance) => _detailPopup.Show(instance.Data);
+
+        private void OnMonsterZoneClicked()
         {
-            if (ctx.MonsterAllies.Count == _lastMonsterAllyCount) return;
+            if (_isTargeting) { ResolveTargeting(CombatTarget.Monster); return; }
 
-            _monsterAlliesZone.Clear();
-            _monsterAllyViews.Clear();
-            _lastMonsterAllyCount = ctx.MonsterAllies.Count;
-
-            foreach (var ally in ctx.MonsterAllies)
+            if (_selectedAttacker != null)
             {
-                var instance = ally;
-                var view     = new CardView(instance.Data);
-                view.AddToClassList("ally-view");
-                view.AddToClassList("ally-view--enemy");
-
-                view.RegisterCallback<PointerDownEvent>(evt =>
-                {
-                    if (evt.button == 1) { _cardDetailPopup.Show(instance.Data); evt.StopPropagation(); return; }
-                    if (evt.button == 0)
-                    {
-                        if (_isTargeting) { ResolveTargeting(CombatTarget.ForAlly(instance)); evt.StopPropagation(); return; }
-                        if (_selectedAttacker != null)
-                        {
-                            _combatManager.PlayState?.TryAttackWithAlly(_combatManager.Context, _selectedAttacker, instance);
-                            ClearAttackerSelection();
-                            evt.StopPropagation();
-                        }
-                    }
-                });
-
-                if (_isTargeting)
-                    view.AddToClassList("targeting-highlight");
-                else if (_selectedAttacker != null)
-                {
-                    _resolver ??= Services.Get<IKeywordResolver>();
-                    if (_resolver.CanTarget(_selectedAttacker, instance))
-                        view.AddToClassList("targeting-highlight");
-                }
-
-                _monsterAlliesZone.Add(view);
-                _monsterAllyViews.Add(view);
-            }
-        }
-
-        private void RegisterCardInteraction(CardView view)
-        {
-            view.RegisterCallback<PointerDownEvent>(evt =>
-            {
-                if (evt.button == 1)
-                {
-                    _cardDetailPopup.Show(view.Data);
-                    evt.StopPropagation();
-                    return;
-                }
-
-                ClearSelection();
+                _combatManager.PlayState?.TryAttackMonsterDirectly(_combatManager.Context, _selectedAttacker);
                 ClearAttackerSelection();
-                _selectedCard = view;
-                view.AddToClassList("selected");
-                evt.StopPropagation();
-            });
-
-            view.RegisterCallback<PointerUpEvent>(evt =>
-            {
-                if (evt.button == 0 && _selectedCard == view)
-                    TryPlaySelectedCard();
-                evt.StopPropagation();
-            });
+            }
         }
 
-        private void SelectAttacker(AlliedInstance ally, CardView view)
+        // ── Sélection attaquant / ciblage ─────────────────────────────────
+
+        private void SelectAttacker(AlliedInstance ally)
         {
-            ClearHandSelection();
-            ClearAttackerSelection();
-            _selectedAttacker     = ally;
-            _selectedAttackerView = view;
-            view.AddToClassList("attacker-selected");
-            ApplyAttackHighlights();
+            _playerHand.ClearSelection();
+            _selectedAttacker = ally;
+            _hud.ShowTargetingBanner($"{ally.Data.CardName} ({ally.ATK} ATK) — choisissez une cible");
         }
 
         private void ClearAttackerSelection()
         {
-            _selectedAttackerView?.RemoveFromClassList("attacker-selected");
-            _selectedAttacker     = null;
-            _selectedAttackerView = null;
-            RemoveAttackHighlights();
-            if (!_isTargeting) HideTargetingBanner();
-        }
-
-        private void ApplyAttackHighlights()
-        {
-            _resolver ??= Services.Get<IKeywordResolver>();
-            var ctx = _combatManager.Context;
-
-            _targetingBanner.RemoveFromClassList("hidden");
-            _targetingLabel.text = $"{_selectedAttacker.Data.CardName} ({_selectedAttacker.ATK} ATK) — choisissez une cible";
-
-            bool canGoDirectly = !HasProvocationBlocker(ctx, _selectedAttacker);
-            if (canGoDirectly) _monsterZone.AddToClassList("targeting-highlight");
-
-            for (int i = 0; i < ctx.MonsterAllies.Count && i < _monsterAllyViews.Count; i++)
-            {
-                if (_resolver.CanTarget(_selectedAttacker, ctx.MonsterAllies[i]))
-                    _monsterAllyViews[i].AddToClassList("targeting-highlight");
-            }
-        }
-
-        private void RemoveAttackHighlights()
-        {
-            _monsterZone.RemoveFromClassList("targeting-highlight");
-            foreach (var v in _monsterAllyViews) v.RemoveFromClassList("targeting-highlight");
-        }
-
-        private void HideTargetingBanner() => _targetingBanner.AddToClassList("hidden");
-
-        private bool HasProvocationBlocker(CombatContext ctx, AlliedInstance attacker)
-        {
-            _resolver ??= Services.Get<IKeywordResolver>();
-            if (ctx == null) return false;
-            foreach (var ally in ctx.MonsterAllies)
-                if (ally.Data.HasKeyword(Keyword.Provocation) && _resolver.CanTarget(attacker, ally))
-                    return true;
-            return false;
-        }
-
-        private void TryPlaySelectedCard()
-        {
-            if (_selectedCard == null) return;
-            if (_combatManager.CurrentState is not PlayState) return;
-            var card = _selectedCard.Data;
-            ClearSelection();
-            if (card.CardType == CardType.Action)
-                EnterTargetingMode(card);
-            else
-                _combatManager.PlayState.TryPlayCard(_combatManager.Context, card);
+            _selectedAttacker = null;
+            _playerAllies.ClearAttacker();
+            if (!_isTargeting) _hud.HideTargetingBanner();
         }
 
         private void EnterTargetingMode(CardData card)
         {
             _isTargeting       = true;
             _pendingActionCard = card;
-            _targetingBanner.RemoveFromClassList("hidden");
-            _targetingLabel.text = $"{card.CardName} ({card.Attack} ATK) — choisissez une cible";
-            _monsterZone.AddToClassList("targeting-highlight");
-            foreach (var v in _playerAllyViews)  v.AddToClassList("targeting-highlight");
-            foreach (var v in _monsterAllyViews) v.AddToClassList("targeting-highlight");
+            _hud.ShowTargetingBanner($"{card.CardName} ({card.Attack} ATK) — choisissez une cible");
         }
 
         private void ExitTargetingMode()
         {
             _isTargeting       = false;
             _pendingActionCard = null;
-            _monsterZone.RemoveFromClassList("targeting-highlight");
-            foreach (var v in _playerAllyViews)  v.RemoveFromClassList("targeting-highlight");
-            foreach (var v in _monsterAllyViews) v.RemoveFromClassList("targeting-highlight");
-            if (_selectedAttacker == null) HideTargetingBanner();
+            if (_selectedAttacker == null) _hud.HideTargetingBanner();
         }
 
         private void OnCancelTargeting()
@@ -460,24 +219,64 @@ namespace MonsterCardGame.UI.Combat
             _combatManager.PlayState?.TryPlayCard(_combatManager.Context, card, target);
         }
 
-        private void ClearSelection()
+        /// <summary>Réapplique chaque frame les surbrillances (les alliés sont reconstruits par les contrôleurs).</summary>
+        private void RefreshHighlights(CombatContext ctx)
         {
-            _selectedCard?.RemoveFromClassList("selected");
-            _selectedCard = null;
+            _playerAllies.ClearTargetable();
+            _monsterAllies.ClearTargetable();
+            _hud.SetMonsterZoneHighlight(false);
+
+            if (_isTargeting)
+            {
+                _hud.SetMonsterZoneHighlight(true);
+                foreach (var a in ctx.PlayerAllies)  _playerAllies.SetTargetable(a, true);
+                foreach (var a in ctx.MonsterAllies) _monsterAllies.SetTargetable(a, true);
+            }
+            else if (_selectedAttacker != null)
+            {
+                _playerAllies.SetAttacker(_selectedAttacker);
+
+                _resolver ??= Services.Get<IKeywordResolver>();
+                if (!HasProvocationBlocker(ctx, _selectedAttacker))
+                    _hud.SetMonsterZoneHighlight(true);
+
+                foreach (var enemy in ctx.MonsterAllies)
+                    if (_resolver.CanTarget(_selectedAttacker, enemy))
+                        _monsterAllies.SetTargetable(enemy, true);
+            }
+            else
+            {
+                _playerAllies.ClearAttacker();
+            }
         }
 
+        private bool HasProvocationBlocker(CombatContext ctx, AlliedInstance attacker)
+        {
+            _resolver ??= Services.Get<IKeywordResolver>();
+            if (ctx == null) return false;
+            foreach (var ally in ctx.MonsterAllies)
+                if (ally.Data.HasKeyword(Keyword.Provocation) && _resolver.CanTarget(attacker, ally))
+                    return true;
+            return false;
+        }
+
+        // ── Labels / bannières ────────────────────────────────────────────
+
+        private void RefreshLabels(CombatContext ctx)
+        {
+            _hud.SetMonsterHP(ctx.MonsterHP);
+            _hud.SetPlayerHP(ctx.PlayerHP);
+            _hud.SetPlayerMana(ctx.PlayerMana);
+            _hud.SetTurn(ctx.Turn);
+            _hud.SetMonsterDeckCount(ctx.MonsterDeck.Count);
+            _hud.SetPlayerHandCount(ctx.PlayerHand.Count);
+        }
 
         private void RefreshPhaseBanner(CombatContext ctx, ICombatState state)
         {
             bool isPlayerTurn = state is DrawState or SacrificeState or PlayState or ReactiveWindowState;
 
-            _activePlayerLabel.text = isPlayerTurn ? "Joueur" : "Monstre";
-
-            _phaseBanner.RemoveFromClassList("phase-banner--player");
-            _phaseBanner.RemoveFromClassList("phase-banner--monster");
-            _phaseBanner.AddToClassList(isPlayerTurn ? "phase-banner--player" : "phase-banner--monster");
-
-            _phaseNameLabel.text = state switch
+            string phaseName = state switch
             {
                 DrawState           => "Pioche",
                 SacrificeState      => "Sacrifice",
@@ -487,6 +286,8 @@ namespace MonsterCardGame.UI.Combat
                 CombatEndState      => ctx.Result == CombatResult.PlayerWin ? "Victoire" : "Défaite",
                 _                   => "—"
             };
+
+            _hud.SetPhase(isPlayerTurn ? "Joueur" : "Monstre", phaseName, isPlayerTurn);
         }
 
         private void RefreshButtons(CombatContext ctx, ICombatState state)
@@ -495,40 +296,41 @@ namespace MonsterCardGame.UI.Combat
             bool inPlay       = state is PlayState;
             bool inReactive   = state is ReactiveWindowState;
             bool hasPending   = ctx.PendingMonsterAction != null;
-            bool hasBlockCard = GetSelectedCardData()?.CardType == CardType.Blocage;
-            _sacrificeBtn.SetEnabled(inSacrifice);
-            _endPlayBtn.SetEnabled(inSacrifice || inPlay);
-            _blockBtn.SetEnabled(inReactive && hasPending && hasBlockCard);
-            _passBtn.SetEnabled(inReactive);
+            bool hasBlockCard = _selectedHandData?.CardType == CardType.Blocage;
+
+            _hud.SetSacrificeEnabled(inSacrifice);
+            _hud.SetEndPlayEnabled(inSacrifice || inPlay);
+            _hud.SetBlockEnabled(inReactive && hasPending && hasBlockCard);
+            _hud.SetPassEnabled(inReactive);
         }
 
         private void RefreshPendingActionBanner(CombatContext ctx)
         {
             if (ctx.PendingMonsterAction == null)
             {
-                _pendingActionBanner.AddToClassList("hidden");
+                _hud.HidePendingActionBanner();
                 return;
             }
 
-            _pendingActionBanner.RemoveFromClassList("hidden");
             var targetName = ctx.PendingMonsterTarget != null
                 ? ctx.PendingMonsterTarget.Data.CardName
                 : "le joueur";
-            _pendingActionLabel.text =
-                $"Le monstre joue {ctx.PendingMonsterAction.CardName} ({ctx.PendingMonsterAction.Attack} ATK) → {targetName}";
+            _hud.ShowPendingActionBanner(
+                $"Le monstre joue {ctx.PendingMonsterAction.CardName} ({ctx.PendingMonsterAction.Attack} ATK) → {targetName}");
         }
+
+        // ── Overlay résultat / loot ───────────────────────────────────────
 
         private void RefreshResultOverlay(CombatContext ctx)
         {
             if (ctx.Result == CombatResult.None)
             {
-                _resultOverlay.AddToClassList("hidden");
+                _hud.HideResultOverlay();
                 _lootDisplayed = false;
                 return;
             }
 
-            _resultOverlay.RemoveFromClassList("hidden");
-            _resultLabel.text = ctx.Result == CombatResult.PlayerWin ? "VICTOIRE !" : "DÉFAITE";
+            _hud.ShowResultOverlay(ctx.Result == CombatResult.PlayerWin ? "VICTOIRE !" : "DÉFAITE");
 
             if (!_lootDisplayed && ctx.Result == CombatResult.PlayerWin
                 && _combatManager.CurrentState is CombatEndState)
@@ -540,22 +342,20 @@ namespace MonsterCardGame.UI.Combat
 
         private void BuildLootList(CombatContext ctx)
         {
-            _lootList.Clear();
+            var root = _hud.LootListRoot;
+            if (root == null || _lootEntryPrefab == null) return;
+
+            for (int i = root.childCount - 1; i >= 0; i--)
+                Destroy(root.GetChild(i).gameObject);
 
             if (ctx.DroppedMaterials.Count == 0)
             {
-                var noneLabel = new Label("Aucun matériau obtenu");
-                noneLabel.AddToClassList("loot-item");
-                noneLabel.AddToClassList("loot-item--commun");
-                _lootList.Add(noneLabel);
+                AddLootEntry(root, "Aucun matériau obtenu", _lootCommonColor);
                 return;
             }
 
-            var header = new Label("Matériaux obtenus :");
-            header.AddToClassList("loot-header");
-            _lootList.Add(header);
+            AddLootEntry(root, "Matériaux obtenus :", Color.white);
 
-            // Regrouper les doublons
             var grouped = new Dictionary<MaterialData, int>();
             foreach (var mat in ctx.DroppedMaterials)
             {
@@ -565,11 +365,16 @@ namespace MonsterCardGame.UI.Combat
 
             foreach (var (mat, count) in grouped)
             {
-                var label = new Label($"× {count}  {mat.MaterialName}");
-                label.AddToClassList("loot-item");
-                label.AddToClassList(mat.Rarity == MaterialRarity.Rare ? "loot-item--rare" : "loot-item--commun");
-                _lootList.Add(label);
+                var color = mat.Rarity == MaterialRarity.Rare ? _lootRareColor : _lootCommonColor;
+                AddLootEntry(root, $"× {count}  {mat.MaterialName}", color);
             }
+        }
+
+        private void AddLootEntry(Transform root, string text, Color color)
+        {
+            var entry = Instantiate(_lootEntryPrefab, root);
+            entry.text  = text;
+            entry.color = color;
         }
 
         // ── Cimetière ─────────────────────────────────────────────────────
@@ -577,100 +382,57 @@ namespace MonsterCardGame.UI.Combat
         private void RefreshCemeteryButton(CombatContext ctx)
         {
             int count = ctx.PlayerCemetery.Count;
-            _cemeteryBtn.text = $"Cimetière ({count})";
+            _hud.SetCemeteryButtonText(count);
 
             if (count == _lastCemeteryCount) return;
             _lastCemeteryCount = count;
 
-            if (_cemeteryPanel != null && !_cemeteryPanel.ClassListContains("hidden"))
-                BuildCemeteryList(ctx);
+            if (_hud.IsCemeteryPanelOpen) RebuildCemetery(ctx);
         }
 
         private void ToggleCemeteryPanel()
         {
-            if (_cemeteryPanel.ClassListContains("hidden"))
-            {
-                BuildCemeteryList(_combatManager.Context);
-                _cemeteryPanel.RemoveFromClassList("hidden");
-            }
-            else
+            if (_hud.IsCemeteryPanelOpen)
             {
                 CloseCemeteryPanel();
             }
+            else
+            {
+                RebuildCemetery(_combatManager.Context);
+                _hud.OpenCemeteryPanel();
+            }
         }
 
-        private void CloseCemeteryPanel() => _cemeteryPanel.AddToClassList("hidden");
+        private void CloseCemeteryPanel() => _hud.CloseCemeteryPanel();
 
-        private void BuildCemeteryList(CombatContext ctx)
+        private void RebuildCemetery(CombatContext ctx)
         {
-            _cemeteryList.Clear();
-
-            if (ctx.PlayerCemetery.Count == 0)
-            {
-                var empty = new Label("Cimetière vide.");
-                empty.AddToClassList("cemetery-card-name");
-                _cemeteryList.Add(empty);
-                return;
-            }
-
             bool inPlay = _combatManager.CurrentState is PlayState;
-
-            foreach (var card in ctx.PlayerCemetery)
-            {
-                var c        = card;
-                bool rampant = card.HasKeyword(Keyword.Rampant) && card.CardType == CardType.Allie;
-                bool canPlay = rampant && inPlay && ctx.PlayerMana >= card.ManaCost;
-
-                var row = new VisualElement();
-                row.AddToClassList("cemetery-row");
-                if (rampant) row.AddToClassList("cemetery-row--rampant");
-
-                var nameLabel = new Label(card.CardName);
-                nameLabel.AddToClassList("cemetery-card-name");
-                row.Add(nameLabel);
-
-                if (rampant)
-                {
-                    var badge = new Label("Rampant");
-                    badge.AddToClassList("cemetery-rampant-badge");
-                    row.Add(badge);
-
-                    var costLabel = new Label($"{card.ManaCost}m");
-                    costLabel.AddToClassList("cemetery-cost-label");
-                    if (!canPlay) costLabel.style.opacity = 0.45f;
-                    row.Add(costLabel);
-                }
-
-                if (canPlay)
-                {
-                    row.RegisterCallback<PointerDownEvent>(evt =>
-                    {
-                        if (evt.button != 0) return;
-                        _combatManager.PlayState.TryPlayFromCemetery(_combatManager.Context, c);
-                        CloseCemeteryPanel();
-                        evt.StopPropagation();
-                    });
-                }
-
-                _cemeteryList.Add(row);
-            }
+            _cemetery.Rebuild(ctx.PlayerCemetery, inPlay, ctx.PlayerMana);
         }
+
+        private void OnPlayFromCemetery(CardData card)
+        {
+            _combatManager.PlayState?.TryPlayFromCemetery(_combatManager.Context, card);
+            CloseCemeteryPanel();
+        }
+
+        // ── Boutons d'action ──────────────────────────────────────────────
 
         private void OnSacrificeClicked()
         {
-            var data = GetSelectedCardData();
-            if (data == null)
+            if (_selectedHandData == null)
             {
                 GameLog.Warning("CombatBoardUI", "Aucune carte sélectionnée pour le sacrifice");
                 return;
             }
-            _combatManager.SacrificeState?.TrySacrifice(_combatManager.Context, data);
-            ClearHandSelection();
+            _combatManager.SacrificeState?.TrySacrifice(_combatManager.Context, _selectedHandData);
+            _playerHand.ClearSelection();
         }
 
         private void OnEndPlayClicked()
         {
-            ClearHandSelection();
+            _playerHand.ClearSelection();
             var state = _combatManager.CurrentState;
             if (state is SacrificeState ss)
                 ss.Skip(_combatManager.Context);
@@ -680,17 +442,18 @@ namespace MonsterCardGame.UI.Combat
 
         private void OnBlockClicked()
         {
-            var data = GetSelectedCardData();
-            if (data == null)
+            if (_selectedHandData == null)
             {
                 GameLog.Warning("CombatBoardUI", "Aucune carte Blocage sélectionnée");
                 return;
             }
-            _combatManager.ReactiveState?.TryBlock(_combatManager.Context, data);
-            ClearHandSelection();
+            _combatManager.ReactiveState?.TryBlock(_combatManager.Context, _selectedHandData);
+            _playerHand.ClearSelection();
         }
 
         private void OnPassClicked()
             => _combatManager.ReactiveState?.Pass(_combatManager.Context);
+
+        private void OnForgeClicked() => SceneManager.LoadScene("Forge");
     }
 }

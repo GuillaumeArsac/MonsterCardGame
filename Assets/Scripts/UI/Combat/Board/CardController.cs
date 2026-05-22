@@ -1,49 +1,32 @@
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using MonsterCardGame.Gameplay.Cards;
 
 namespace MonsterCardGame.UI.Combat.Board
 {
     /// <summary>
-    /// Contrôleur d'une carte du board (prefab 2D).
-    /// Gère l'affichage des données et les animations (deal, hover, sélection, défausse).
+    /// Contrôleur d'une carte de la main (prefab 2D).
+    /// Délègue l'affichage à <see cref="CardView2D"/> et gère les poses/animations
+    /// spécifiques à la main (deal, hover, sélection, défausse).
     /// L'input est géré par <see cref="PlayerHandController"/> via raycast.
     /// </summary>
+    [RequireComponent(typeof(CardView2D))]
     public class CardController : MonoBehaviour
     {
         private enum PoseState { Idle, Hovered, Selected }
 
-        [Header("Visuel")]
-        [SerializeField] private SpriteRenderer _frameRenderer;
-
-        [SerializeField] private SpriteRenderer _artworkRenderer;
-        [SerializeField] private TMP_Text _nameLabel;
-        [SerializeField] private TMP_Text _costLabel;
-        [SerializeField] private TMP_Text _manaGenLabel;
-        [SerializeField] private GameObject _selectionHighlight;
-
-        [Header("Couleurs par région")]
-        [SerializeField] private Color _colorPlaines = new(0.55f, 0.75f, 0.45f);
-
-        [SerializeField] private Color _colorMontagne = new(0.65f, 0.55f, 0.45f);
-        [SerializeField] private Color _colorMarais = new(0.45f, 0.55f, 0.40f);
-        [SerializeField] private Color _colorRuines = new(0.60f, 0.55f, 0.50f);
-        [SerializeField] private Color _colorForet = new(0.35f, 0.60f, 0.40f);
-        [SerializeField] private Color _colorOcean = new(0.40f, 0.55f, 0.70f);
-        [SerializeField] private Color _colorAucune = new(0.55f, 0.55f, 0.55f);
+        [SerializeField] private CardView2D _view;
 
         [Header("Animations")]
-        [SerializeField] private float _hoveredYOffset = 0.35f;
-        [SerializeField] private float _hoveredScale = 1.08f;
+        [SerializeField] private float _hoveredYOffset   = 0.35f;
+        [SerializeField] private float _hoveredScale    = 1.08f;
         [SerializeField] private float _selectedYOffset = 0.6f;
-
-        [SerializeField] private float _selectedScale = 1.15f;
-        [SerializeField] private float _poseAnimTime = 0.18f;
-        [SerializeField] private float _dealAnimTime = 0.30f;
+        [SerializeField] private float _selectedScale   = 1.15f;
+        [SerializeField] private float _poseAnimTime    = 0.18f;
+        [SerializeField] private float _dealAnimTime    = 0.30f;
         [SerializeField] private float _discardAnimTime = 0.25f;
 
-        public CardData Data { get; private set; }
+        public CardData Data => _view != null ? _view.Data : null;
         public bool IsSelected => _state == PoseState.Selected;
 
         private Vector3   _basePosition;
@@ -51,26 +34,17 @@ namespace MonsterCardGame.UI.Combat.Board
         private float     _baseZRotation;
         private PoseState _state = PoseState.Idle;
 
+        private void Reset() => _view = GetComponent<CardView2D>();
+        private void Awake()
+        {
+            if (_view == null) _view = GetComponent<CardView2D>();
+        }
+
         // ── Binding ───────────────────────────────────────────────────────
 
         public void Bind(CardData data)
         {
-            Data = data;
-
-            if (_nameLabel != null) _nameLabel.text = data.CardName;
-            if (_costLabel != null) _costLabel.text = data.ManaCost.ToString();
-
-            if (_manaGenLabel != null)
-            {
-                bool hasMana = data.ManaGenerated > 0;
-                _manaGenLabel.gameObject.SetActive(hasMana);
-                if (hasMana) _manaGenLabel.text = $"+{data.ManaGenerated}";
-            }
-
-            if (_artworkRenderer != null) _artworkRenderer.sprite = data.Artwork;
-            if (_frameRenderer != null) _frameRenderer.color = ColorForRegion(data.Region);
-
-            if (_selectionHighlight != null) _selectionHighlight.SetActive(false);
+            _view.Bind(data);
             _state = PoseState.Idle;
         }
 
@@ -86,10 +60,10 @@ namespace MonsterCardGame.UI.Combat.Board
             {
                 transform.DOKill();
                 _state = PoseState.Idle;
-                if (_selectionHighlight != null) _selectionHighlight.SetActive(false);
-                transform.localPosition       = localPosition;
-                transform.localScale          = localScale;
-                transform.localEulerAngles    = new Vector3(0f, 0f, zRotation);
+                _view.SetHighlight(false);
+                transform.localPosition    = localPosition;
+                transform.localScale       = localScale;
+                transform.localEulerAngles = new Vector3(0f, 0f, zRotation);
             }
             else
             {
@@ -105,7 +79,7 @@ namespace MonsterCardGame.UI.Combat.Board
             _baseScale     = targetScale;
             _baseZRotation = zRotation;
             _state         = PoseState.Idle;
-            if (_selectionHighlight != null) _selectionHighlight.SetActive(false);
+            _view.SetHighlight(false);
 
             transform.DOKill();
             transform.localPosition    = fromLocalPosition;
@@ -135,7 +109,7 @@ namespace MonsterCardGame.UI.Combat.Board
             if (_state == target) return;
             _state = target;
 
-            if (_selectionHighlight != null) _selectionHighlight.SetActive(selected);
+            _view.SetHighlight(selected);
             ApplyPose();
         }
 
@@ -143,7 +117,7 @@ namespace MonsterCardGame.UI.Combat.Board
         {
             transform.DOKill();
             _state = PoseState.Idle;
-            if (_selectionHighlight != null) _selectionHighlight.SetActive(false);
+            _view.SetHighlight(false);
 
             var seq = DOTween.Sequence();
             seq.Append(transform.DOScale(_baseScale * 0.1f, _discardAnimTime).SetEase(Ease.InCubic));
@@ -178,19 +152,6 @@ namespace MonsterCardGame.UI.Combat.Board
             transform.DOScale(scale, _poseAnimTime).SetEase(Ease.OutCubic);
             transform.DOLocalRotate(new Vector3(0f, 0f, zAngle), _poseAnimTime).SetEase(Ease.OutCubic);
         }
-
-        // ── Helpers ───────────────────────────────────────────────────────
-
-        private Color ColorForRegion(Region region) => region switch
-        {
-            Region.Plaines => _colorPlaines,
-            Region.Montagne => _colorMontagne,
-            Region.Marais => _colorMarais,
-            Region.Ruines => _colorRuines,
-            Region.Foret => _colorForet,
-            Region.Ocean => _colorOcean,
-            _ => _colorAucune
-        };
 
         private void OnDestroy() => transform.DOKill();
     }

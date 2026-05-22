@@ -17,10 +17,11 @@ namespace MonsterCardGame.UI.Combat.Board
     public class PlayerHandController : MonoBehaviour
     {
         [Header("Références")]
-        [SerializeField] private CombatManager  _combatManager;
+        [SerializeField] private CombatManager _combatManager;
+
         [SerializeField] private CardController _cardPrefab;
-        [SerializeField] private Transform      _handAnchor;
-        [SerializeField] private Camera         _camera;
+        [SerializeField] private Transform _handAnchor;
+        [SerializeField] private Camera _camera;
 
         [Header("Layout en éventail")]
         [SerializeField, Tooltip("Rayon de l'arc de l'éventail (unités world). Plus grand = arc plus plat.")]
@@ -160,12 +161,12 @@ namespace MonsterCardGame.UI.Combat.Board
                 : Mathf.Min(_maxFanAngle, _maxAnglePerCard * (count - 1));
 
             float startAngle = totalAngle * 0.5f; // carte de gauche penche vers la gauche (Z positif)
-            float angleStep  = count == 1 ? 0f : totalAngle / (count - 1);
+            float angleStep = count == 1 ? 0f : totalAngle / (count - 1);
 
             for (int i = 0; i < count; i++)
             {
                 float angleDeg = startAngle - angleStep * i;
-                float rad      = angleDeg * Mathf.Deg2Rad;
+                float rad = angleDeg * Mathf.Deg2Rad;
 
                 // Centre de l'arc en (0, -R) → carte centrale à l'origine.
                 Vector3 target = new(
@@ -173,11 +174,14 @@ namespace MonsterCardGame.UI.Combat.Board
                     _fanRadius * (Mathf.Cos(rad) - 1f),
                     i * 0.01f); // petit z pour stabiliser le raycast quand les cartes se chevauchent
 
+                // Le haut des cartes s'écarte vers l'extérieur (pivot bas) : rotation opposée à la position.
+                float tilt = -angleDeg;
+
                 var card = _cards[i];
                 if (freshlyDealt.Contains(card))
-                    card.PlayDeal(_drawFromOffset, target, _cardScale, angleDeg, delay: i * 0.05f);
+                    card.PlayDeal(_drawFromOffset, target, _cardScale, tilt, delay: i * 0.05f);
                 else
-                    card.SetBasePose(target, _cardScale, angleDeg, snap: false);
+                    card.SetBasePose(target, _cardScale, tilt, snap: false);
             }
         }
 
