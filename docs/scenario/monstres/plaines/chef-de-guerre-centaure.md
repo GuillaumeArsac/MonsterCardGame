@@ -32,7 +32,7 @@ Ce n'est qu'en avançant dans d'autres zones que le joueur pourra commencer à f
 
 | Type | Monture | Rôle de combat | Allié invoqué |
 |---|---|---|---|
-| **Guerrier** | Cheval | Ligne de front, frappe directe | Centaure Guerrier — **Provocation** |
+| **Guerrier** | Taureau | Ligne de front, frappe directe | Centaure Guerrier — **Provocation** |
 | **Paladin** | Élan | Soutien, protection | Centaure Paladin — **Éveillé** |
 | **Archer** | Chèvre | Distance, mobilité | Centaure Archer — **Portée** |
 
@@ -81,7 +81,7 @@ La stratégie du joueur doit s'adapter à la composition du plateau adverse :
 |---|---|---|---|
 | Métal des Plaines | Commun | 2-3 | Ferrures et armures récupérées sur les guerriers vaincus |
 | Peau Tannée | Commun | 1-2 | Cuir épais, traité selon les techniques des tribus |
-| Fer à Cheval Brisé | Commun | 1-2 | Vestige d'un galop qui ne s'arrêtera jamais vraiment |
+| Corne de Taureau Brisée | Commun | 1-2 | Fragment d'une corne fracassée au combat — encore tranchante |
 | Fragment d'esprit de Thrâk | Rare | 1 | Un éclat translucide, chaud au toucher — il pulse légèrement, même détaché |
 
 ---
