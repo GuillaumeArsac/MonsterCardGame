@@ -11,7 +11,7 @@ Zone d'entrée recommandée. Lumineuse, organisée, indifférente à la crise.
 | **Tension thématique** | Comment convaincre ceux qui ne voient pas le danger ? |
 | **Mécanique de jeu dominante** | Polyvalence, decks hybrides |
 | **PNJ principal** | Arkhavel Kael Vorn |
-| **Boss de zone** | à nommer |
+| **Boss de zone** | Vaelisse, la Mère-Nuée |
 
 ## Arc narratif de la zone
 
@@ -52,8 +52,8 @@ Maelor Fernoir a connu Arkhavel — certains habitants l'ont croisé. Première 
 | Nom | Type | Difficulté | Rôle narratif | Lien fiche |
 |---|---|---|---|---|
 | [Aigle Runique Géant](../monstres/plaines/aigle-runique-geant.md) | Normal | ★★☆ | Symbole de liberté, presque révéré | [→](../monstres/plaines/aigle-runique-geant.md) |
-| [Chef de Guerre Centaure](../monstres/plaines/chef-de-guerre-centaure.md) | à définir | ★★☆ | à définir | [→](../monstres/plaines/chef-de-guerre-centaure.md) |
-| *(boss à nommer)* | Boss | ★★★ | à définir | à créer |
+| [Thrâk le Perpétuel](../monstres/plaines/chef-de-guerre-centaure.md) | Normal | ★★☆ | Esprit guerrier centaure — clans devenus agressifs | [→](../monstres/plaines/chef-de-guerre-centaure.md) |
+| [Vaelisse, la Mère-Nuée](../monstres/plaines/vaelisse-mere-nuee.md) | Boss | ★★★ | Reine d'essaim pervertie par l'Entité — menace lente que les dirigeants ignorent | [→](../monstres/plaines/vaelisse-mere-nuee.md) |
 
 ---
 

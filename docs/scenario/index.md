@@ -62,8 +62,8 @@ Les Ruines Oubliées → boss final → épilogue
 
 ### Les Plaines Libres
 - [Aigle Runique Géant](monstres/plaines/aigle-runique-geant.md) — monstre normal
-- [Chef de Guerre Centaure](monstres/plaines/chef-de-guerre-centaure.md) — à définir
-- *(boss à nommer)*
+- [Thrâk le Perpétuel](monstres/plaines/chef-de-guerre-centaure.md) — monstre normal (centaures)
+- [Vaelisse, la Mère-Nuée](monstres/plaines/vaelisse-mere-nuee.md) — **boss de zone**
 
 ### Les Marais de la Putréfaction
 - *(monstres à définir)*
