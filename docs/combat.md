@@ -24,8 +24,9 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 - Les deux joueurs choisissent **en secret** les monstres qu'ils posent, puis les révèlent en même temps.
 
 **Tours**
-- Les joueurs jouent ensuite chacun leur tour.
-- Pendant son tour, un joueur :
+- Un **tour** se compose de la phase du joueur, puis de la phase de l'adversaire.
+- Un tour est donc terminé quand toutes les créatures en jeu des deux camps ont agi.
+- Pendant sa phase, un joueur :
   1. pose autant de monstres qu'il veut, dans la limite des places libres ;
   2. fait agir **chacun** de ses monstres sur le terrain, y compris ceux qui viennent d'être posés.
 
