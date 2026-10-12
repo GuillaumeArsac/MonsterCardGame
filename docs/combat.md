@@ -47,6 +47,9 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 - Après le tour 15, tous les monstres sur le terrain, des deux camps, subissent des dégâts de **fatigue** au début de chaque tour.
 - Ces dégâts augmentent de 1 à chaque tour : 1 dégât au tour 16, 2 au tour 17, 3 au tour 18, etc.
 - La fatigue garantit qu'un combat finit toujours, sans limiter les stratégies défensives avant le tour 15.
+- Un monstre vaincu par la fatigue **ne rapporte aucun point**.
+- Si les deux camps perdent leur dernier monstre (en main comme sur le terrain) sans qu'aucun n'ait atteint 3 points, **le joueur perd** et l'adversaire gagne.
+  Le jeu étant uniquement en PvE, cela empêche le joueur de gagner en se soignant en boucle et en laissant la fatigue faire le travail.
 
 ## Pourquoi garder des monstres en main
 
