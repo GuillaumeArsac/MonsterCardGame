@@ -8,14 +8,14 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 ## Les cartes
 
-- Chaque joueur a **8 monstres**.
+- Chaque joueur a **5 monstres**.
 - Un monstre est soit **en main**, soit **sur le terrain**.
 - Il n'y a ni deck, ni pioche, ni cimetière.
-- Les 8 monstres sont **en main dès le début** du combat.
+- Les 5 monstres sont **en main dès le début** du combat.
 
 ## Le terrain
 
-- Chaque joueur a **5 places**.
+- Chaque joueur a **3 places**.
 - On ne peut poser un monstre que sur une place libre.
 
 ## Déroulement
@@ -39,7 +39,7 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 - Un monstre vaincu est **retiré du combat**.
 - Chaque monstre vaincu rapporte **1 point** à l'adversaire.
-- Le premier joueur à **5 points** gagne.
+- Le premier joueur à **3 points** gagne.
 
 ## Pourquoi garder des monstres en main
 
