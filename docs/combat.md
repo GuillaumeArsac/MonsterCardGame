@@ -32,15 +32,21 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 ## Les monstres sur le terrain
 
-- À chaque tour, un monstre choisit **une action** parmi ses capacités.
-- Il peut aussi avoir des **capacités passives**, toujours actives.
-- Un monstre ne peut revenir du terrain dans la main que grâce à une capacité qui le permet.
+- À chaque tour, un monstre utilise **une** de ses compétences actives.
+- Ses compétences passives sont toujours actives.
+- Un monstre ne peut revenir du terrain dans la main que grâce à une compétence qui le permet.
+
+## La carte monstre
+
+- Un monstre a **jusqu'à 3 compétences**, actives et passives comprises (par exemple 1 active et 2 passives).
+- Le joueur **choisit la cible** des compétences de ses monstres.
 
 ## Monstre vaincu et victoire
 
 - Un monstre vaincu est **retiré du combat**.
 - Chaque monstre vaincu rapporte **1 point** à l'adversaire.
 - Le premier joueur à **3 points** gagne.
+- Un camp qui n'a plus aucun monstre, ni en main ni sur le terrain, **perd**, quel que soit le score.
 
 ## Fatigue
 
@@ -48,7 +54,7 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 - Ces dégâts augmentent de 1 à chaque tour : 1 dégât au tour 16, 2 au tour 17, 3 au tour 18, etc.
 - La fatigue garantit qu'un combat finit toujours, sans limiter les stratégies défensives avant le tour 15.
 - Un monstre vaincu par la fatigue **ne rapporte aucun point**.
-- Si les deux camps perdent leur dernier monstre (en main comme sur le terrain) sans qu'aucun n'ait atteint 3 points, **le joueur perd** et l'adversaire gagne.
+- Si les deux camps perdent leur dernier monstre en même temps sans qu'aucun n'ait atteint 3 points, **le joueur perd** et l'adversaire gagne.
   Le jeu étant uniquement en PvE, cela empêche le joueur de gagner en se soignant en boucle et en laissant la fatigue faire le travail.
 
 ## Pourquoi garder des monstres en main
