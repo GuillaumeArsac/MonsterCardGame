@@ -32,14 +32,29 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 ## Les monstres sur le terrain
 
-- À chaque tour, un monstre utilise **une** de ses compétences actives.
+- À chaque tour, un monstre utilise **une** de ses compétences actives, s'il en a.
 - Ses compétences passives sont toujours actives.
 - Un monstre ne peut revenir du terrain dans la main que grâce à une compétence qui le permet.
 
 ## La carte monstre
 
+Une carte monstre affiche uniquement :
+- son **nom** et son **illustration** ;
+- ses **PV** ;
+- ses **compétences**.
+
+**Compétences**
 - Un monstre a **jusqu'à 3 compétences**, actives et passives comprises (par exemple 1 active et 2 passives).
+- Un monstre peut n'avoir que des compétences passives. Il n'agit alors pas pendant sa phase.
+
+**Ciblage**
 - Le joueur **choisit la cible** des compétences de ses monstres.
+- Une compétence peut viser n'importe quel monstre **sur le terrain**, allié ou ennemi, selon ce qu'elle indique.
+- Un monstre en main ne peut jamais être ciblé.
+
+**Provocation**
+- Tant qu'un monstre avec Provocation est sur le terrain, les compétences adverses qui visent un ennemi doivent le cibler.
+- Si plusieurs monstres ont Provocation, l'adversaire choisit lequel cibler parmi eux.
 
 ## Monstre vaincu et victoire
 
