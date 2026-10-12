@@ -15,16 +15,24 @@ Les règles du combat sont dans [combat.md](combat.md).
 1. On applique d'abord les **bonus** de dégâts.
 2. On applique ensuite les **réductions** de dégâts.
 
+**Temps de recharge**
+- Toutes les compétences actives ont un temps de recharge.
+
 **Ralentissement**
-- Un monstre ralenti voit le temps de recharge de son attaque augmenté de 1.
+- Un monstre ralenti voit le temps de recharge de **toutes** ses compétences actives augmenté de 1.
+- Selon la compétence qui l'applique, le ralentissement est permanent ou dure X tours.
 
 **Durées**
-- Un effet de **X tours** dure jusqu'à la fin du X-ième tour, en comptant le tour en cours.
-- Un tour se compose de la phase du joueur puis de celle de l'adversaire.
-- Exemple pour une durée de 2 tours :
-  - l'effet dure jusqu'à la fin du tour en cours (phase du joueur + phase de l'adversaire) ;
-  - puis jusqu'à la fin du tour suivant (phase du joueur + phase de l'adversaire) ;
-  - au début du tour d'après, l'effet est terminé.
+- Quand une compétence applique un effet pendant **X tours**, l'effet dure jusqu'à la fin de la X-ième phase **de l'autre camp**.
+- Cette règle vaut pour tous les effets à durée : bonus, réductions, ralentissement, etc.
+- Exemple : le joueur applique un effet de 2 tours pendant sa phase.
+  - l'effet dure pendant la fin de sa phase, puis toute la phase de l'adversaire (1re phase de l'autre camp) ;
+  - puis toute la phase suivante du joueur, et toute la phase suivante de l'adversaire (2e phase de l'autre camp) ;
+  - au début de la phase suivante du joueur, l'effet est terminé.
+- Exemple : l'adversaire applique un effet de 1 tour pendant sa phase.
+  - l'effet dure pendant la fin de sa phase, puis toute la phase suivante du joueur ;
+  - au début de la phase suivante de l'adversaire, l'effet est terminé.
+- Ainsi, un même effet a la même valeur, qu'il soit utilisé par le joueur ou par l'adversaire.
 
 ## Format d'une fiche
 
@@ -35,6 +43,7 @@ Les règles du combat sont dans [combat.md](combat.md).
 | **Rôle visé** | Carry, support ou tank. Pour le design seulement, ce n'est pas affiché sur la carte |
 | **Cible** | Un ennemi, un allié, ce monstre, tous les ennemis, tous les alliés, ou aucune |
 | **Effet** | Ce qui se passe, avec des chiffres |
+| **Temps de recharge** | Actives seulement |
 | **Durée** | Instantané, X tours, ou permanent |
 | **Déclencheur** | Passives seulement : quand l'effet s'applique |
 
