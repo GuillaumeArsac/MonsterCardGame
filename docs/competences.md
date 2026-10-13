@@ -106,3 +106,116 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Durée** | 6 tours |
 
 Seuls les alliés présents sur le terrain au moment de l'utilisation reçoivent le bonus.
+
+## Propositions à valider
+
+Ces compétences sont des propositions. Elles rejoindront le catalogue une fois validées.
+
+### Morsure perforante
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
+| **Effet** | Inflige 2 dégâts. Ces dégâts ignorent les réductions de dégâts |
+| **Temps de recharge** | 0 |
+| **Durée** | Instantané |
+
+Si elle vise un ennemi, elle est soumise à la Provocation. Les bonus de dégâts s'appliquent normalement.
+
+### Exécution
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
+| **Effet** | Si la cible a 4 PV ou moins, elle est vaincue. Sinon, inflige 1 dégât |
+| **Temps de recharge** | 3 |
+| **Durée** | Instantané |
+
+Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue rapporte normalement 1 point à l'adversaire de son camp.
+
+### Chasseur de trophées
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Carry |
+| **Cible** | Aucune |
+| **Effet** | Le camp de ce monstre gagne 1 point supplémentaire |
+| **Durée** | Permanente |
+| **Déclencheur** | Quand ce monstre vainc un monstre ennemi qui avait 12 PV de départ ou plus |
+
+### Bouclier
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
+| **Effet** | Les dégâts subis par la cible sont réduits de 2 |
+| **Temps de recharge** | 2 |
+| **Durée** | 2 tours |
+
+Si elle vise un ennemi, elle est soumise à la Provocation.
+
+### Aura apaisante
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Support |
+| **Cible** | Tous les alliés sur le terrain |
+| **Effet** | Rend 1 PV à chaque allié sur le terrain, y compris ce monstre |
+| **Durée** | Instantané, à chaque déclenchement |
+| **Déclencheur** | Au début de chaque phase de ce monstre |
+
+### Repli
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | N'importe quel autre monstre sur le terrain, allié ou ennemi |
+| **Effet** | Renvoie la cible dans la main de son propriétaire. Elle garde ses PV actuels et perd tous ses effets temporaires (bonus, réductions, ralentissement). Ses recharges sont remises à 0 |
+| **Temps de recharge** | 3 |
+| **Durée** | Instantané |
+
+Si elle vise un ennemi, elle est soumise à la Provocation. Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué.
+
+### Provocation
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Tank |
+| **Cible** | Ce monstre |
+| **Effet** | Ce monstre a Provocation (voir [combat.md](combat.md)) |
+| **Durée** | Permanente |
+| **Déclencheur** | Toujours |
+
+### Carapace
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Tank |
+| **Cible** | Ce monstre |
+| **Effet** | Les dégâts subis par ce monstre sont réduits de 1, sans descendre sous 0 |
+| **Durée** | Permanente |
+| **Déclencheur** | Quand ce monstre subit des dégâts |
+
+### Coup de bouclier
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Tank |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
+| **Effet** | Inflige 1 dégât et applique Ralentissement |
+| **Temps de recharge** | 2 |
+| **Durée** | Instantané |
+
+Si elle vise un ennemi, elle est soumise à la Provocation.
