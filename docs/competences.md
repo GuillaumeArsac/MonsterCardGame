@@ -67,3 +67,16 @@ Une fiche doit être assez précise pour que n'importe qui obtienne le même ré
 | **Durée** | Instantané |
 
 Ne choisit pas de cible : ignore la Provocation.
+
+### Griffe
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 3 dégâts |
+| **Temps de recharge** | 1 |
+| **Durée** | Instantané |
+
+Soumise à la Provocation.
