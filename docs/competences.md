@@ -16,18 +16,28 @@ Les règles du combat sont dans [combat.md](combat.md).
 2. On applique ensuite les **réductions** de dégâts.
 
 **Temps de recharge**
-- Toutes les compétences actives ont un temps de recharge.
-- **Temps de recharge X :** après utilisation, la compétence ne peut pas être réutilisée pendant les X phases suivantes de ce monstre.
-- Avec 0, elle est utilisable à chaque phase ; avec 1, une phase sur deux ; avec 2, une phase sur trois, etc.
-- **Entrée sur le terrain :** un monstre qui arrive sur le terrain a toutes ses recharges au maximum, comme s'il venait d'utiliser chacune de ses compétences actives.
-  - Une compétence avec un temps de recharge de 0 est donc utilisable dès la phase où le monstre est posé.
-  - Une compétence avec un temps de recharge de X n'est utilisable qu'après X phases de ce monstre.
-  - Cette règle s'applique aussi aux monstres posés lors de la mise en place.
+- Chaque compétence active a un **temps de recharge** (sur sa fiche) et un **compteur de recharge** (pendant le combat).
+- Une compétence est **disponible** quand son compteur est à 0.
+- Quand une compétence est utilisée, son compteur prend la valeur de son temps de recharge.
+- Au **début de chaque tour**, tous les compteurs supérieurs à 0 baissent de 1.
+
+| Temps de recharge | Utilisable |
+|---|---|
+| 0 | à chaque phase |
+| 1 | à chaque phase, sauf celle où le monstre est posé |
+| 2 | une phase sur deux |
+| 3 | une phase sur trois |
+
+**Entrée sur le terrain**
+- Un monstre qui arrive sur le terrain a tous ses compteurs au maximum, c'est-à-dire égaux à son temps de recharge.
+- Exemple : un monstre posé au tour 1 avec une compétence à 0 et une compétence à 1.
+  - La compétence à 0 est utilisable immédiatement, dès le tour 1.
+  - Au début du tour 2, le compteur de la seconde passe de 1 à 0 : elle devient disponible.
+- Cette règle s'applique aussi aux monstres posés lors de la mise en place.
 
 **Ralentissement**
-- Un monstre ralenti voit la recharge en cours de **toutes** ses compétences actives augmentée de 1 : chacune sera disponible une phase plus tard que prévu.
-- Une compétence déjà disponible devient indisponible pendant la prochaine phase du monstre.
-- Le ralentissement n'a pas de durée : il ne touche que la recharge en cours. Après la prochaine utilisation de la compétence, son temps de recharge normal s'applique.
+- Un monstre ralenti voit le compteur de **toutes** ses compétences actives augmenter de 1, y compris celles qui sont disponibles.
+- Le ralentissement n'a pas de durée : il ne touche que le compteur en cours. Après la prochaine utilisation de la compétence, son temps de recharge normal s'applique.
 - Le ralentissement est indépendant des dégâts : il s'applique même si les dégâts de la compétence sont réduits à 0.
 
 **Durées**
@@ -67,7 +77,7 @@ Une fiche doit être assez précise pour que n'importe qui obtienne le même ré
 | **Rôle visé** | Tank |
 | **Cible** | Tous les ennemis sur le terrain |
 | **Effet** | Inflige 1 dégât à chaque ennemi sur le terrain et lui applique Ralentissement |
-| **Temps de recharge** | 4 |
+| **Temps de recharge** | 5 |
 | **Durée** | Instantané |
 
 Ne choisit pas de cible : ignore la Provocation.
@@ -93,7 +103,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Rôle visé** | Support |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Rend 4 PV |
-| **Temps de recharge** | 1 |
+| **Temps de recharge** | 2 |
 | **Durée** | Instantané |
 
 Si elle vise un ennemi, elle est soumise à la Provocation.
@@ -106,7 +116,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Rôle visé** | Support |
 | **Cible** | Tous les alliés sur le terrain |
 | **Effet** | Les dégâts infligés par chaque allié ciblé augmentent de 1 |
-| **Temps de recharge** | 2 |
+| **Temps de recharge** | 3 |
 | **Durée** | 6 tours |
 
 Seuls les alliés présents sur le terrain au moment de l'utilisation reçoivent le bonus.
@@ -132,7 +142,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Les bonus de dégât
 | **Rôle visé** | Carry |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Si la cible a 4 PV ou moins, elle est vaincue. Sinon, inflige 1 dégât |
-| **Temps de recharge** | 3 |
+| **Temps de recharge** | 4 |
 | **Durée** | Instantané |
 
 Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue rapporte normalement 1 point à l'adversaire de son camp.
@@ -156,7 +166,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue ra
 | **Rôle visé** | Support |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Les dégâts subis par la cible sont réduits de 2 |
-| **Temps de recharge** | 2 |
+| **Temps de recharge** | 3 |
 | **Durée** | 2 tours |
 
 Si elle vise un ennemi, elle est soumise à la Provocation.
@@ -180,7 +190,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Rôle visé** | Support |
 | **Cible** | Un autre allié sur le terrain |
 | **Effet** | Renvoie la cible dans la main. Elle garde ses PV actuels et perd tous ses effets temporaires (bonus, réductions, ralentissement) |
-| **Temps de recharge** | 3 |
+| **Temps de recharge** | 4 |
 | **Durée** | Instantané |
 
 Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il est reposé plus tard, ses recharges repartent au maximum, comme pour toute entrée sur le terrain.
@@ -215,7 +225,7 @@ Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il e
 | **Rôle visé** | Tank |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Inflige 1 dégât et applique Ralentissement |
-| **Temps de recharge** | 2 |
+| **Temps de recharge** | 3 |
 | **Durée** | Instantané |
 
 Si elle vise un ennemi, elle est soumise à la Provocation.
