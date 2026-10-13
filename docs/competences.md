@@ -19,7 +19,9 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Chaque compétence active a un **temps de recharge** (sur sa fiche) et un **compteur de recharge** (pendant le combat).
 - Une compétence est **disponible** quand son compteur est à 0.
 - Quand une compétence est utilisée, son compteur prend la valeur de son temps de recharge.
-- Au **début de chaque tour**, tous les compteurs supérieurs à 0 baissent de 1.
+- À la **fin de la phase d'un camp**, les compteurs supérieurs à 0 des monstres de **ce camp** baissent de 1.
+  - Fin de la phase du joueur : les compteurs des monstres du joueur baissent de 1.
+  - Fin de la phase de l'adversaire : les compteurs des monstres de l'adversaire baissent de 1.
 
 | Temps de recharge | Utilisable |
 |---|---|
@@ -32,11 +34,12 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Un monstre qui arrive sur le terrain a tous ses compteurs au maximum, c'est-à-dire égaux à son temps de recharge.
 - Exemple : un monstre posé au tour 1 avec une compétence à 0 et une compétence à 1.
   - La compétence à 0 est utilisable immédiatement, dès le tour 1.
-  - Au début du tour 2, le compteur de la seconde passe de 1 à 0 : elle devient disponible.
+  - À la fin de la phase du joueur au tour 1, le compteur de la seconde passe de 1 à 0 : elle est disponible au tour 2.
 - Cette règle s'applique aussi aux monstres posés lors de la mise en place.
 
 **Ralentissement**
 - Un monstre ralenti voit le compteur de **toutes** ses compétences actives augmenter de 1, y compris celles qui sont disponibles.
+- Comme les compteurs ne baissent qu'à la fin de la phase du camp du monstre, une compétence disponible qui est ralentie est bloquée pendant la prochaine phase de ce monstre, quel que soit le camp qui applique le ralentissement.
 - Le ralentissement n'a pas de durée : il ne touche que le compteur en cours. Après la prochaine utilisation de la compétence, son temps de recharge normal s'applique.
 - Le ralentissement est indépendant des dégâts : il s'applique même si les dégâts de la compétence sont réduits à 0.
 
