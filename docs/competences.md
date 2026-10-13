@@ -76,7 +76,31 @@ Ne choisit pas de cible : ignore la Provocation.
 | **Rôle visé** | Carry |
 | **Cible** | Un ennemi sur le terrain |
 | **Effet** | Inflige 3 dégâts |
-| **Temps de recharge** | 1 |
+| **Temps de recharge** | 0 |
 | **Durée** | Instantané |
 
 Soumise à la Provocation.
+
+### Soin
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Un allié sur le terrain |
+| **Effet** | Rend 4 PV |
+| **Temps de recharge** | 1 |
+| **Durée** | Instantané |
+
+### Bénédiction
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Tous les alliés sur le terrain |
+| **Effet** | Les dégâts infligés par chaque allié ciblé augmentent de 1 |
+| **Temps de recharge** | 2 |
+| **Durée** | 6 tours |
+
+Seuls les alliés présents sur le terrain au moment de l'utilisation reçoivent le bonus.
