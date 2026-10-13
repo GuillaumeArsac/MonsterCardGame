@@ -74,12 +74,12 @@ Ne choisit pas de cible : ignore la Provocation.
 |---|---|
 | **Type** | Active |
 | **Rôle visé** | Carry |
-| **Cible** | Un ennemi sur le terrain |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Inflige 3 dégâts |
 | **Temps de recharge** | 0 |
 | **Durée** | Instantané |
 
-Soumise à la Provocation.
+Si elle vise un ennemi, elle est soumise à la Provocation.
 
 ### Soin
 
@@ -87,10 +87,12 @@ Soumise à la Provocation.
 |---|---|
 | **Type** | Active |
 | **Rôle visé** | Support |
-| **Cible** | Un allié sur le terrain |
+| **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
 | **Effet** | Rend 4 PV |
 | **Temps de recharge** | 1 |
 | **Durée** | Instantané |
+
+Si elle vise un ennemi, elle est soumise à la Provocation.
 
 ### Bénédiction
 
