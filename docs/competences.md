@@ -111,10 +111,6 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 
 Seuls les alliés présents sur le terrain au moment de l'utilisation reçoivent le bonus.
 
-## Propositions à valider
-
-Ces compétences sont des propositions. Elles rejoindront le catalogue une fois validées.
-
 ### Morsure perforante
 
 | Champ | Valeur |
