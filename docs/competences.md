@@ -17,6 +17,8 @@ Les règles du combat sont dans [combat.md](combat.md).
 
 **Temps de recharge**
 - Toutes les compétences actives ont un temps de recharge.
+- **Temps de recharge X :** après utilisation, la compétence ne peut pas être réutilisée pendant les X phases suivantes de ce monstre.
+- Avec 0, elle est utilisable à chaque phase ; avec 1, une phase sur deux ; avec 2, une phase sur trois, etc.
 
 **Ralentissement**
 - Un monstre ralenti voit le temps de recharge de **toutes** ses compétences actives augmenté de 1.
