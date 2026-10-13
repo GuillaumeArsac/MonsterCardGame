@@ -21,12 +21,14 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Avec 0, elle est utilisable à chaque phase ; avec 1, une phase sur deux ; avec 2, une phase sur trois, etc.
 
 **Ralentissement**
-- Un monstre ralenti voit le temps de recharge de **toutes** ses compétences actives augmenté de 1.
-- Selon la compétence qui l'applique, le ralentissement est permanent ou dure X tours.
+- Un monstre ralenti voit la recharge en cours de **toutes** ses compétences actives augmentée de 1 : chacune sera disponible une phase plus tard que prévu.
+- Une compétence déjà disponible devient indisponible pendant la prochaine phase du monstre.
+- Le ralentissement n'a pas de durée : il ne touche que la recharge en cours. Après la prochaine utilisation de la compétence, son temps de recharge normal s'applique.
+- Le ralentissement est indépendant des dégâts : il s'applique même si les dégâts de la compétence sont réduits à 0.
 
 **Durées**
 - Quand une compétence applique un effet pendant **X tours**, l'effet dure jusqu'à la fin de la X-ième phase **de l'autre camp**.
-- Cette règle vaut pour tous les effets à durée : bonus, réductions, ralentissement, etc.
+- Cette règle vaut pour tous les effets à durée : bonus, réductions, etc.
 - Exemple : le joueur applique un effet de 2 tours pendant sa phase.
   - l'effet dure pendant la fin de sa phase, puis toute la phase de l'adversaire (1re phase de l'autre camp) ;
   - puis toute la phase suivante du joueur, et toute la phase suivante de l'adversaire (2e phase de l'autre camp) ;
@@ -53,4 +55,15 @@ Une fiche doit être assez précise pour que n'importe qui obtienne le même ré
 
 ## Catalogue
 
-*À remplir.*
+### Grand balayage
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Tank |
+| **Cible** | Tous les ennemis sur le terrain |
+| **Effet** | Inflige 1 dégât à chaque ennemi sur le terrain et lui applique Ralentissement |
+| **Temps de recharge** | 4 |
+| **Durée** | Instantané |
+
+Ne choisit pas de cible : ignore la Provocation.
