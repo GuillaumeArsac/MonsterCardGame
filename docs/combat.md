@@ -28,7 +28,7 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 - Un tour est donc terminé quand toutes les créatures en jeu des deux camps ont agi.
 - Pendant sa phase, un joueur :
   1. pose autant de monstres qu'il veut, dans la limite des places libres ;
-  2. fait agir **chacun** de ses monstres sur le terrain, y compris ceux qui viennent d'être posés.
+  2. fait agir **chacun** de ses monstres sur le terrain, y compris ceux qui viennent d'être posés, s'ils ont une compétence active disponible (voir les temps de recharge dans [competences.md](competences.md)).
 
 ## Les monstres sur le terrain
 

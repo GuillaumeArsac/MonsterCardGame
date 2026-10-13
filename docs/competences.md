@@ -19,6 +19,10 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Toutes les compétences actives ont un temps de recharge.
 - **Temps de recharge X :** après utilisation, la compétence ne peut pas être réutilisée pendant les X phases suivantes de ce monstre.
 - Avec 0, elle est utilisable à chaque phase ; avec 1, une phase sur deux ; avec 2, une phase sur trois, etc.
+- **Entrée sur le terrain :** un monstre qui arrive sur le terrain a toutes ses recharges au maximum, comme s'il venait d'utiliser chacune de ses compétences actives.
+  - Une compétence avec un temps de recharge de 0 est donc utilisable dès la phase où le monstre est posé.
+  - Une compétence avec un temps de recharge de X n'est utilisable qu'après X phases de ce monstre.
+  - Cette règle s'applique aussi aux monstres posés lors de la mise en place.
 
 **Ralentissement**
 - Un monstre ralenti voit la recharge en cours de **toutes** ses compétences actives augmentée de 1 : chacune sera disponible une phase plus tard que prévu.
@@ -178,12 +182,12 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 |---|---|
 | **Type** | Active |
 | **Rôle visé** | Support |
-| **Cible** | N'importe quel autre monstre sur le terrain, allié ou ennemi |
-| **Effet** | Renvoie la cible dans la main de son propriétaire. Elle garde ses PV actuels et perd tous ses effets temporaires (bonus, réductions, ralentissement). Ses recharges sont remises à 0 |
+| **Cible** | Un autre allié sur le terrain |
+| **Effet** | Renvoie la cible dans la main. Elle garde ses PV actuels et perd tous ses effets temporaires (bonus, réductions, ralentissement) |
 | **Temps de recharge** | 3 |
 | **Durée** | Instantané |
 
-Si elle vise un ennemi, elle est soumise à la Provocation. Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué.
+Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il est reposé plus tard, ses recharges repartent au maximum, comme pour toute entrée sur le terrain.
 
 ### Provocation
 
