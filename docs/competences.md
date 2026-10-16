@@ -80,7 +80,7 @@ Une fiche doit être assez précise pour que n'importe qui obtienne le même ré
 | **Rôle visé** | Tank |
 | **Cible** | Tous les ennemis sur le terrain |
 | **Effet** | Inflige 1 dégât à chaque ennemi sur le terrain et lui applique Ralentissement |
-| **Temps de recharge** | 5 |
+| **Temps de recharge** | 3 |
 | **Durée** | Instantané |
 
 Ne choisit pas de cible : ignore la Provocation.
@@ -144,7 +144,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Les bonus de dégât
 | **Type** | Active |
 | **Rôle visé** | Carry |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Si la cible a 4 PV ou moins, elle est vaincue. Sinon, inflige 1 dégât |
+| **Effet** | Si la cible a 8 PV ou moins, elle est vaincue. Sinon, inflige 1 dégât |
 | **Temps de recharge** | 4 |
 | **Durée** | Instantané |
 

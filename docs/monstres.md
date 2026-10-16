@@ -32,12 +32,12 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 | **Aigle Runique Géant** | Carry | 18 | Griffe, Exécution, Chasseur de trophées |
 | **Guerrier centaure** | Carry | 16 | Morsure perforante, Coup de bouclier |
 | **Chaman centaure** | Support | 16 | Griffe, Soin, Bénédiction |
-| **Taureau de guerre** | Tank | 30 | Provocation, Carapace, Coup de bouclier |
+| **Taureau de guerre** | Tank | 30 | Carapace, Griffe, Coup de bouclier |
 
 ## Principes suivis
 
 - **Chaque monstre est utile dès sa pose** : il a une compétence à recharge 0, ou une passive qui fonctionne dès son arrivée (Aura apaisante, Provocation, Carapace).
 - **Les carry ont peu de PV** et une compétence à recharge 0, pour frapper tout de suite.
 - **Les supports ont une compétence offensive** (Griffe) ou une passive, pour ne pas rester inactifs pendant les recharges.
-- **Tous les tanks ont Provocation**, pour protéger les autres monstres de leur camp.
+- **Un seul tank avec Provocation par équipe.** Les simulations ont montré que deux Provocations rendent les carry de l'équipe presque intouchables.
 - **Chaque équipe a une Exécution**, et l'adversaire a le ralentissement de zone (Grand balayage), pour tester ces mécaniques.
