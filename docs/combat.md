@@ -15,8 +15,8 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 ## Le terrain
 
-- Chaque joueur a **3 places**.
-- On ne peut poser un monstre que sur une place libre.
+- Chaque joueur a **3 places**, appelées emplacements : gauche, centre et droite.
+- On ne peut poser un monstre que sur un emplacement libre, et le joueur choisit lequel.
 
 ## Déroulement
 

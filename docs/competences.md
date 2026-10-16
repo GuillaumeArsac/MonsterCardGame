@@ -156,10 +156,14 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue ra
 |---|---|
 | **Type** | Passive |
 | **Rôle visé** | Carry |
-| **Cible** | Aucune |
-| **Effet** | Le camp de ce monstre gagne 1 point supplémentaire |
-| **Durée** | Permanente |
-| **Déclencheur** | Quand ce monstre vainc un monstre ennemi qui avait 12 PV de départ ou plus |
+| **Cible** | Un emplacement adverse, tiré au hasard |
+| **Effet** | Un monstre adverse vaincu sur cet emplacement rapporte 1 point de plus |
+| **Durée** | Tout le combat |
+| **Déclencheur** | Au début du combat |
+
+- Le tirage a lieu avant la mise en place, et l'emplacement marqué est visible des deux camps.
+- Le point bonus s'applique quel que soit le monstre qui vainc la cible, même si le Chasseur de trophées est en main ou a été vaincu.
+- Un monstre vaincu par la fatigue ne rapporte aucun point, bonus compris.
 
 ### Bouclier
 
