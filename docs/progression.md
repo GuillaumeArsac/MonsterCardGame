@@ -32,12 +32,6 @@ Après chaque **victoire** :
 - Une compétence unique, obtenue par une quête secondaire, ne peut jamais être remplacée.
 - Un monstre peut recevoir une compétence qu'il possède déjà. Les deux exemplaires se cumulent selon la règle de cumul.
 
-## Principe de conception de l'aventure
-
-- Le joueur accumule des outils au fil de l'aventure, y compris des combinaisons très fortes (par exemple plusieurs exemplaires d'une même compétence active). C'est voulu.
-- En contrepartie, les monstres adverses deviennent plus puissants et plus dangereux à mesure que l'aventure avance.
-- La difficulté se règle donc par la conception des adversaires de chaque zone, pas en limitant ce que le joueur peut construire.
-
 **Boost de stats**
 - Chaque monstre adverse a un **boost de stats** défini à l'avance, indépendant de ses propres statistiques (par exemple : +4 PV).
 - Un monstre du joueur ne peut porter qu'**un seul** boost de stats. En ajouter un nouveau remplace le précédent.
@@ -46,3 +40,20 @@ Après chaque **victoire** :
 
 - Les combats du **scénario** sont uniques.
 - Chaque zone propose aussi des **combats libres**, rejouables, pour s'entraîner et progresser.
+
+## Principe de conception de l'aventure
+
+- Le joueur accumule des outils au fil de l'aventure, y compris des combinaisons très fortes (par exemple plusieurs exemplaires d'une même compétence active). C'est voulu.
+- En contrepartie, les monstres adverses deviennent plus puissants et plus dangereux à mesure que l'aventure avance.
+- La difficulté se règle donc par la conception des adversaires de chaque zone, pas en limitant ce que le joueur peut construire.
+
+## Propositions à valider
+
+**Échelle des boosts de stats** (les boosts ne concernent que les PV pour l'instant) :
+
+| Adversaire | Boost |
+|---|---|
+| Combat d'introduction | +2 PV |
+| Monstre normal de zone | +3 à +4 PV |
+| Monstre d'élite | +5 à +6 PV |
+| Boss de zone | +8 PV |

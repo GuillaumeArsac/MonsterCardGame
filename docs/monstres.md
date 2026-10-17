@@ -59,3 +59,21 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 - **Les supports ont une compétence offensive** (Griffe) ou une passive, pour ne pas rester inactifs pendant les recharges.
 - **Un seul tank avec Provocation par équipe.** Les simulations ont montré que deux Provocations rendent les carry de l'équipe presque intouchables.
 - **Chaque équipe a une Exécution**, et l'adversaire a le ralentissement de zone (Grand balayage), pour tester ces mécaniques.
+
+## Collection de départ — proposition à valider
+
+7 monstres de base, avec une seule compétence chacun. Le joueur en choisit 5 pour combattre.
+
+| Monstre | Rôle | PV | Compétence |
+|---|---|---|---|
+| **Loup des cendres** | Carry | 15 | Griffe |
+| **Renard de braise** | Carry | 14 | Morsure perforante |
+| **Ours brun** | Carry | 20 | Griffe |
+| **Chouette guérisseuse** | Support | 16 | Soin |
+| **Luciole sacrée** | Support | 16 | Bénédiction |
+| **Chien de garde** | Tank | 26 | Provocation |
+| **Sanglier** | Tank | 24 | Coup de bouclier |
+
+- **3 attaquants sur 7.** Avec une seule compétence, un support ou un tank n'inflige aucun dégât. Les simulations montrent qu'une équipe de base a besoin d'au moins 3 attaquants pour finir ses combats avant la fatigue.
+- **Les compétences de base sont toutes remplaçables**, contrairement aux compétences uniques des monstres de quête.
+- **Les premiers adversaires doivent avoir 1 ou 2 compétences** et des PV modestes. Face à la horde de Thrâk, l'équipe de base perd tous ses combats.
