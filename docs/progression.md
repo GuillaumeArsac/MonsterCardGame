@@ -10,22 +10,31 @@ Le joueur commence avec quelques monstres simples, et les renforce en **dépeça
 
 Inspiration : les jeux de cartes Yu-Gi-Oh sur GBA et DS.
 
-## Collection de départ
+## Collection
 
-- Le joueur commence avec **5 à 10 monstres de base**.
+- Le joueur commence avec **6 ou 7 monstres de base**.
 - Chaque monstre de base a **une seule compétence**, à l'effet standard.
+- Le seul moyen d'obtenir de nouveaux monstres est de réussir des **quêtes secondaires**.
+  - Ces monstres ont une **compétence unique**, qui ne peut pas être remplacée.
+- En fin d'aventure, le joueur possède **8 à 12 monstres**, selon le nombre de quêtes secondaires réussies.
 
 ## Dépeçage
 
 Après chaque **victoire** :
 1. Un monstre est **tiré au hasard** parmi tous les monstres de l'équipe adverse, qu'il ait été vaincu ou non.
 2. Le joueur choisit **une** récompense :
-   - **une compétence** de ce monstre, ajoutée à l'un de ses monstres ;
-   - **ou une partie de ses statistiques**, ajoutée à l'un de ses monstres.
+   - **une compétence** de ce monstre, au choix, ajoutée à l'un de ses monstres ;
+   - **ou le boost de stats** de ce monstre, ajouté à l'un de ses monstres.
 
-**Limite de compétences**
+**Compétences**
 - Un monstre a au maximum 3 compétences.
 - Si le monstre qui reçoit la compétence en a déjà 3, le joueur choisit l'une d'elles à remplacer. La compétence remplacée est perdue.
+- Une compétence unique, obtenue par une quête secondaire, ne peut jamais être remplacée.
+- Un monstre peut recevoir une compétence qu'il possède déjà. Les deux exemplaires se cumulent selon la règle de cumul.
+
+**Boost de stats**
+- Chaque monstre adverse a un **boost de stats** défini à l'avance, indépendant de ses propres statistiques (par exemple : +4 PV).
+- Un monstre du joueur ne peut porter qu'**un seul** boost de stats. En ajouter un nouveau remplace le précédent.
 
 ## Combats
 
