@@ -32,7 +32,8 @@ Chaque carte est un **monstre unique** avec ses propres capacités.
 
 ## Les monstres sur le terrain
 
-- À chaque tour, un monstre utilise **une** de ses compétences actives, s'il en a.
+- Pendant sa phase, un monstre peut utiliser **toutes** ses compétences actives disponibles, c'est-à-dire celles qui ne sont pas en recharge.
+- Chaque compétence ne peut être utilisée qu'**une fois par phase**, même si son temps de recharge est 0.
 - Ses compétences passives sont toujours actives.
 - Un monstre ne peut revenir du terrain dans la main que grâce à une compétence qui le permet.
 
