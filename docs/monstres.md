@@ -60,7 +60,7 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 - **Un seul tank avec Provocation par équipe.** Les simulations ont montré que deux Provocations rendent les carry de l'équipe presque intouchables.
 - **Chaque équipe a une Exécution**, et l'adversaire a le ralentissement de zone (Grand balayage), pour tester ces mécaniques.
 
-## Collection de départ — proposition à valider
+## Collection de départ
 
 7 monstres de base, avec une seule compétence chacun. Le joueur en choisit 5 pour combattre.
 

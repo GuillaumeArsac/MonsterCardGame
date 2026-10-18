@@ -47,9 +47,9 @@ Après chaque **victoire** :
 - En contrepartie, les monstres adverses deviennent plus puissants et plus dangereux à mesure que l'aventure avance.
 - La difficulté se règle donc par la conception des adversaires de chaque zone, pas en limitant ce que le joueur peut construire.
 
-## Propositions à valider
+## Échelle des boosts de stats
 
-**Échelle des boosts de stats** (les boosts ne concernent que les PV pour l'instant) :
+Les boosts ne concernent que les PV pour l'instant.
 
 | Adversaire | Boost |
 |---|---|
