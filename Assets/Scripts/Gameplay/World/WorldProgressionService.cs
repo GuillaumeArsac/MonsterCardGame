@@ -1,48 +1,36 @@
 using System.Collections.Generic;
-using MonsterCardGame.Gameplay.Combat.Data;
 
 namespace MonsterCardGame.Gameplay.World
 {
     public class WorldProgressionService : IWorldProgressionService
     {
-        private readonly WorldData          _worldData;
-        private readonly HashSet<string>    _defeatedMonsters = new();
+        private readonly WorldData       _worldData;
+        private readonly HashSet<string> _completedEncounters = new();
 
         public WorldProgressionService(WorldData worldData) => _worldData = worldData;
 
-        public IReadOnlyList<ZoneData>      AllZones             => _worldData?.Zones ?? new List<ZoneData>();
-        public IReadOnlyCollection<string>  DefeatedMonsterNames => _defeatedMonsters;
+        public IReadOnlyList<ZoneData>     AllZones              => _worldData?.Zones ?? new List<ZoneData>();
+        public IReadOnlyCollection<string> CompletedEncounterIds => _completedEncounters;
 
+        // Les combats de zone (et donc les boss) seront branchés à l'étape 8 du plan :
+        // d'ici là, une zone qui exige les autres boss reste verrouillée.
         public bool IsZoneUnlocked(ZoneData zone)
-        {
-            if (zone == null || !zone.RequiresAllOtherBossesDefeated) return true;
-            if (_worldData == null) return false;
+            => zone != null && !zone.RequiresAllOtherBossesDefeated;
 
-            foreach (var z in _worldData.Zones)
-            {
-                if (z == zone) continue;
-                if (!IsBossDefeated(z)) return false;
-            }
-            return true;
+        public bool IsEncounterCompleted(string encounterId)
+            => !string.IsNullOrEmpty(encounterId) && _completedEncounters.Contains(encounterId);
+
+        public void RecordVictory(string encounterId)
+        {
+            if (string.IsNullOrEmpty(encounterId)) return;
+            _completedEncounters.Add(encounterId);
+            Core.GameLog.Info("WorldProgression", $"Combat gagné enregistré : {encounterId}");
         }
 
-        public bool IsMonsterDefeated(MonsterData monster)
-            => monster != null && _defeatedMonsters.Contains(monster.name);
-
-        public bool IsBossDefeated(ZoneData zone)
-            => zone?.Boss != null && IsMonsterDefeated(zone.Boss);
-
-        public void RecordVictory(MonsterData monster)
+        public void LoadCompleted(IEnumerable<string> encounterIds)
         {
-            if (monster == null) return;
-            _defeatedMonsters.Add(monster.name);
-            Core.GameLog.Info("WorldProgression", $"Monstre vaincu enregistré : {monster.MonsterName}");
-        }
-
-        public void LoadDefeated(IEnumerable<string> names)
-        {
-            _defeatedMonsters.Clear();
-            foreach (var n in names) _defeatedMonsters.Add(n);
+            _completedEncounters.Clear();
+            foreach (var id in encounterIds) _completedEncounters.Add(id);
         }
     }
 }

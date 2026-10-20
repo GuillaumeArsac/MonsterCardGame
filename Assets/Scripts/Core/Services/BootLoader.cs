@@ -22,9 +22,8 @@ namespace MonsterCardGame.Core.Services
 
         private void RegisterServices()
         {
-            // Les services Gameplay sont enregistrés par CombatServicesInstaller (Gameplay.asmdef)
+            // Les services Gameplay sont enregistrés par GameServicesInstaller (Gameplay.asmdef)
             // via [RuntimeInitializeOnLoadMethod] — avant tout Awake().
-            // Epic 4 : Services.Register<ISaveSystem>(new JsonSaveSystem());
             GameLog.Info("BootLoader", "Services Core initialisés");
         }
     }

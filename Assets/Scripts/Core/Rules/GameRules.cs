@@ -1,26 +1,19 @@
 namespace MonsterCardGame.Core
 {
+    /// <summary>Constantes des règles du jeu. Référence : docs/combat.md et docs/progression.md.</summary>
     public static class GameRules
     {
-        // Construction du deck
-        public const int DeckSize = 40;
+        // Équipe et terrain
+        public const int TeamSize = 5;
+        public const int FieldSlots = 3;
 
-        public const int MaxDeckWeight = 15;
-        public const int MaxHandSize = 10;
-        public const int StartOfTurnHandSize = 6;
-        public const int MaxCopiesCommon = 3;
-        public const int MaxCopiesRare = 3;
-        public const int MaxCopiesLegendary = 1;
-        public const int MaxCopiesUnique = 1;
+        // Victoire
+        public const int PointsToWin = 3;
 
-        // Poids par rareté
-        public const int WeightCommon = 0;
+        // Fatigue : à partir de ce tour, dégâts croissants (1, puis 2, puis 3...) au début de chaque tour
+        public const int FatigueStartTurn = 16;
 
-        public const int WeightRare = 1;
-        public const int WeightLegendary = 2;
-        public const int WeightUnique = 2;
-
-        // Combat — placeholder à confirmer lors du balance Epic 2
-        public const int PlayerStartingHP = 30;
+        // Monstres
+        public const int MaxSkillsPerMonster = 3;
     }
 }
