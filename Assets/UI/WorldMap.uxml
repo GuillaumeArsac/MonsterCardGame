@@ -16,11 +16,17 @@
             <!-- Zone de carte interactive : les marqueurs sont ajoutés dynamiquement -->
             <ui:VisualElement name="map-area" class="map-area" />
 
-            <!-- Panneau de détail : artwork et description de la zone sélectionnée -->
+            <!-- Panneau de détail : artwork, description et combats de la zone sélectionnée -->
             <ui:VisualElement name="detail-panel" class="detail-panel">
                 <ui:VisualElement name="zone-artwork" class="zone-artwork" />
                 <ui:Label name="zone-name-label" text="Sélectionnez une zone" class="detail-zone-name" />
                 <ui:Label name="zone-desc-label" text="" class="detail-zone-desc" />
+                <ui:Label text="Combats" class="detail-section-title" />
+                <ui:ScrollView name="encounter-scroll" class="wm-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="encounter-list" class="wm-list" />
+                </ui:ScrollView>
+                <ui:Label name="fight-status-label" text="" class="detail-fight-status" />
+                <ui:Button name="fight-btn" text="Combattre !" class="nav-btn nav-btn--primary" />
             </ui:VisualElement>
 
         </ui:VisualElement>

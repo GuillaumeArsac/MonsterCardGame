@@ -110,14 +110,18 @@ Choix faits là où `progression.md` ne dit rien :
 - [x] Script d'éditeur qui génère les assets depuis les docs : les 13 compétences, les 7 monstres de départ, les équipes de test A et B, la patrouille centaure (menu **MonsterCardGame > Contenu > Générer les assets depuis les docs**, fait avec l'étape 5). Relancer le menu met à jour les assets sans changer leur GUID.
   Les docs ne donnent pas de boost de stats aux équipes A et B : il est à 0 pour l'instant. Le contenu est aussi décrit dans `Tests/EditMode/TestCatalog.cs` pour les tests : un changement dans les docs se reporte aux deux endroits.
 
-### 8. Branchement au monde
+### 8. Branchement au monde — fait
 
-- [ ] `ZoneData` : combats du scénario (uniques) et combats libres (rejouables).
-- [ ] Lancer la patrouille centaure depuis les Plaines.
-- [ ] Réactiver le verrouillage des zones (les Ruines) à partir des boss vaincus.
-- [ ] **Jalon 4 :** la patrouille centaure jouable depuis la carte des Plaines.
+- [x] `ZoneData` : combats du scénario (uniques) et combats libres (rejouables), et le combat de boss de la zone. Les combats du scénario se débloquent dans l'ordre : chacun est disponible quand les précédents sont gagnés (comme Vaelisse, disponible après la défaite de Thrâk).
+- [x] Lancer la patrouille centaure depuis les Plaines : la carte du monde liste les combats de la zone avec leur état (gagné, verrouillé, libre, boss) et un bouton **Combattre !**. Après le combat (et le dépeçage), le joueur revient sur la carte.
+- [x] Réactiver le verrouillage des zones (les Ruines) à partir des boss vaincus. Une zone sans boss défini compte comme non vaincue : les Ruines restent verrouillées tant que Vaelisse, boss des Plaines, n'existe pas.
+- [x] **Jalon 4 :** la patrouille centaure jouable depuis la carte des Plaines. Vérifié dans Unity, depuis Boot : la patrouille gagnée passe à « gagné » et ne se rejoue pas, la victoire est sauvegardée.
+
+Le générateur de contenu donne leurs combats aux zones et crée les Ruines si elles manquent. L'identité des zones (nom, description, illustration, position sur la carte) se règle à la main dans leurs assets. En attendant de vrais combats libres, la horde de Thrâk (équipe de test B) est le combat libre des Plaines. L'écran Équipe ne lance plus de combats : tout passe par la carte du monde.
 
 ## Points de conception encore ouverts
+
+- **Les combats suivants des Plaines :** Thrâk et Vaelisse (boss) restent à concevoir dans `combats-scenario.md`. Ce sont eux qui débloqueront, à terme, les Ruines.
 
 - **La Forge dans le récit :** la fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore d'améliorer la Forge aux niveaux 2 et 3, une mécanique de l'ancienne version. Le dépeçage la remplace. Il faut décider ce que devient la Forge : simple élément narratif, ou lieu du dépeçage.
 - **La patrouille centaure** (`combats-scenario.md`) attend une validation. Une mauvaise composition d'équipe y est très punie : il faudra peut-être un dialogue qui conseille l'équipe avant ce premier combat.

@@ -100,11 +100,7 @@ namespace MonsterCardGame.Editor
 
             var grid = CardGrid(canvas, new Vector2(-240, -60), new Vector2(1240, 760));
 
-            var combatsTitle = NewText("Titre des combats", canvas, "Combats", 26, TextAlignmentOptions.Center, FontStyles.Bold);
-            Center(combatsTitle.rectTransform, new Vector2(700, 300), new Vector2(420, 40));
-            var template = ButtonColumn(canvas, "Combats", new Vector2(700, 50), new Vector2(420, 440));
-
-            var (worldMap, _) = NewButton("Carte du monde", canvas, "Carte du monde", 24, SecondaryButtonColor);
+            var (worldMap, _) = NewButton("Carte du monde", canvas, "Carte du monde", 24);
             Anchor((RectTransform)worldMap.transform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-50, 50), new Vector2(420, 64));
 
             var screen = canvasGo.AddComponent<TeamScreen>();
@@ -112,7 +108,6 @@ namespace MonsterCardGame.Editor
             Assign(screen, "_grid", grid);
             Assign(screen, "_teamLabel", teamLabel);
             Assign(screen, "_hintLabel", hint);
-            Assign(screen, "_encounterButtonTemplate", template);
             Assign(screen, "_worldMapButton", worldMap);
 
             EditorSceneManager.SaveScene(scene, TeamScenePath);

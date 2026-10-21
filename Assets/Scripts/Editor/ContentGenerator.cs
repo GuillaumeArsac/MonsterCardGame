@@ -8,6 +8,7 @@ using MonsterCardGame.Gameplay.Encounters;
 using MonsterCardGame.Gameplay.Monsters;
 using MonsterCardGame.Gameplay.Skills;
 using MonsterCardGame.Gameplay.Skills.Effects;
+using MonsterCardGame.Gameplay.World;
 
 namespace MonsterCardGame.Editor
 {
@@ -39,6 +40,8 @@ namespace MonsterCardGame.Editor
                 Encounter("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, patrol),
                 Encounter("test-horde-de-thrak", "La horde de Thrâk (équipe de test B)", EncounterType.Free, teamB),
             };
+
+            GenerateZones(patrol: encounters[0], horde: encounters[1]);
 
             var database = GetOrCreate<ContentDatabase>("Assets/Resources", ContentDatabase.ResourcePath);
             database.Init(Skills.Values, starters.Concat(teamA).Concat(teamB).Concat(patrol), starters, encounters);
@@ -168,6 +171,46 @@ namespace MonsterCardGame.Editor
             encounter.Init(id, displayName, type, monsters);
             Save(encounter);
             return encounter;
+        }
+
+        // ── Zones (docs/scenario/zones) ───────────────────────────────────
+
+        private const string ZoneFolder = Root + "/Zone";
+        private const string WorldDataPath = "Assets/Resources/WorldData.asset";
+
+        /// <summary>
+        /// Combats des zones. L'identité des zones (nom, illustration, position) se règle à la main dans leurs assets :
+        /// seules les Ruines sont créées si elles manquent.
+        /// </summary>
+        private static void GenerateZones(EncounterData patrol, EncounterData horde)
+        {
+            var plains = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Plains.asset");
+            if (plains == null)
+            {
+                Debug.LogWarning($"[ContentGenerator] Zone introuvable : {ZoneFolder}/Plains.asset");
+                return;
+            }
+
+            // Vaelisse, boss des Plaines, n'est pas encore conçue : sans boss, les Ruines restent verrouillées.
+            // La horde de Thrâk (équipe de test B) sert de combat libre en attendant les vrais combats libres.
+            plains.SetEncounters(new[] { patrol }, new[] { horde }, null);
+            Save(plains);
+
+            var ruins = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Ruins.asset");
+            if (ruins == null)
+            {
+                ruins = ScriptableObject.CreateInstance<ZoneData>();
+                ruins.InitIdentity("Les Ruines Oubliées", "Zone finale. La vérité sur l'origine de tout. S'ouvre quand les boss des autres zones sont vaincus.",
+                                   new Vector2(0.78f, 0.28f), requiresAllOtherBossesDefeated: true);
+                AssetDatabase.CreateAsset(ruins, $"{ZoneFolder}/Ruins.asset");
+            }
+
+            var world = AssetDatabase.LoadAssetAtPath<WorldData>(WorldDataPath);
+            if (world != null && !world.Zones.Contains(ruins))
+            {
+                world.SetZones(world.Zones.Append(ruins));
+                Save(world);
+            }
         }
 
         // ── Outils ────────────────────────────────────────────────────────

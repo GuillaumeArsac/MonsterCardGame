@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using MonsterCardGame.Core;
 using MonsterCardGame.Core.Services;
-using MonsterCardGame.Gameplay.Content;
-using MonsterCardGame.Gameplay.Encounters;
 using MonsterCardGame.Gameplay.Monsters;
 using MonsterCardGame.Gameplay.World;
 using MonsterCardGame.UI.Combat;
@@ -15,7 +13,7 @@ namespace MonsterCardGame.UI.Progression
 {
     /// <summary>
     /// Composition de l'équipe : le joueur choisit 5 monstres de sa collection. Cliquer une carte l'ajoute à l'équipe
-    /// ou l'en retire. En attendant le branchement au monde (étape 8), l'écran lance aussi les combats.
+    /// ou l'en retire. Les combats se lancent depuis la carte du monde.
     /// Référence : docs/progression.md (Collection).
     /// </summary>
     public class TeamScreen : MonoBehaviour
@@ -24,13 +22,11 @@ namespace MonsterCardGame.UI.Progression
         [SerializeField] private RectTransform _grid;
         [SerializeField] private TMP_Text _teamLabel;
         [SerializeField] private TMP_Text _hintLabel;
-        [SerializeField, Tooltip("Bouton copié pour chaque combat")] private Button _encounterButtonTemplate;
         [SerializeField] private Button _worldMapButton;
 
         private MonsterCollection _collection;
         private ISaveService _save;
         private readonly List<MonsterCardView> _views = new();
-        private readonly List<Button> _encounterButtons = new();
 
         private void Start()
         {
@@ -46,32 +42,8 @@ namespace MonsterCardGame.UI.Progression
                 _views.Add(view);
             }
 
-            BuildEncounterButtons();
             _worldMapButton.onClick.AddListener(() => SceneManager.LoadScene(SceneNames.WorldMap));
             Refresh();
-        }
-
-        private void BuildEncounterButtons()
-        {
-            _encounterButtonTemplate.gameObject.SetActive(false);
-            if (!Services.Has<ContentDatabase>()) return;
-
-            var progression = Services.Get<IWorldProgressionService>();
-            foreach (var encounter in Services.Get<ContentDatabase>().Encounters)
-            {
-                var button = Instantiate(_encounterButtonTemplate, _encounterButtonTemplate.transform.parent);
-                button.gameObject.SetActive(true);
-                bool won = progression.IsEncounterCompleted(encounter.EncounterId);
-                button.GetComponentInChildren<TMP_Text>().text = won ? $"{encounter.DisplayName} (gagné)" : encounter.DisplayName;
-
-                var e = encounter;
-                button.onClick.AddListener(() =>
-                {
-                    Services.Get<CombatSession>().Begin(e, SceneNames.Team);
-                    SceneManager.LoadScene(SceneNames.Combat);
-                });
-                _encounterButtons.Add(button);
-            }
         }
 
         private void Toggle(OwnedMonster monster)
@@ -95,8 +67,8 @@ namespace MonsterCardGame.UI.Progression
                 ? "Votre équipe est prête. Cliquez un monstre encadré pour le retirer, puis un autre pour le remplacer."
                 : $"Choisissez encore {GameRules.TeamSize - count} monstre{(GameRules.TeamSize - count > 1 ? "s" : "")} : cliquez une carte pour l'ajouter à l'équipe.";
 
-            foreach (var button in _encounterButtons)
-                button.interactable = _collection.IsTeamComplete;
+            // Sans équipe complète, on ne peut pas combattre : le retour à la carte reste possible
+            _worldMapButton.GetComponentInChildren<TMP_Text>().text = _collection.IsTeamComplete ? "Carte du monde" : "Carte du monde (équipe incomplète)";
         }
     }
 }

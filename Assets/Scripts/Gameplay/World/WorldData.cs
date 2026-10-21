@@ -10,5 +10,8 @@ namespace MonsterCardGame.Gameplay.World
         private List<ZoneData> _zones = new();
 
         public IReadOnlyList<ZoneData> Zones => _zones;
+
+        /// <summary>Remplace la liste des zones. Pour les scripts d'éditeur et les tests.</summary>
+        public void SetZones(IEnumerable<ZoneData> zones) => _zones = new List<ZoneData>(zones);
     }
 }

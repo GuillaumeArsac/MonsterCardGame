@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af02df912a4ef74ebb1d660093d3c07, type: 3}
   m_Name: Plains
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.World.ZoneData
-  _zoneName: Plains
-  _description: 
+  _zoneName: Les Plaines Libres
+  _description: "Zone d'entr\xE9e recommand\xE9e. Lumineuse, organis\xE9e, indiff\xE9rente
+    \xE0 la crise."
   _artwork: {fileID: -9102900633203978818, guid: 6a67a921775262f4c8bc5ea364456f7c, type: 3}
   _mapPosition: {x: 0.5, y: 0.5}
+  _scenarioEncounters:
+  - {fileID: 11400000, guid: 04579b07dce74f54ab424eff5df91338, type: 2}
+  _freeEncounters:
+  - {fileID: 11400000, guid: f967461e656b70747bd2dd264ea02a03, type: 2}
+  _bossEncounter: {fileID: 0}
   _requiresAllOtherBossesDefeated: 0

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.World.WorldData
   _zones:
   - {fileID: 11400000, guid: b527fc0a8708bbf42baae0c239a96d28, type: 2}
+  - {fileID: 11400000, guid: 9b229f6c260dff44eb6aeb83e423b6ff, type: 2}
