@@ -93,6 +93,38 @@ namespace MonsterCardGame.Tests.EditMode
             return encounter;
         }
 
+        // ── Équipes de test (docs/monstres.md, tools/simulation) ──────────
+
+        /// <summary>Équipe A, équipe de test du joueur.</summary>
+        public MonsterCardData[] TeamA() => new[]
+        {
+            Monster("Griffon",          MonsterRole.Carry,   16, 0, Griffe, Execution),
+            Monster("Archer centaure",  MonsterRole.Carry,   14, 0, MorsurePerforante, ChasseurDeTrophees),
+            Monster("Orbe de lumière",  MonsterRole.Support, 18, 0, Soin, Benediction, AuraApaisante),
+            Monster("Svathurim",        MonsterRole.Support, 20, 0, Griffe, Bouclier, Repli),
+            Monster("Paladin centaure", MonsterRole.Tank,    28, 0, Provocation, Carapace, CoupDeBouclier),
+        };
+
+        /// <summary>Équipe B, la horde de Thrâk.</summary>
+        public MonsterCardData[] TeamB() => new[]
+        {
+            Monster("Thrâk le Perpétuel",  MonsterRole.Tank,    26, 0, Provocation, Griffe, GrandBalayage),
+            Monster("Aigle Runique Géant", MonsterRole.Carry,   18, 0, Griffe, Execution, ChasseurDeTrophees),
+            Monster("Guerrier centaure",   MonsterRole.Carry,   16, 0, MorsurePerforante, CoupDeBouclier),
+            Monster("Chaman centaure",     MonsterRole.Support, 16, 0, Griffe, Soin, Benediction),
+            Monster("Taureau de guerre",   MonsterRole.Tank,    30, 0, Carapace, Griffe, CoupDeBouclier),
+        };
+
+        /// <summary>Meilleure équipe de 5 de la collection de départ (clé « Départ » du simulateur).</summary>
+        public MonsterCardData[] TeamStart() => new[]
+        {
+            Monster("Loup des cendres",     MonsterRole.Carry,   15, 0, Griffe),
+            Monster("Renard de braise",     MonsterRole.Carry,   14, 0, MorsurePerforante),
+            Monster("Ours brun",            MonsterRole.Carry,   20, 0, Griffe),
+            Monster("Chouette guérisseuse", MonsterRole.Support, 16, 0, Soin),
+            Monster("Chien de garde",       MonsterRole.Tank,    26, 0, Provocation),
+        };
+
         public void Dispose()
         {
             foreach (var obj in _created)

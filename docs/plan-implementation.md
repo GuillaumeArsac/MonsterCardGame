@@ -45,7 +45,7 @@ La conception elle-même est décrite dans :
 - [x] `OwnedMonster`, le monstre possédé par le joueur : carte d'origine, compétences actuelles, boost, compétence unique verrouillée (monstres de quête). Il applique les règles du dépeçage : 3 compétences au maximum, remplacement, un seul boost.
 - [x] Tests EditMode : règles d'`OwnedMonster`, et le catalogue des docs décrit avec ce modèle (`Tests/EditMode/TestCatalog.cs`, réutilisable pour les tests du moteur).
 
-### 3. Moteur de combat (C# pur) — fait, sauf la comparaison
+### 3. Moteur de combat (C# pur) — fait
 
 Le moteur (`Gameplay/Combat/CombatEngine.cs`) se pilote par commandes : `Setup`, `Place`, `UseSkill`, `EndPhase`. Le joueur et l'IA passent par les mêmes commandes, et `CanPlace`, `CanUseSkill` et `GetValidTargets` disent ce qui est permis. Il n'utilise aucune API Unity : le hasard vient d'un `System.Random` qu'on lui donne.
 
@@ -57,16 +57,26 @@ Le moteur (`Gameplay/Combat/CombatEngine.cs`) se pilote par commandes : `Setup`,
 - [x] Points, emplacements marqués, fatigue à partir du tour 16, conditions de victoire et de défaite.
 - [x] Événements pour l'interface : pose, compétence utilisée, dégâts, soin, ralentissement, effet appliqué, retour en main, monstre vaincu, début et fin de phase, fin de combat.
 - [x] Tests EditMode pour chaque règle (`Tests/EditMode/Combat`).
-- [ ] Comparaison avec le simulateur sur les équipes A et B. Elle demande l'IA : elle se fera avec l'étape 4, en comparant aux résultats notés dans `monstres.md` et `combats-scenario.md`.
+- [x] Comparaison avec le simulateur sur les équipes A et B, et sur la patrouille centaure (faite avec l'IA de l'étape 4, voir plus bas).
 
 Points que les docs ne précisent pas, réglés comme dans le simulateur :
 - la fatigue ignore les réductions de dégâts (Carapace, Bouclier) ;
 - quand Exécution ne vainc pas la cible, son dégât passe par le calcul normal (bonus, puis réductions) ;
 - le compteur d'une compétence prend son temps de recharge avant ses effets : un monstre qui se ralentit lui-même ralentit aussi la compétence qu'il vient d'utiliser.
 
-### 4. IA adverse
+### 4. IA adverse — fait
 
-- [ ] Porter l'IA du simulateur : choix de la pose, puis note de chaque action possible.
+- [x] Porter l'IA du simulateur : choix de la pose, puis note de chaque action possible (`Gameplay/Combat/AI/CombatAI.cs`).
+  Elle reconnaît les compétences à leurs effets et non à leur nom : une nouvelle compétence faite des briques existantes est jouée sans code en plus. Les poids de menace sont calculés depuis les effets et redonnent exactement ceux du simulateur.
+- [x] `CombatSimulation` joue des combats IA contre IA, comme `run_sims.py`. Les tests `SimulatorComparisonTests` comparent ses résultats à ceux du simulateur Python (1 000 combats par configuration, écart toléré : 6 points de victoires, 1,5 tour) :
+
+| Configuration | Simulateur Python | C# |
+|---|---|---|
+| A contre B | ~35 %, ~8 tours | 35 %, 8,3 tours |
+| Loup, Renard, Ours, Luciole, Chien contre la patrouille | 78 %, 10 tours | 77 %, 10,2 tours |
+| Loup, Renard, Ours, Chouette, Chien contre la patrouille | 83 %, 10 tours | 82 %, 10,4 tours |
+| Loup, Ours, Chouette, Luciole, Chien contre la patrouille | 30 %, 12 tours | 26 %, 11,6 tours |
+| Loup, Renard, Ours, Chouette, Sanglier contre la patrouille | 1 %, 10 tours | 1 %, 9,6 tours |
 
 ### 5. Interface de combat
 
