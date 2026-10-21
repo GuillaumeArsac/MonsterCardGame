@@ -7,10 +7,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using MonsterCardGame.Core;
+using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.Combat;
 using MonsterCardGame.Gameplay.Combat.AI;
 using MonsterCardGame.Gameplay.Encounters;
 using MonsterCardGame.Gameplay.Monsters;
+using MonsterCardGame.Gameplay.World;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -49,8 +51,14 @@ namespace MonsterCardGame.UI.Combat
         [SerializeField] private TMP_Text _endTitle;
         [SerializeField] private TMP_Text _endReason;
         [SerializeField] private Button   _replayButton;
+        [SerializeField, Tooltip("Dépecer après une victoire, retour après une défaite. Caché sans session de combat")]
+        private Button   _continueButton;
+        [SerializeField] private TMP_Text _continueLabel;
 
         private CombatEngine _engine;
+        /// <summary>Combat lancé depuis le jeu. Null quand la scène est ouverte seule (combat de test).</summary>
+        private CombatSession _session;
+        private System.Random _random;
         private CombatAI _enemyAI;
         private readonly Dictionary<CombatMonster, MonsterCardView> _views = new();
 
@@ -67,13 +75,26 @@ namespace MonsterCardGame.UI.Combat
         private void Start()
         {
             var random = _seed != 0 ? new System.Random(_seed) : new System.Random();
-            var player = _playerTeam.Where(m => m != null).Select(CombatMonster.From).ToList();
-            var enemy  = _encounter.Monsters.Where(m => m != null).Select(CombatMonster.From).ToList();
+            _random = random;
+
+            List<CombatMonster> player, enemy;
+            var session = Services.Has<CombatSession>() ? Services.Get<CombatSession>() : null;
+            if (session != null && session.IsActive && !session.IsFinished && Services.Has<MonsterCollection>())
+            {
+                _session = session;
+                player = Services.Get<MonsterCollection>().Team.Select(CombatMonster.From).ToList();
+                enemy  = session.Encounter.Monsters.Where(m => m != null).Select(CombatMonster.From).ToList();
+            }
+            else
+            {
+                player = _playerTeam.Where(m => m != null).Select(CombatMonster.From).ToList();
+                enemy  = _encounter.Monsters.Where(m => m != null).Select(CombatMonster.From).ToList();
+            }
 
             _engine  = new CombatEngine(player, enemy, new System.Random(random.Next()));
             _enemyAI = new CombatAI(new System.Random(random.Next()));
             _log.Listen(_engine);
-            _engine.CombatEnded += _ => ClearSelection();
+            _engine.CombatEnded += OnCombatEnded;
 
             foreach (var monster in player.Concat(enemy))
             {
@@ -89,7 +110,8 @@ namespace MonsterCardGame.UI.Combat
                 slot.Clicked += OnSlotClicked;
 
             _actionButton.onClick.AddListener(OnActionButton);
-            _replayButton.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
+            _replayButton.onClick.AddListener(OnReplay);
+            _continueButton.onClick.AddListener(OnContinue);
             _endPanel.SetActive(false);
 
             Refresh();
@@ -221,6 +243,42 @@ namespace MonsterCardGame.UI.Combat
             Refresh();
         }
 
+        // ── Fin du combat ─────────────────────────────────────────────────
+
+        private void OnCombatEnded(CombatEndedEvent e)
+        {
+            ClearSelection();
+            if (_session == null) return;
+
+            bool victory = e.Winner == Side.Player;
+            _session.Complete(victory, new System.Random(_random.Next()));
+            if (victory) Services.Get<IWorldProgressionService>().RecordVictory(_session.Encounter.EncounterId);
+            Services.Get<ISaveService>().Save();
+        }
+
+        private void OnReplay()
+        {
+            // Rejouer le même combat : la session repart de zéro
+            _session?.Begin(_session.Encounter, _session.ReturnScene);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        private void OnContinue()
+        {
+            if (_session == null) return;
+
+            if (_session.Victory == true)
+            {
+                SceneManager.LoadScene(SceneNames.Skinning);
+            }
+            else
+            {
+                string scene = _session.ReturnScene ?? SceneNames.Team;
+                _session.Clear();
+                SceneManager.LoadScene(scene);
+            }
+        }
+
         private void ToggleSelection(CombatMonster monster)
         {
             bool same = _selected == monster && !IsTargeting;
@@ -321,6 +379,11 @@ namespace MonsterCardGame.UI.Combat
                     CombatEndReason.NoMonstersLeft => won ? "L'adversaire n'a plus de monstre." : "Vous n'avez plus de monstre.",
                     _                              => "Les deux camps ont perdu leur dernier monstre en même temps."
                 };
+
+                // Un combat du jeu se poursuit par le dépeçage ; un combat gagné ne se rejoue pas d'ici
+                _continueButton.gameObject.SetActive(_session != null);
+                _continueLabel.text = won ? "Dépecer" : "Retour";
+                _replayButton.gameObject.SetActive(_session == null || !won);
             }
         }
 

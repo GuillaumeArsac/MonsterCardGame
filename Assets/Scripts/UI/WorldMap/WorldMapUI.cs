@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using MonsterCardGame.Core.Services;
 using MonsterCardGame.Gameplay.World;
@@ -31,6 +32,8 @@ namespace MonsterCardGame.UI.WorldMap
             _zoneArtwork   = root.Q<VisualElement>("zone-artwork");
             _zoneNameLabel = root.Q<Label>("zone-name-label");
             _zoneDescLabel = root.Q<Label>("zone-desc-label");
+
+            root.Q<Button>("team-btn").clicked += () => SceneManager.LoadScene(SceneNames.Team);
         }
 
         private void Start()

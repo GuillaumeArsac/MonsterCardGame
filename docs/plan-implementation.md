@@ -90,13 +90,20 @@ La scène `Assets/Scenes/Combat.unity` et le prefab `Assets/Prefabs/Combat/Monst
 
 Pas encore fait : animations (DOTween), détail des compétences au survol, illustrations des monstres qui n'en ont pas (Thrâk, Chaman, Taureau, monstres de départ et de la patrouille).
 
-### 6. Progression
+### 6. Progression — fait
 
-- [ ] Collection de départ (7 monstres).
-- [ ] Écran de composition d'équipe (5 monstres parmi la collection).
-- [ ] Écran de dépeçage : tirage du monstre, choix d'une compétence ou du boost, choix du monstre qui la reçoit, remplacement si besoin.
-- [ ] Sauvegarde des monstres possédés.
-- [ ] **Jalon 3 :** collection, équipe, dépeçage et sauvegarde fonctionnels.
+Les scènes `Team.unity` (équipe) et `Skinning.unity` (dépeçage) sont générées par le menu **MonsterCardGame > Progression**. Le menu **MonsterCardGame > Tout générer** génère le contenu, la scène de combat et ces deux écrans.
+
+- [x] Collection de départ (7 monstres). L'équipe de début de partie est la meilleure selon les simulations : Loup, Renard, Ours, Chouette, Chien.
+- [x] Écran de composition d'équipe (5 monstres parmi la collection). On y accède par le bouton **Équipe** de la carte du monde. En attendant l'étape 8, il lance aussi les combats du contenu.
+- [x] Écran de dépeçage : tirage du monstre, choix d'une compétence ou du boost, choix du monstre qui la reçoit, remplacement si besoin.
+- [x] Sauvegarde des monstres possédés et de l'équipe. Les monstres et les compétences y sont désignés par le nom de leur asset : renommer un asset fait perdre l'élément dans les sauvegardes existantes (il est ignoré, avec un avertissement).
+- [x] **Jalon 3 :** collection, équipe, dépeçage et sauvegarde fonctionnels. Vérifié dans Unity : composition de l'équipe, patrouille centaure gagnée, dépeçage avec remplacement d'une compétence, puis rechargement de la sauvegarde.
+
+Choix faits là où `progression.md` ne dit rien :
+- la récompense du dépeçage est obligatoire, et peut aller à n'importe quel monstre de la collection, pas seulement à l'équipe ;
+- le monstre dépecé est tiré une seule fois, à la victoire : quitter puis revenir sur l'écran de dépeçage ne relance pas le tirage. Le tirage n'est pas sauvegardé : quitter le jeu pendant le dépeçage fait perdre la récompense ;
+- après une victoire, le combat ne peut pas être rejoué depuis l'écran de fin ; après une défaite, si.
 
 ### 7. Contenu — fait
 

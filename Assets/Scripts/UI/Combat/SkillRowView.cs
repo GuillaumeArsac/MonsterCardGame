@@ -45,6 +45,24 @@ namespace MonsterCardGame.UI.Combat
                               : _waitingColor;
         }
 
+        /// <summary>Affichage hors combat : temps de recharge ou type de la compétence.</summary>
+        /// <param name="choosable">La ligne peut être choisie (par exemple la compétence à remplacer).</param>
+        public void BindInfo(int skillIndex, SkillData skill, bool locked, bool choosable, bool selected)
+        {
+            SkillIndex = skillIndex;
+            gameObject.SetActive(true);
+
+            _nameLabel.text = skill.SkillName;
+            _counterLabel.text = locked          ? "unique"
+                               : skill.IsPassive ? "passive"
+                               : $"recharge {skill.Cooldown}";
+
+            _background.color = selected        ? _selectedColor
+                              : choosable       ? _readyColor
+                              : skill.IsPassive ? _passiveColor
+                              : _waitingColor;
+        }
+
         public void Hide() => gameObject.SetActive(false);
     }
 }

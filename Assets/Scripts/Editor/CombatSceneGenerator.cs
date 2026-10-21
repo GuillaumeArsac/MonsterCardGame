@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using MonsterCardGame.Gameplay.Combat;
 using MonsterCardGame.Gameplay.Encounters;
 using MonsterCardGame.UI.Combat;
+using static MonsterCardGame.Editor.UIBuilder;
 
 namespace MonsterCardGame.Editor
 {
@@ -27,9 +28,6 @@ namespace MonsterCardGame.Editor
         private static readonly Vector2 SlotSize = new(210, 300);
         private const float SlotSpacing = 260;
 
-        private static readonly Color Background = new(0.08f, 0.09f, 0.11f);
-        private static readonly Color PanelColor = new(0.05f, 0.06f, 0.08f, 0.9f);
-        private static readonly Color ButtonColor = new(0.55f, 0.40f, 0.12f);
 
         [MenuItem("MonsterCardGame/Combat/Générer la scène de combat")]
         public static void Generate()
@@ -39,7 +37,7 @@ namespace MonsterCardGame.Editor
             ContentGenerator.Generate();
             BuildCardPrefab();
             BuildScene();
-            AddSceneToBuildSettings();
+            AddSceneToBuildSettings(ScenePath);
             AssetDatabase.SaveAssets();
 
             Debug.Log($"[CombatSceneGenerator] Scène générée : {ScenePath} (prefab de carte : {CardPrefabPath})");
@@ -209,8 +207,10 @@ namespace MonsterCardGame.Editor
             Anchor(endTitle.rectTransform, new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1), new Vector2(0, -30), new Vector2(0, 90));
             var endReason = NewText("Raison", box, "", 28, TextAlignmentOptions.Center);
             Anchor(endReason.rectTransform, new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 10), new Vector2(-60, 80));
-            var (replay, _) = NewButton("Rejouer", box, "Rejouer");
-            Anchor((RectTransform)replay.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 40), new Vector2(260, 64));
+            var (replay, _) = NewButton("Rejouer", box, "Rejouer", color: SecondaryButtonColor);
+            Anchor((RectTransform)replay.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(-150, 40), new Vector2(260, 64));
+            var (continueButton, continueLabel) = NewButton("Continuer", box, "Continuer");
+            Anchor((RectTransform)continueButton.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(150, 40), new Vector2(260, 64));
 
             // Contrôleur
             var screen = canvasGo.AddComponent<CombatScreen>();
@@ -232,6 +232,8 @@ namespace MonsterCardGame.Editor
             Assign(screen, "_endTitle", endTitle);
             Assign(screen, "_endReason", endReason);
             Assign(screen, "_replayButton", replay);
+            Assign(screen, "_continueButton", continueButton);
+            Assign(screen, "_continueLabel", continueLabel);
 
             EditorSceneManager.SaveScene(scene, ScenePath);
         }
@@ -266,114 +268,5 @@ namespace MonsterCardGame.Editor
             return view;
         }
 
-        private static void AddSceneToBuildSettings()
-        {
-            var scenes = EditorBuildSettings.scenes.ToList();
-            if (scenes.Any(s => s.path == ScenePath)) return;
-            scenes.Add(new EditorBuildSettingsScene(ScenePath, true));
-            EditorBuildSettings.scenes = scenes.ToArray();
-        }
-
-        // ── Outils de construction ────────────────────────────────────────
-
-        private static RectTransform NewImage(string name, Transform parent, Color color)
-        {
-            var go = new GameObject(name, typeof(RectTransform), typeof(Image));
-            go.transform.SetParent(parent, false);
-            go.GetComponent<Image>().color = color;
-            return (RectTransform)go.transform;
-        }
-
-        private static TextMeshProUGUI NewText(string name, Transform parent, string text, float size,
-                                               TextAlignmentOptions alignment, FontStyles style = FontStyles.Normal)
-        {
-            var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
-            go.transform.SetParent(parent, false);
-            var label = go.GetComponent<TextMeshProUGUI>();
-            label.text = text;
-            label.fontSize = size;
-            label.alignment = alignment;
-            label.fontStyle = style;
-            label.color = Color.white;
-            label.raycastTarget = false;
-            label.textWrappingMode = TextWrappingModes.Normal;
-            label.overflowMode = TextOverflowModes.Ellipsis;
-            return label;
-        }
-
-        /// <summary>Réduit le texte jusqu'à <paramref name="min"/> pour qu'il tienne sur une ligne.</summary>
-        private static void AutoSize(TextMeshProUGUI label, float min, float max)
-        {
-            label.enableAutoSizing = true;
-            label.fontSizeMin = min;
-            label.fontSizeMax = max;
-            label.textWrappingMode = TextWrappingModes.NoWrap;
-        }
-
-        private static (Button, TMP_Text) NewButton(string name, Transform parent, string text)
-        {
-            var rect = NewImage(name, parent, ButtonColor);
-            var button = rect.gameObject.AddComponent<Button>();
-            button.targetGraphic = rect.GetComponent<Image>();
-            var label = NewText("Texte", rect, text, 28, TextAlignmentOptions.Center, FontStyles.Bold);
-            Stretch(label.rectTransform, 0);
-            return (button, label);
-        }
-
-        private static RectTransform Stretch(RectTransform rect, float inset)
-        {
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(inset, inset);
-            rect.offsetMax = new Vector2(-inset, -inset);
-            return rect;
-        }
-
-        /// <summary>Bande horizontale en haut de la carte, à <paramref name="top"/> pixels du bord.</summary>
-        private static void TopBand(RectTransform rect, float top, float height, float inset = 6)
-        {
-            rect.anchorMin = new Vector2(0, 1);
-            rect.anchorMax = new Vector2(1, 1);
-            rect.pivot     = new Vector2(0.5f, 1);
-            rect.anchoredPosition = new Vector2(0, -top);
-            rect.sizeDelta = new Vector2(-2 * inset, height);
-        }
-
-        private static void Anchor(RectTransform rect, Vector2 min, Vector2 max, Vector2 pivot, Vector2 position, Vector2 size)
-        {
-            rect.anchorMin = min;
-            rect.anchorMax = max;
-            rect.pivot = pivot;
-            rect.anchoredPosition = position;
-            rect.sizeDelta = size;
-        }
-
-        private static void Assign(Object target, string field, Object value)
-        {
-            var so = new SerializedObject(target);
-            var property = so.FindProperty(field);
-            if (property == null) throw new System.ArgumentException($"{target.GetType().Name} n'a pas de champ {field}");
-            property.objectReferenceValue = value;
-            so.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void AssignArray(Object target, string field, Object[] values)
-        {
-            var so = new SerializedObject(target);
-            var property = so.FindProperty(field);
-            if (property == null) throw new System.ArgumentException($"{target.GetType().Name} n'a pas de champ {field}");
-            property.arraySize = values.Length;
-            for (int i = 0; i < values.Length; i++)
-                property.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
-            so.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void EnsureFolder(string folder)
-        {
-            if (AssetDatabase.IsValidFolder(folder)) return;
-            var parent = System.IO.Path.GetDirectoryName(folder)?.Replace('\\', '/');
-            if (!string.IsNullOrEmpty(parent)) EnsureFolder(parent);
-            AssetDatabase.CreateFolder(parent, System.IO.Path.GetFileName(folder));
-        }
     }
 }

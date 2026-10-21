@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using MonsterCardGame.Gameplay.Content;
 using MonsterCardGame.Gameplay.Encounters;
 using MonsterCardGame.Gameplay.Monsters;
 using MonsterCardGame.Gameplay.Skills;
@@ -33,8 +34,15 @@ namespace MonsterCardGame.Editor
             var teamB    = GenerateTeamB();
             var patrol   = GeneratePatrol();
 
-            Encounter("test-horde-de-thrak", "La horde de Thrâk (équipe de test B)", EncounterType.Free, teamB);
-            Encounter("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, patrol);
+            var encounters = new List<EncounterData>
+            {
+                Encounter("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, patrol),
+                Encounter("test-horde-de-thrak", "La horde de Thrâk (équipe de test B)", EncounterType.Free, teamB),
+            };
+
+            var database = GetOrCreate<ContentDatabase>("Assets/Resources", ContentDatabase.ResourcePath);
+            database.Init(Skills.Values, starters.Concat(teamA).Concat(teamB).Concat(patrol), starters, encounters);
+            Save(database);
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[ContentGenerator] {Skills.Count} compétences, {starters.Count} monstres de départ, " +
@@ -67,31 +75,44 @@ namespace MonsterCardGame.Editor
         }
 
         private static void Active(string name, MonsterRole role, SkillTarget target, int cooldown, params SkillEffect[] effects)
+            => Skill(name, SkillType.Active, role, target, cooldown, PassiveTrigger.Always, effects);
+
+        private static void Passive(string name, MonsterRole role, SkillTarget target, PassiveTrigger trigger, params SkillEffect[] effects)
+            => Skill(name, SkillType.Passive, role, target, 0, trigger, effects);
+
+        private static void Skill(string name, SkillType type, MonsterRole role, SkillTarget target, int cooldown,
+                                  PassiveTrigger trigger, SkillEffect[] effects)
         {
             var skill = GetOrCreate<SkillData>($"{Root}/Skills", name);
-            skill.Init(name, SkillType.Active, role, target, cooldown, PassiveTrigger.Always, effects);
-            Save(skill);
+
+            // Réécrire les effets change leurs identifiants internes (rid) : on ne touche pas une compétence inchangée
+            var expected = ScriptableObject.CreateInstance<SkillData>();
+            expected.Init(name, type, role, target, cooldown, trigger, effects);
+            if (Signature(skill) != Signature(expected))
+            {
+                skill.Init(name, type, role, target, cooldown, trigger, effects);
+                Save(skill);
+            }
+            Object.DestroyImmediate(expected);
+
             Skills[name] = skill;
         }
 
-        private static void Passive(string name, MonsterRole role, SkillTarget target, PassiveTrigger trigger, params SkillEffect[] effects)
-        {
-            var skill = GetOrCreate<SkillData>($"{Root}/Skills", name);
-            skill.Init(name, SkillType.Passive, role, target, 0, trigger, effects);
-            Save(skill);
-            Skills[name] = skill;
-        }
+        private static string Signature(SkillData skill)
+            => $"{skill.SkillName}|{skill.Type}|{skill.Role}|{skill.Target}|{skill.Cooldown}|{skill.Trigger}|"
+             + string.Join("|", skill.Effects.Select(e => e == null ? "null" : $"{e.GetType().Name}{JsonUtility.ToJson(e)}"));
 
         // ── Monstres (docs/monstres.md, docs/combats-scenario.md) ─────────
 
+        // Les 5 premiers forment l'équipe de début de partie : la meilleure selon les simulations (docs/combats-scenario.md)
         private static List<MonsterCardData> GenerateStarters() => new()
         {
             Monster("Depart", "Loup des cendres",     MonsterRole.Carry,   15, 0, null, "Griffe"),
             Monster("Depart", "Renard de braise",     MonsterRole.Carry,   14, 0, null, "Morsure perforante"),
             Monster("Depart", "Ours brun",            MonsterRole.Carry,   20, 0, null, "Griffe"),
             Monster("Depart", "Chouette guérisseuse", MonsterRole.Support, 16, 0, null, "Soin"),
-            Monster("Depart", "Luciole sacrée",       MonsterRole.Support, 16, 0, null, "Bénédiction"),
             Monster("Depart", "Chien de garde",       MonsterRole.Tank,    26, 0, null, "Provocation"),
+            Monster("Depart", "Luciole sacrée",       MonsterRole.Support, 16, 0, null, "Bénédiction"),
             Monster("Depart", "Sanglier",             MonsterRole.Tank,    24, 0, null, "Coup de bouclier"),
         };
 
@@ -141,11 +162,12 @@ namespace MonsterCardGame.Editor
             return sprite;
         }
 
-        private static void Encounter(string id, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters)
+        private static EncounterData Encounter(string id, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters)
         {
             var encounter = GetOrCreate<EncounterData>($"{Root}/Encounters", id);
             encounter.Init(id, displayName, type, monsters);
             Save(encounter);
+            return encounter;
         }
 
         // ── Outils ────────────────────────────────────────────────────────

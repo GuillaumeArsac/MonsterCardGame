@@ -36,7 +36,12 @@ namespace MonsterCardGame.UI.Combat
         [SerializeField] private Color _targetColor    = new(1.00f, 0.40f, 0.30f);
         [SerializeField] private Color _noArtworkColor = new(0.10f, 0.10f, 0.12f);
 
+        /// <summary>Monstre affiché en combat. Null hors combat.</summary>
         public CombatMonster Monster { get; private set; }
+        /// <summary>Monstre du joueur affiché hors combat (collection, dépeçage).</summary>
+        public OwnedMonster Owned { get; private set; }
+        /// <summary>Carte affichée hors combat (monstre adverse dépecé).</summary>
+        public MonsterCardData Card { get; private set; }
 
         public event Action<MonsterCardView> Clicked;
         public event Action<MonsterCardView, int> SkillClicked;
@@ -76,6 +81,51 @@ namespace MonsterCardGame.UI.Combat
                 if (i >= m.Skills.Count) { _skillRows[i].Hide(); continue; }
                 _skillRows[i].Bind(i, m.Skills[i], m.GetCooldown(i), m.WasUsedThisPhase(i), canUseSkill(i), i == selectedSkill);
             }
+        }
+
+        // ── Hors combat ───────────────────────────────────────────────────
+
+        /// <summary>Affiche un monstre du joueur : PV avec le boost, compétences et compétence unique.</summary>
+        /// <param name="choosableSkill">Dit si une ligne de compétence peut être choisie.</param>
+        public void ShowOwned(OwnedMonster monster, CardHighlight highlight,
+                              Func<int, bool> choosableSkill = null, int selectedSkill = -1)
+        {
+            Owned = monster;
+            var card = monster.Origin;
+            ShowInfo(monster.Name, card.Artwork, _playerFrame, highlight);
+            _hpLabel.text = $"PV {monster.MaxHp}";
+            _statusLabel.text = monster.Boost.IsEmpty ? "" : $"Boost {monster.Boost}";
+
+            for (int i = 0; i < _skillRows.Length; i++)
+            {
+                if (i >= monster.Skills.Count) { _skillRows[i].Hide(); continue; }
+                _skillRows[i].BindInfo(i, monster.Skills[i], monster.IsLocked(i), choosableSkill?.Invoke(i) ?? false, i == selectedSkill);
+            }
+        }
+
+        /// <summary>Affiche une carte telle quelle (monstre adverse), avec son boost de dépeçage.</summary>
+        public void ShowCard(MonsterCardData card, CardHighlight highlight, int selectedSkill = -1)
+        {
+            Card = card;
+            ShowInfo(card.MonsterName, card.Artwork, _enemyFrame, highlight);
+            _hpLabel.text = $"PV {card.MaxHp}";
+            _statusLabel.text = card.StatBoost.IsEmpty ? "" : $"Boost : {card.StatBoost}";
+
+            for (int i = 0; i < _skillRows.Length; i++)
+            {
+                if (i >= card.Skills.Count) { _skillRows[i].Hide(); continue; }
+                _skillRows[i].BindInfo(i, card.Skills[i], card.Skills[i] == card.UniqueSkill, false, i == selectedSkill);
+            }
+        }
+
+        private void ShowInfo(string monsterName, Sprite artwork, Color frame, CardHighlight highlight)
+        {
+            _nameLabel.text = monsterName;
+            _frame.color    = frame;
+            _artwork.sprite = artwork;
+            _artwork.color  = artwork != null ? Color.white : _noArtworkColor;
+            _highlight.enabled = highlight != CardHighlight.None;
+            _highlight.color   = highlight == CardHighlight.Target ? _targetColor : _selectedColor;
         }
 
         private static string StatusText(CombatMonster m)
