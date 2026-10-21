@@ -32,15 +32,18 @@ La conception elle-même est décrite dans :
 - [x] Supprimer les assets, prefabs et scènes associés (Combat, DeckBuilder, Forge).
 - [x] Adapter le monde et la sauvegarde : ils ne suivent pour l'instant que les combats gagnés, identifiés par leur nom.
 - [x] `GameRules` contient les constantes des nouvelles règles.
-- [ ] **À vérifier dans Unity :** aucune erreur de compilation, la scène Boot enchaîne sur MainMenu, la carte du monde affiche les Plaines.
+- [x] **Vérifié dans Unity :** aucune erreur de compilation, la scène Boot enchaîne sur la carte du monde, qui affiche les Plaines.
+  La scène Boot chargeait encore DeckBuilder, supprimée : elle charge maintenant directement WorldMap. MainMenu ne contient qu'une caméra et n'est pas utilisée pour l'instant.
 
-### 2. Modèle de données
+### 2. Modèle de données — fait
 
-- [ ] `SkillData` : nom, type (active ou passive), rôle visé, cible, temps de recharge, effets. Les passives ont un déclencheur : toujours, début de phase du monstre, début du combat.
-- [ ] Effets : dégâts (option « ignore les réductions »), soin, bonus ou réduction de dégâts avec durée, ralentissement, exécution avec seuil, retour en main, Provocation, emplacement marqué (Chasseur de trophées).
-- [ ] `MonsterCardData` : nom, illustration, PV, jusqu'à 3 compétences, boost de stats.
-- [ ] `EncounterData` : 5 monstres adverses, type (scénario ou libre), identifiant unique.
-- [ ] Monstre possédé par le joueur : carte d'origine, compétences actuelles, boost, compétence unique verrouillée (monstres de quête).
+- [x] `SkillData` : nom, type (active ou passive), rôle visé, cible, temps de recharge, effets. Les passives ont un déclencheur : toujours, début de phase du monstre, début du combat.
+- [x] Effets : dégâts (option « ignore les réductions »), soin, bonus ou réduction de dégâts avec durée, ralentissement, exécution avec seuil, retour en main, Provocation, emplacement marqué (Chasseur de trophées).
+  Ce sont des classes C# pures (une par brique, dans `Gameplay/Skills/Effects`), rangées dans `SkillData` avec `[SerializeReference]` : pas d'asset par effet, et le moteur peut les lire sans dépendre de Unity. L'inspecteur de `SkillData` a un bouton « Ajouter un effet ».
+- [x] `MonsterCardData` : nom, illustration, PV, jusqu'à 3 compétences, boost de stats. Elle a aussi un rôle (pour l'IA, non affiché) et une compétence unique optionnelle (monstres de quête).
+- [x] `EncounterData` : 5 monstres adverses, type (scénario ou libre), identifiant unique.
+- [x] `OwnedMonster`, le monstre possédé par le joueur : carte d'origine, compétences actuelles, boost, compétence unique verrouillée (monstres de quête). Il applique les règles du dépeçage : 3 compétences au maximum, remplacement, un seul boost.
+- [x] Tests EditMode : règles d'`OwnedMonster`, et le catalogue des docs décrit avec ce modèle (`Tests/EditMode/TestCatalog.cs`, réutilisable pour les tests du moteur).
 
 ### 3. Moteur de combat (C# pur)
 
