@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
+  m_Name: Taureau de guerre
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
+  _monsterName: Taureau de guerre
+  _artwork: {fileID: 0}
+  _role: 2
+  _maxHp: 30
+  _skills:
+  - {fileID: 11400000, guid: fa00f28448666cf4383758f06cfb4df0, type: 2}
+  - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
+  - {fileID: 11400000, guid: b646b7c59f03bb248be753c6eadefa45, type: 2}
+  _uniqueSkill: {fileID: 0}
+  _statBoost:
+    _hp: 0

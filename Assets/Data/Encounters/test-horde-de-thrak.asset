@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b631a7c6f3744a4aaf927339e26a389, type: 3}
+  m_Name: test-horde-de-thrak
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Encounters.EncounterData
+  _encounterId: test-horde-de-thrak
+  _displayName: "La horde de Thr\xE2k (\xE9quipe de test B)"
+  _type: 1
+  _monsters:
+  - {fileID: 11400000, guid: c3d1e67c235b6ef468d6cbd235b00bb8, type: 2}
+  - {fileID: 11400000, guid: f714772263265b842b2e51a17b06c23f, type: 2}
+  - {fileID: 11400000, guid: 76beed51cc969214389c25564b4c031a, type: 2}
+  - {fileID: 11400000, guid: f124279f993c1e04a94d05e3a7fc874d, type: 2}
+  - {fileID: 11400000, guid: 65d9dfd94be03ae49b804f9e502237ac, type: 2}

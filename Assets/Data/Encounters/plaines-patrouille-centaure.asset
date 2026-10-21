@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b631a7c6f3744a4aaf927339e26a389, type: 3}
+  m_Name: plaines-patrouille-centaure
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Encounters.EncounterData
+  _encounterId: plaines-patrouille-centaure
+  _displayName: La patrouille centaure
+  _type: 0
+  _monsters:
+  - {fileID: 11400000, guid: 85e63da072385a6479da838aa291afb6, type: 2}
+  - {fileID: 11400000, guid: e6ecab388a215004a94d13280ce449e6, type: 2}
+  - {fileID: 11400000, guid: 81a8ae818e7ad334c9954524eaee21df, type: 2}
+  - {fileID: 11400000, guid: e9927dbaa2ad02d44b365a63d3252691, type: 2}
+  - {fileID: 11400000, guid: 644063554b032b84c8fac0c456af918e, type: 2}

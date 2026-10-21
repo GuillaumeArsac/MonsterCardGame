@@ -78,13 +78,17 @@ Points que les docs ne précisent pas, réglés comme dans le simulateur :
 | Loup, Ours, Chouette, Luciole, Chien contre la patrouille | 30 %, 12 tours | 26 %, 11,6 tours |
 | Loup, Renard, Ours, Chouette, Sanglier contre la patrouille | 1 %, 10 tours | 1 %, 9,6 tours |
 
-### 5. Interface de combat
+### 5. Interface de combat — fait
 
-- [ ] Main de 5 cartes, 3 emplacements de chaque côté.
-- [ ] Carte : nom, illustration, PV, compétences avec leurs compteurs.
-- [ ] Choix de la cible au clic.
-- [ ] Affichage des points, du tour, de la fatigue et de l'emplacement marqué.
-- [ ] **Jalon 2 :** un combat A contre B jouable à la souris.
+La scène `Assets/Scenes/Combat.unity` et le prefab `Assets/Prefabs/Combat/MonsterCard.prefab` sont générés par le menu **MonsterCardGame > Combat > Générer la scène de combat**, qui génère aussi le contenu (étape 7). Relancer le menu reconstruit la scène et le prefab : les réglages faits à la main y sont perdus. Les scripts sont dans `Scripts/UI/Combat`.
+
+- [x] Main de 5 cartes, 3 emplacements de chaque côté.
+- [x] Carte : nom, illustration, PV, effets en cours (bonus, réductions), compétences avec leurs compteurs.
+- [x] Choix de la cible au clic : la compétence, puis la cible parmi celles mises en surbrillance. Échap annule.
+- [x] Affichage des points, du tour, de la fatigue et de l'emplacement marqué, avec un journal des actions.
+- [x] **Jalon 2 :** un combat A contre B jouable à la souris. Ouvrir la scène Combat et lancer le jeu. L'adversaire joue avec l'IA de l'étape 4.
+
+Pas encore fait : animations (DOTween), détail des compétences au survol, illustrations des monstres qui n'en ont pas (Thrâk, Chaman, Taureau, monstres de départ et de la patrouille).
 
 ### 6. Progression
 
@@ -94,9 +98,10 @@ Points que les docs ne précisent pas, réglés comme dans le simulateur :
 - [ ] Sauvegarde des monstres possédés.
 - [ ] **Jalon 3 :** collection, équipe, dépeçage et sauvegarde fonctionnels.
 
-### 7. Contenu
+### 7. Contenu — fait
 
-- [ ] Script d'éditeur qui génère les assets depuis les docs : les 13 compétences, les 7 monstres de départ, les équipes de test A et B, la patrouille centaure.
+- [x] Script d'éditeur qui génère les assets depuis les docs : les 13 compétences, les 7 monstres de départ, les équipes de test A et B, la patrouille centaure (menu **MonsterCardGame > Contenu > Générer les assets depuis les docs**, fait avec l'étape 5). Relancer le menu met à jour les assets sans changer leur GUID.
+  Les docs ne donnent pas de boost de stats aux équipes A et B : il est à 0 pour l'instant. Le contenu est aussi décrit dans `Tests/EditMode/TestCatalog.cs` pour les tests : un changement dans les docs se reporte aux deux endroits.
 
 ### 8. Branchement au monde
 

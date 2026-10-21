@@ -3,7 +3,11 @@
     "rootNamespace": "MonsterCardGame.Editor",
     "references": [
         "MonsterCardGame.Core",
-        "MonsterCardGame.Gameplay"
+        "MonsterCardGame.Gameplay",
+        "MonsterCardGame.UI",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [
         "Editor"
