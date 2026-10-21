@@ -108,7 +108,8 @@ namespace MonsterCardGame.Tests.EditMode
             return skill;
         }
 
-        private T Track<T>(T obj) where T : ScriptableObject
+        /// <summary>Garde un ScriptableObject créé par un test pour le détruire dans Dispose().</summary>
+        public T Track<T>(T obj) where T : ScriptableObject
         {
             _created.Add(obj);
             return obj;

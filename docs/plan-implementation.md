@@ -45,17 +45,24 @@ La conception elle-même est décrite dans :
 - [x] `OwnedMonster`, le monstre possédé par le joueur : carte d'origine, compétences actuelles, boost, compétence unique verrouillée (monstres de quête). Il applique les règles du dépeçage : 3 compétences au maximum, remplacement, un seul boost.
 - [x] Tests EditMode : règles d'`OwnedMonster`, et le catalogue des docs décrit avec ce modèle (`Tests/EditMode/TestCatalog.cs`, réutilisable pour les tests du moteur).
 
-### 3. Moteur de combat (C# pur)
+### 3. Moteur de combat (C# pur) — fait, sauf la comparaison
 
-- [ ] Main, 3 emplacements par camp, pose secrète simultanée au départ.
-- [ ] Tours : phase du joueur, puis phase de l'adversaire. Pose libre, puis chaque monstre utilise toutes ses compétences disponibles, chacune une fois par phase (chaque exemplaire d'un doublon compte).
-- [ ] Compteurs de recharge : au maximum à l'entrée sur le terrain, baisse de 1 à la fin de la phase du camp, ralentissement.
-- [ ] Durées des effets : jusqu'à la fin de la X-ième phase de l'autre camp.
-- [ ] Provocation, calcul des dégâts (bonus puis réductions), soin plafonné aux PV de départ.
-- [ ] Points, emplacements marqués, fatigue à partir du tour 16, conditions de victoire et de défaite.
-- [ ] Événements pour l'interface : pose, compétence utilisée, dégâts, soin, monstre vaincu, fin de phase, fin de combat.
-- [ ] Tests EditMode pour chaque règle.
-- [ ] Comparaison avec le simulateur sur les équipes A et B.
+Le moteur (`Gameplay/Combat/CombatEngine.cs`) se pilote par commandes : `Setup`, `Place`, `UseSkill`, `EndPhase`. Le joueur et l'IA passent par les mêmes commandes, et `CanPlace`, `CanUseSkill` et `GetValidTargets` disent ce qui est permis. Il n'utilise aucune API Unity : le hasard vient d'un `System.Random` qu'on lui donne.
+
+- [x] Main, 3 emplacements par camp, pose secrète simultanée au départ.
+- [x] Tours : phase du joueur, puis phase de l'adversaire. Pose libre, puis chaque monstre utilise toutes ses compétences disponibles, chacune une fois par phase (chaque exemplaire d'un doublon compte).
+- [x] Compteurs de recharge : au maximum à l'entrée sur le terrain, baisse de 1 à la fin de la phase du camp, ralentissement.
+- [x] Durées des effets : jusqu'à la fin de la X-ième phase de l'autre camp.
+- [x] Provocation, calcul des dégâts (bonus puis réductions), soin plafonné aux PV de départ.
+- [x] Points, emplacements marqués, fatigue à partir du tour 16, conditions de victoire et de défaite.
+- [x] Événements pour l'interface : pose, compétence utilisée, dégâts, soin, ralentissement, effet appliqué, retour en main, monstre vaincu, début et fin de phase, fin de combat.
+- [x] Tests EditMode pour chaque règle (`Tests/EditMode/Combat`).
+- [ ] Comparaison avec le simulateur sur les équipes A et B. Elle demande l'IA : elle se fera avec l'étape 4, en comparant aux résultats notés dans `monstres.md` et `combats-scenario.md`.
+
+Points que les docs ne précisent pas, réglés comme dans le simulateur :
+- la fatigue ignore les réductions de dégâts (Carapace, Bouclier) ;
+- quand Exécution ne vainc pas la cible, son dégât passe par le calcul normal (bonus, puis réductions) ;
+- le compteur d'une compétence prend son temps de recharge avant ses effets : un monstre qui se ralentit lui-même ralentit aussi la compétence qu'il vient d'utiliser.
 
 ### 4. IA adverse
 
