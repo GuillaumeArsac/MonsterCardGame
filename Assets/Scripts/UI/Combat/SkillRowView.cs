@@ -1,13 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using MonsterCardGame.Gameplay.Skills;
 
 namespace MonsterCardGame.UI.Combat
 {
     /// <summary>Ligne d'une compétence sur une carte : nom et compteur de recharge. Cliquable pour l'utiliser.</summary>
-    public class SkillRowView : MonoBehaviour
+    public class SkillRowView : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Button   _button;
         [SerializeField] private Image    _background;
@@ -24,8 +25,15 @@ namespace MonsterCardGame.UI.Combat
         public int SkillIndex { get; private set; }
 
         public event Action<SkillRowView> Clicked;
+        /// <summary>Clic droit : la ligne capte le clic, la carte affiche alors le détail de ses compétences.</summary>
+        public event Action<SkillRowView> RightClicked;
 
         private void Awake() => _button.onClick.AddListener(() => Clicked?.Invoke(this));
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Right) RightClicked?.Invoke(this);
+        }
 
         public void Bind(int skillIndex, SkillData skill, int cooldown, bool usedThisPhase, bool usable, bool selected)
         {

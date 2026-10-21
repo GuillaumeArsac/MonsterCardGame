@@ -103,6 +103,9 @@ namespace MonsterCardGame.Editor
             var (worldMap, _) = NewButton("Carte du monde", canvas, "Carte du monde", 24);
             Anchor((RectTransform)worldMap.transform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-50, 50), new Vector2(420, 64));
 
+            AddRightClickHint(canvas);
+            AddCardDetailsPopup(canvas);
+
             var screen = canvasGo.AddComponent<TeamScreen>();
             Assign(screen, "_cardPrefab", CardPrefab());
             Assign(screen, "_grid", grid);
@@ -137,6 +140,9 @@ namespace MonsterCardGame.Editor
 
             var (confirm, confirmLabel) = NewButton("Confirmer", canvas, "Confirmer");
             Anchor((RectTransform)confirm.transform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-50, 40), new Vector2(300, 70));
+
+            AddRightClickHint(canvas);
+            AddCardDetailsPopup(canvas);
 
             var screen = canvasGo.AddComponent<SkinningScreen>();
             Assign(screen, "_cardPrefab", CardPrefab());

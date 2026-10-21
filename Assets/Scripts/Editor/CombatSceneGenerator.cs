@@ -212,6 +212,9 @@ namespace MonsterCardGame.Editor
             var (continueButton, continueLabel) = NewButton("Continuer", box, "Continuer");
             Anchor((RectTransform)continueButton.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(150, 40), new Vector2(260, 64));
 
+            AddRightClickHint(canvas);
+            AddCardDetailsPopup(canvas);
+
             // Contrôleur
             var screen = canvasGo.AddComponent<CombatScreen>();
             AssignArray(screen, "_playerTeam", ContentGenerator.LoadTeam("EquipeA").ToArray<Object>());

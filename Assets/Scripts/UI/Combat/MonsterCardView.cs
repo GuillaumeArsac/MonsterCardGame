@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using MonsterCardGame.Gameplay.Combat;
 using MonsterCardGame.Gameplay.Monsters;
+using MonsterCardGame.Gameplay.Skills;
 
 namespace MonsterCardGame.UI.Combat
 {
@@ -18,7 +20,7 @@ namespace MonsterCardGame.UI.Combat
     }
 
     /// <summary>Carte monstre en combat : nom, illustration, PV, effets en cours et compétences. Référence : docs/combat.md (La carte monstre).</summary>
-    public class MonsterCardView : MonoBehaviour
+    public class MonsterCardView : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Button   _button;
         [SerializeField] private Image    _highlight;
@@ -46,11 +48,37 @@ namespace MonsterCardGame.UI.Combat
         public event Action<MonsterCardView> Clicked;
         public event Action<MonsterCardView, int> SkillClicked;
 
+        /// <summary>Nom affiché, quel que soit le monstre montré.</summary>
+        public string DisplayName => Monster?.Name ?? Owned?.Name ?? (Card != null ? Card.MonsterName : "");
+
+        /// <summary>Compétences affichées, quel que soit le monstre montré.</summary>
+        public IReadOnlyList<SkillData> DisplayedSkills
+            => Monster?.Skills ?? Owned?.Skills ?? (Card != null ? Card.Skills : Array.Empty<SkillData>());
+
+        /// <summary>Vrai pour la compétence unique d'un monstre de quête.</summary>
+        public bool IsSkillLocked(int skillIndex)
+            => Owned != null ? Owned.IsLocked(skillIndex)
+             : Card != null && skillIndex < Card.Skills.Count && Card.Skills[skillIndex] == Card.UniqueSkill;
+
         private void Awake()
         {
             _button.onClick.AddListener(() => Clicked?.Invoke(this));
             foreach (var row in _skillRows)
+            {
                 row.Clicked += r => SkillClicked?.Invoke(this, r.SkillIndex);
+                row.RightClicked += _ => ShowDetails();
+            }
+        }
+
+        /// <summary>Clic droit sur la carte : détail de ses compétences. Le clic gauche passe par le bouton.</summary>
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Right) ShowDetails();
+        }
+
+        private void ShowDetails()
+        {
+            if (CardDetailsPopup.Current != null) CardDetailsPopup.Current.Show(this);
         }
 
         public void Bind(CombatMonster monster)

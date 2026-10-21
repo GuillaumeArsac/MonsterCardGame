@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using MonsterCardGame.UI.Combat;
 
 namespace MonsterCardGame.Editor
 {
@@ -52,6 +53,49 @@ namespace MonsterCardGame.Editor
             var label = NewText("Titre", bar, title, 32, TextAlignmentOptions.Center, FontStyles.Bold);
             Anchor(label.rectTransform, new Vector2(0.5f, 0), new Vector2(0.5f, 1), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(900, 0));
             return (bar, label);
+        }
+
+        /// <summary>
+        /// Panneau de détail des compétences, ouvert par un clic droit sur une carte.
+        /// À ajouter en dernier, pour qu'il passe devant le reste de l'écran.
+        /// </summary>
+        public static CardDetailsPopup AddCardDetailsPopup(Transform canvas)
+        {
+            // Le support reste actif (il écoute Échap) ; seul le fond s'affiche et se cache
+            var holder = Stretch(NewEmpty("Détail des cartes", canvas), 0);
+            var overlay = Stretch(NewImage("Fond", holder, new Color(0, 0, 0, 0.65f)), 0);
+
+            var panel = NewImage("Panneau", overlay, new Color(0.07f, 0.08f, 0.11f, 1f));
+            Center(panel, Vector2.zero, new Vector2(780, 0));
+            var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
+            layout.padding = new RectOffset(30, 30, 26, 22);
+            layout.spacing = 14;
+            layout.childControlWidth = layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = false;
+            panel.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            var title = NewText("Titre", panel, "Monstre", 34, TextAlignmentOptions.Center, FontStyles.Bold);
+            var body  = NewText("Compétences", panel, "", 22, TextAlignmentOptions.TopLeft);
+            body.overflowMode = TextOverflowModes.Overflow;
+            var footer = NewText("Fermer", panel, "Clic ou Échap pour fermer", 16, TextAlignmentOptions.Center);
+            footer.color = new Color(0.6f, 0.6f, 0.65f);
+
+            var popup = holder.gameObject.AddComponent<CardDetailsPopup>();
+            Assign(popup, "_root", overlay.gameObject);
+            Assign(popup, "_titleLabel", title);
+            Assign(popup, "_bodyLabel", body);
+            return popup;
+        }
+
+        /// <summary>Rappel en bas à gauche de l'écran : le clic droit montre le détail des compétences.</summary>
+        public static TextMeshProUGUI AddRightClickHint(Transform canvas)
+        {
+            var hint = NewText("Aide clic droit", canvas, "Clic droit sur une carte : détail de ses compétences", 18, TextAlignmentOptions.BottomLeft);
+            hint.color = new Color(0.65f, 0.68f, 0.75f);
+            // 330 px de large : reste dans la colonne de gauche, sans passer sous la main du joueur en combat
+            Anchor(hint.rectTransform, Vector2.zero, Vector2.zero, Vector2.zero, new Vector2(30, 24), new Vector2(330, 60));
+            return hint;
         }
 
         public static void AddSceneToBuildSettings(string path)

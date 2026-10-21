@@ -1,0 +1,103 @@
+using System.Collections.Generic;
+using System.Linq;
+using MonsterCardGame.Gameplay.Skills.Effects;
+
+namespace MonsterCardGame.Gameplay.Skills
+{
+    /// <summary>
+    /// Texte d'une compétence pour le joueur, construit à partir de ses effets : il reste juste quand une compétence change.
+    /// Formulations reprises de docs/competences.md.
+    /// </summary>
+    public static class SkillDescriber
+    {
+        /// <summary>Type et rythme : « Active · recharge 3 » ou « Passive · au début du combat ».</summary>
+        public static string Summary(SkillData skill)
+            => skill.IsActive
+                ? $"Active · {CooldownText(skill.Cooldown)}"
+                : $"Passive · {TriggerText(skill.Trigger)}";
+
+        public static string TargetText(SkillTarget target) => target switch
+        {
+            SkillTarget.AnyMonster => "un monstre sur le terrain, allié ou ennemi",
+            SkillTarget.Enemy      => "un ennemi sur le terrain",
+            SkillTarget.Ally       => "un allié sur le terrain",
+            SkillTarget.OtherAlly  => "un autre allié sur le terrain",
+            SkillTarget.Self       => "ce monstre",
+            SkillTarget.AllEnemies => "tous les ennemis sur le terrain",
+            SkillTarget.AllAllies  => "tous les alliés sur le terrain, y compris ce monstre",
+            _                      => "aucune"
+        };
+
+        /// <summary>Ce que fait la compétence, en une ou deux phrases.</summary>
+        public static string Effect(SkillData skill)
+        {
+            var parts = skill.Effects.Where(e => e != null).Select(EffectText).Where(t => t.Length > 0).ToList();
+            if (parts.Count == 0) return "Aucun effet.";
+            return Capitalize(JoinFrench(parts)) + ".";
+        }
+
+        /// <summary>Précision sur le ciblage, quand elle compte (Provocation).</summary>
+        public static string TargetingNote(SkillData skill)
+        {
+            if (!skill.IsActive) return "";
+            return skill.Target switch
+            {
+                SkillTarget.AllEnemies => "Ne choisit pas de cible : ignore la Provocation.",
+                SkillTarget.AnyMonster => "Si elle vise un ennemi, elle est soumise à la Provocation.",
+                SkillTarget.Enemy      => "Soumise à la Provocation.",
+                _                      => ""
+            };
+        }
+
+        /// <summary>Description complète : résumé, cible, effet et précision de ciblage, une par ligne.</summary>
+        public static string FullText(SkillData skill)
+        {
+            var lines = new List<string> { Summary(skill) };
+            if (skill.Target != SkillTarget.None && skill.Target != SkillTarget.Self)
+                lines.Add($"Cible : {TargetText(skill.Target)}");
+            lines.Add(Effect(skill));
+            var note = TargetingNote(skill);
+            if (note.Length > 0) lines.Add(note);
+            return string.Join("\n", lines);
+        }
+
+        // ── Effets ────────────────────────────────────────────────────────
+
+        private static string EffectText(SkillEffect effect) => effect switch
+        {
+            DamageEffect d          => $"inflige {Plural(d.Amount, "dégât")}" + (d.IgnoresReductions ? ", qui ignorent les réductions de dégâts" : ""),
+            HealEffect h            => $"rend {h.Amount} PV, sans dépasser les PV de départ",
+            DamageBonusEffect b     => $"les dégâts infligés augmentent de {b.Amount} {DurationText(b.DurationTurns)}",
+            DamageReductionEffect r => $"les dégâts subis sont réduits de {r.Amount}, sans descendre sous 0, {DurationText(r.DurationTurns)}",
+            SlowEffect              => "applique Ralentissement : +1 au compteur de toutes ses compétences actives, même disponibles",
+            ExecuteEffect x         => $"si la cible a {x.HpThreshold} PV ou moins, elle est vaincue ; sinon, inflige {Plural(x.FallbackDamage, "dégât")}",
+            ReturnToHandEffect      => "renvoie la cible dans la main : elle garde ses PV et perd ses effets temporaires, sans point marqué",
+            TauntEffect             => "ce monstre a Provocation : tant qu'il est sur le terrain, les compétences adverses qui visent un ennemi doivent le cibler",
+            MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus (pas par la fatigue)",
+            _                       => ""
+        };
+
+        private static string DurationText(int turns) => turns <= 0 ? "en permanence" : $"pendant {Plural(turns, "tour")}";
+
+        private static string CooldownText(int cooldown) => cooldown switch
+        {
+            0 => "recharge 0 : utilisable à chaque phase",
+            1 => "recharge 1 : à chaque phase, sauf celle où le monstre est posé",
+            _ => $"recharge {cooldown} : une phase sur {cooldown}"
+        };
+
+        private static string TriggerText(PassiveTrigger trigger) => trigger switch
+        {
+            PassiveTrigger.StartOfOwnPhase => "au début de chaque phase de ce monstre",
+            PassiveTrigger.StartOfCombat   => "au début du combat",
+            _                              => "toujours active"
+        };
+
+        private static string Plural(int count, string word) => $"{count} {word}{(count > 1 ? "s" : "")}";
+
+        private static string JoinFrench(IReadOnlyList<string> parts)
+            => parts.Count == 1 ? parts[0] : string.Join(", ", parts.Take(parts.Count - 1)) + " et " + parts[parts.Count - 1];
+
+        private static string Capitalize(string text) => text.Length == 0 ? text : char.ToUpper(text[0]) + text.Substring(1);
+    }
+}

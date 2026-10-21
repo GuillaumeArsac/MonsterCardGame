@@ -88,7 +88,9 @@ La scène `Assets/Scenes/Combat.unity` et le prefab `Assets/Prefabs/Combat/Monst
 - [x] Affichage des points, du tour, de la fatigue et de l'emplacement marqué, avec un journal des actions.
 - [x] **Jalon 2 :** un combat A contre B jouable à la souris. Ouvrir la scène Combat et lancer le jeu. L'adversaire joue avec l'IA de l'étape 4.
 
-Pas encore fait : animations (DOTween), détail des compétences au survol, illustrations des monstres qui n'en ont pas (Thrâk, Chaman, Taureau, monstres de départ et de la patrouille).
+Un clic droit sur une carte, dans tous les écrans (combat, équipe, dépeçage), ouvre le détail de ses compétences : type, rythme, cible, effet et précision sur la Provocation. Ce texte est construit à partir des effets de chaque compétence (`Gameplay/Skills/SkillDescriber.cs`) : il reste juste quand une compétence change ou qu'une nouvelle est ajoutée.
+
+Pas encore fait : animations (DOTween), illustrations des monstres qui n'en ont pas (Thrâk, Chaman, Taureau, monstres de départ et de la patrouille).
 
 ### 6. Progression — fait
 
