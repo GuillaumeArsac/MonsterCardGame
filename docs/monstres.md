@@ -18,11 +18,11 @@ Ces repères servent de base pour créer de nouveaux monstres. Ce ne sont pas de
 - **Une équipe de 3 monstres sur le terrain inflige environ 6 à 8 dégâts par phase.** C'est ce rythme qui donne des combats d'environ 9 à 12 tours.
 - **Une compétence avec une recharge de 4 ou plus sert rarement** : le monstre est posé avec ses compteurs au maximum.
 
-Résultats des simulations avec les deux équipes ci-dessous (environ 16 000 combats, IA simple) :
-- durée moyenne d'environ 9 tours, et plus de 90 % des combats entre 7 et 15 tours ;
+Résultats des simulations avec les deux équipes ci-dessous (2 000 combats par configuration, IA simple, voir [tools/simulation](../tools/simulation/README.md)) :
+- durée moyenne d'environ 8 tours, et plus de 90 % des combats entre 7 et 15 tours ;
 - premier monstre vaincu vers le tour 5 ;
-- le joueur avec l'équipe A gagne environ 50 % de ses combats contre la horde de Thrâk ;
-- le premier joueur garde un léger avantage (57 à 67 % en miroir).
+- le joueur avec l'équipe A gagne environ 35 % de ses combats contre la horde de Thrâk. Avant la règle « un monstre utilise toutes ses compétences disponibles », c'était environ 50 % : l'équipe B a davantage de compétences actives offensives ;
+- le premier joueur garde un avantage (54 à 73 % en miroir).
 
 ## Équipes de test
 
