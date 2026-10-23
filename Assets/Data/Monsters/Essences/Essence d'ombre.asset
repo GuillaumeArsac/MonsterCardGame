@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: Sanglier
+  m_Name: Essence d'ombre
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: Sanglier
+  _monsterName: Essence d'ombre
   _artwork: {fileID: 0}
-  _role: 2
-  _maxHp: 240
+  _cardFrame: {fileID: 0}
+  _role: 0
+  _maxHp: 100
   _skills:
-  - {fileID: 11400000, guid: b646b7c59f03bb248be753c6eadefa45, type: 2}
+  - {fileID: 11400000, guid: 633cde97fafc5d04faebc61a05a12553, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MonsterCardGame.Core;
 using MonsterCardGame.Gameplay.Monsters;
 using MonsterCardGame.Gameplay.Skills;
 using MonsterCardGame.Gameplay.Skills.Effects;
@@ -34,6 +35,8 @@ namespace MonsterCardGame.Gameplay.Combat
 
         private readonly int[]  _cooldowns;
         private readonly bool[] _usedThisPhase;
+        /// <summary>Dégâts gagnés par chaque compétence pendant ce combat (Essence de nature).</summary>
+        private readonly int[]  _damageGrowth;
         private readonly List<CombatModifier> _modifiers = new();
 
         public string                   Name   { get; }
@@ -50,6 +53,12 @@ namespace MonsterCardGame.Gameplay.Combat
 
         public bool IsOnField => Zone == MonsterZone.Field;
 
+        /// <summary>Cumuls de saignement : retirés par un soin, un retour en main ou la défaite.</summary>
+        public int BleedStacks { get; internal set; }
+
+        /// <summary>Dégâts de saignement au début de la phase de son camp : 5 % des PV max par cumul, 1 minimum par cumul.</summary>
+        public int BleedDamage => BleedStacks * Math.Max(1, MaxHp * GameRules.BleedPercentPerStack / 100);
+
         /// <summary>Effets temporaires en cours (bonus, réductions).</summary>
         public IReadOnlyList<CombatModifier> Modifiers => _modifiers;
 
@@ -64,6 +73,7 @@ namespace MonsterCardGame.Gameplay.Combat
 
             _cooldowns     = new int[Skills.Count];
             _usedThisPhase = new bool[Skills.Count];
+            _damageGrowth  = new int[Skills.Count];
         }
 
         /// <summary>Monstre du joueur : ses compétences actuelles et ses PV avec le boost.</summary>
@@ -80,7 +90,13 @@ namespace MonsterCardGame.Gameplay.Combat
         public int  GetCooldown(int skillIndex)      => _cooldowns[skillIndex];
         public bool WasUsedThisPhase(int skillIndex) => _usedThisPhase[skillIndex];
 
-        public bool HasTaunt => HasAlwaysPassive<TauntEffect>(_ => true);
+        public bool HasTaunt => HasAlwaysPassive<TauntEffect>(_ => true) || HasModifier(ModifierKind.Taunt);
+
+        /// <summary>Vrai si les compétences adverses ne peuvent pas le choisir comme cible.</summary>
+        public bool IsUntargetable => HasModifier(ModifierKind.Untargetable);
+
+        /// <summary>Dégâts ajoutés à cette compétence par ses utilisations précédentes (Essence de nature).</summary>
+        public int GetDamageGrowth(int skillIndex) => _damageGrowth[skillIndex];
 
         /// <summary>Bonus aux dégâts infligés : effets temporaires et passives permanentes.</summary>
         public int DamageBonus => SumModifiers(ModifierKind.DamageBonus)
@@ -105,13 +121,14 @@ namespace MonsterCardGame.Gameplay.Combat
             _modifiers.Clear();
         }
 
-        /// <summary>Retour en main : garde ses PV, perd ses effets temporaires et son ralentissement.</summary>
+        /// <summary>Retour en main : garde ses PV, perd ses effets temporaires, son ralentissement et ses saignements.</summary>
         internal void ReturnToHand()
         {
             Zone = MonsterZone.Hand;
             Slot = NoSlot;
             Array.Clear(_cooldowns, 0, _cooldowns.Length);
             _modifiers.Clear();
+            BleedStacks = 0;
         }
 
         internal void Defeat()
@@ -120,6 +137,7 @@ namespace MonsterCardGame.Gameplay.Combat
             Slot = NoSlot;
             Hp   = 0;
             _modifiers.Clear();
+            BleedStacks = 0;
         }
 
         internal void MarkUsed(int skillIndex)
@@ -146,12 +164,21 @@ namespace MonsterCardGame.Gameplay.Combat
 
         internal void AddModifier(CombatModifier modifier) => _modifiers.Add(modifier);
 
+        internal void AddDamageGrowth(int skillIndex, int amount) => _damageGrowth[skillIndex] += amount;
+
         /// <summary>Fin de la phase de <paramref name="endingSide"/> : les effets qui comptent ses phases avancent.</summary>
         internal void TickModifiers(Side endingSide)
         {
             foreach (var modifier in _modifiers)
                 if (modifier.CountdownSide == endingSide) modifier.Tick();
             _modifiers.RemoveAll(m => m.IsExpired);
+        }
+
+        private bool HasModifier(ModifierKind kind)
+        {
+            foreach (var modifier in _modifiers)
+                if (modifier.Kind == kind) return true;
+            return false;
         }
 
         private int SumModifiers(ModifierKind kind)

@@ -377,6 +377,7 @@ namespace MonsterCardGame.UI.Combat
                 {
                     CombatEndReason.Points         => won ? "Vous avez marqué 3 points." : "L'adversaire a marqué 3 points.",
                     CombatEndReason.NoMonstersLeft => won ? "L'adversaire n'a plus de monstre." : "Vous n'avez plus de monstre.",
+                    CombatEndReason.BothReachedPoints => "Les deux camps ont atteint 3 points en même temps.",
                     _                              => "Les deux camps ont perdu leur dernier monstre en même temps."
                 };
 
@@ -391,7 +392,7 @@ namespace MonsterCardGame.UI.Combat
         {
             int turn = _engine.Turn;
             int now  = CombatEngine.FatigueDamage(turn);
-            if (now > 0) return $"Fatigue : {now} dégât{(now > 1 ? "s" : "")} ce tour, {now + 1} au prochain";
+            if (now > 0) return $"Fatigue : {now} dégât{(now > 1 ? "s" : "")} ce tour, {now + GameRules.FatigueDamageStep} au prochain";
 
             int left = GameRules.FatigueStartTurn - turn;
             return turn > 0 && left <= 3 ? $"Fatigue dans {left} tour{(left > 1 ? "s" : "")}" : "";

@@ -54,6 +54,9 @@ namespace MonsterCardGame.Gameplay.World
             {
                 foreach (var item in CollectionSaveMapper.Read(data, _content, _collection))
                     Core.GameLog.Warning("SaveService", $"Élément de la sauvegarde introuvable, ignoré : {item}");
+
+                // Aucun monstre de la sauvegarde n'existe plus (collection de départ remplacée) : on repart des monstres de départ
+                if (_collection.Monsters.Count == 0) StartNewCollection();
             }
 
             Core.GameLog.Info("SaveService", $"Sauvegarde chargée — {data.CompletedEncounters.Count} combat(s) gagné(s), {_collection.Monsters.Count} monstre(s)");

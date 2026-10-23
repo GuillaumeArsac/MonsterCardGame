@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: "Luciole sacr\xE9e"
+  m_Name: Essence de nature
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: "Luciole sacr\xE9e"
+  _monsterName: Essence de nature
   _artwork: {fileID: 0}
-  _role: 1
-  _maxHp: 160
+  _cardFrame: {fileID: 0}
+  _role: 0
+  _maxHp: 180
   _skills:
-  - {fileID: 11400000, guid: fdc02d82b2100db4a83d8550b32d65f2, type: 2}
+  - {fileID: 11400000, guid: bc6ddecf14c8938418e90a9ba927c3cf, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

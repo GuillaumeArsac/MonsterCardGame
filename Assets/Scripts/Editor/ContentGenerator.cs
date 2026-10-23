@@ -21,6 +21,7 @@ namespace MonsterCardGame.Editor
     {
         private const string Root = "Assets/Data";
         private const string ArtworkFolder = "Assets/Images/CardSprites";
+        private const string PlainsCardFramePath = "Assets/Images/Others/SYL_contour_plus_bande.png";
 
         private static readonly Dictionary<string, SkillData> Skills = new();
 
@@ -73,6 +74,15 @@ namespace MonsterCardGame.Editor
             Passive("Aura apaisante", MonsterRole.Support, SkillTarget.AllAllies, PassiveTrigger.StartOfOwnPhase, new HealEffect(10));
             Active("Repli", MonsterRole.Support, SkillTarget.OtherAlly, 4, new ReturnToHandEffect());
             Passive("Provocation", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new TauntEffect());
+
+            // Attaques de base des Essences (docs/competences.md, Essences)
+            Active("Entaille sanglante", MonsterRole.Carry, SkillTarget.Enemy, 2, new DamageEffect(10), new BleedEffect(3));
+            Active("Frappe de l'ombre", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(40), new UntargetableEffect(1).On(EffectTarget.Self));
+            Active("Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(5), new DamageGrowthEffect(5));
+            Active("Marée des abysses", MonsterRole.Support, SkillTarget.AllEnemies, 3, new SlowEffect());
+            Active("Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 1, new DamageEffect(20), new HealEffect(10).On(EffectTarget.AllAllies));
+            Active("Faveur céleste", MonsterRole.Support, SkillTarget.Enemy, 2, new DamageEffect(10), new DamageBonusEffect(10, 3).On(EffectTarget.AllAllies));
+            Active("Défi de pierre", MonsterRole.Tank, SkillTarget.Enemy, 0, new DamageEffect(10), new TauntEffect(1).On(EffectTarget.Self));
             Passive("Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(10, 0));
             Active("Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(10), new SlowEffect());
         }
@@ -107,16 +117,16 @@ namespace MonsterCardGame.Editor
 
         // ── Monstres (docs/monstres.md, docs/combats-scenario.md) ─────────
 
-        // Les 5 premiers forment l'équipe de début de partie : la meilleure selon les simulations (docs/combats-scenario.md)
+        // Les Essences, fabriquées à la Forge. Les 5 premières forment l'équipe de début de partie, la meilleure selon les simulations (docs/monstres.md)
         private static List<MonsterCardData> GenerateStarters() => new()
         {
-            Monster("Depart", "Loup des cendres",     MonsterRole.Carry,   150, 0, null, "Griffe"),
-            Monster("Depart", "Renard de braise",     MonsterRole.Carry,   140, 0, null, "Morsure perforante"),
-            Monster("Depart", "Ours brun",            MonsterRole.Carry,   200, 0, null, "Griffe"),
-            Monster("Depart", "Chouette guérisseuse", MonsterRole.Support, 160, 0, null, "Soin"),
-            Monster("Depart", "Chien de garde",       MonsterRole.Tank,    260, 0, null, "Provocation"),
-            Monster("Depart", "Luciole sacrée",       MonsterRole.Support, 160, 0, null, "Bénédiction"),
-            Monster("Depart", "Sanglier",             MonsterRole.Tank,    240, 0, null, "Coup de bouclier"),
+            Monster("Essences", "Essence de nature",      MonsterRole.Carry,   180, 0, null, "Croissance sauvage"),
+            Monster("Essences", "Essence de vie",         MonsterRole.Support, 160, 0, null, "Souffle de vie"),
+            Monster("Essences", "Essence de pierre",      MonsterRole.Tank,    260, 0, null, "Défi de pierre"),
+            Monster("Essences", "Essence d'ombre",        MonsterRole.Carry,   100, 0, null, "Frappe de l'ombre"),
+            Monster("Essences", "Essence des cieux",      MonsterRole.Support, 160, 0, null, "Faveur céleste"),
+            Monster("Essences", "Essence du sang",        MonsterRole.Carry,   160, 0, null, "Entaille sanglante"),
+            Monster("Essences", "Essence des profondeurs", MonsterRole.Support, 180, 0, null, "Marée des abysses"),
         };
 
         // Les docs ne donnent pas de boost de stats aux équipes de test : 0 en attendant.
@@ -151,7 +161,13 @@ namespace MonsterCardGame.Editor
                                                string artwork, params string[] skills)
         {
             var card = GetOrCreate<MonsterCardData>($"{Root}/Monsters/{folder}", name);
-            card.Init(name, role, hp, skills.Select(s => Skills[s]), new StatBoost(boostHp), artwork: LoadArtwork(artwork));
+            // L'illustration et le cadre réglés à la main dans l'asset sont gardés : le générateur ne donne
+            // que ceux qui manquent. Les Essences ont le cadre de la Forge (vide) ; tous les adversaires actuels viennent des Plaines
+            var art = card.Artwork != null ? card.Artwork : LoadArtwork(artwork);
+            var frame = card.CardFrame != null ? card.CardFrame
+                      : folder == "Essences" ? null
+                      : AssetDatabase.LoadAllAssetsAtPath(PlainsCardFramePath).OfType<Sprite>().FirstOrDefault();
+            card.Init(name, role, hp, skills.Select(s => Skills[s]), new StatBoost(boostHp), artwork: art, cardFrame: frame);
             Save(card);
             return card;
         }

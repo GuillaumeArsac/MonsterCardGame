@@ -7,6 +7,7 @@ Les règles du combat sont dans [combat.md](combat.md).
 
 **Soin**
 - Un soin ne peut pas faire dépasser à un monstre ses PV de départ.
+- Sur un monstre qui **saigne**, un soin retire tous ses saignements **au lieu de** rendre des PV. Cela vaut pour toutes les compétences qui soignent (Soin, Aura apaisante, Souffle de vie).
 
 **Cumul**
 - Les effets identiques se cumulent. Par exemple, deux bonus de +10 dégâts donnent +20 dégâts.
@@ -42,6 +43,21 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Comme les compteurs ne baissent qu'à la fin de la phase du camp du monstre, une compétence disponible qui est ralentie est bloquée pendant la prochaine phase de ce monstre, quel que soit le camp qui applique le ralentissement.
 - Le ralentissement n'a pas de durée : il ne touche que le compteur en cours. Après la prochaine utilisation de la compétence, son temps de recharge normal s'applique.
 - Le ralentissement est indépendant des dégâts : il s'applique même si les dégâts de la compétence sont réduits à 0.
+
+**Saignement**
+- Au début de chaque phase de son camp, un monstre qui saigne perd **5 % de ses PV max par saignement**, arrondi à l'entier inférieur, avec 1 dégât minimum par saignement.
+- Les saignements se cumulent et ne s'arrêtent pas seuls : seul un soin les retire (voir Soin). Un retour en main ou la défaite les retire aussi.
+- Ces dégâts ignorent les bonus et les réductions de dégâts.
+- Un monstre vaincu par le saignement rapporte ses points à l'adversaire, comme tout monstre vaincu.
+- Le saignement frappe avant les passives de début de phase : une Aura apaisante le retire, mais après qu'il a frappé une fois.
+
+**Inciblable**
+- Un monstre inciblable ne peut pas être choisi comme cible par les compétences adverses, même s'il a Provocation.
+- Les compétences qui ne choisissent pas de cible (Grand balayage, Marée des abysses) le touchent quand même.
+
+**Effets sur ce monstre ou sur les alliés**
+- Certaines compétences ont des effets qui ne touchent pas leur cible : « ce monstre » (Frappe de l'ombre, Défi de pierre) ou « tous les alliés sur le terrain » (Souffle de vie, Faveur céleste).
+- Ces effets s'appliquent après les dégâts sur la cible, dans l'ordre de la fiche.
 
 **Durées**
 - Quand une compétence applique un effet pendant **X tours**, l'effet dure jusqu'à la fin de la X-ième phase **de l'autre camp**.
@@ -163,7 +179,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue ra
 
 - Le tirage a lieu avant la mise en place, et l'emplacement marqué est visible des deux camps.
 - Le point bonus s'applique quel que soit le monstre qui vainc la cible, même si le Chasseur de trophées est en main ou a été vaincu.
-- Un monstre vaincu par la fatigue ne rapporte aucun point, bonus compris.
+- Le point bonus compte aussi pour un monstre vaincu par la fatigue ou le saignement.
 
 ### Bouclier
 
@@ -236,3 +252,98 @@ Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il e
 | **Durée** | Instantané |
 
 Si elle vise un ennemi, elle est soumise à la Provocation.
+
+## Attaques des Essences
+
+Les attaques de base des 7 Essences de départ (voir [monstres.md](monstres.md)). Elles ne visent que les ennemis.
+
+### Entaille sanglante (Essence du sang)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 10 dégâts et applique 3 saignements |
+| **Temps de recharge** | 2 |
+| **Durée** | Les saignements durent jusqu'à un soin |
+
+Soumise à la Provocation.
+
+### Frappe de l'ombre (Essence d'ombre)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 40 dégâts. Ce monstre devient inciblable |
+| **Temps de recharge** | 1 |
+| **Durée** | Inciblable pendant 1 tour : jusqu'à la fin de la prochaine phase adverse |
+
+Soumise à la Provocation. Avec la recharge de 1, elle frappe à chaque phase à partir de sa deuxième sur le terrain : elle reste alors inciblable pendant toutes les phases adverses, sauf si elle est ralentie ou renvoyée en main.
+
+### Croissance sauvage (Essence de nature)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 5 dégâts. Ensuite, les dégâts de cette compétence augmentent de 5 |
+| **Temps de recharge** | 0 |
+| **Durée** | L'augmentation dure tout le combat, même après un retour en main |
+
+Soumise à la Provocation. Les coups infligent 5, puis 10, puis 15 dégâts, etc.
+
+### Marée des abysses (Essence des profondeurs)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Tous les ennemis sur le terrain |
+| **Effet** | Applique Ralentissement à chaque ennemi sur le terrain, sans dégâts |
+| **Temps de recharge** | 3 |
+| **Durée** | Instantané |
+
+Ne choisit pas de cible : ignore la Provocation et touche les monstres inciblables.
+
+### Souffle de vie (Essence de vie)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 20 dégâts. Rend 10 PV à tous les alliés sur le terrain, y compris ce monstre |
+| **Temps de recharge** | 1 |
+| **Durée** | Instantané |
+
+Soumise à la Provocation. Un allié qui saigne perd ses saignements au lieu d'être soigné.
+
+### Faveur céleste (Essence des cieux)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 10 dégâts. Les dégâts infligés par tous les alliés sur le terrain augmentent de 10 |
+| **Temps de recharge** | 2 |
+| **Durée** | Bonus pendant 3 tours |
+
+Soumise à la Provocation. Avec la recharge de 2 et une durée de 3 tours, deux bonus se chevauchent un tour sur deux : les alliés ont alors +20 dégâts.
+
+### Défi de pierre (Essence de pierre)
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Tank |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 10 dégâts. Ce monstre a Provocation |
+| **Temps de recharge** | 0 |
+| **Durée** | Provocation pendant 1 tour : jusqu'à la fin de la prochaine phase adverse |
+
+Soumise à la Provocation. Ralentie ou renvoyée en main, l'Essence ne peut pas renouveler son Défi et perd sa Provocation.

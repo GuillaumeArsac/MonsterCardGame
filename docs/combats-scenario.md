@@ -43,5 +43,7 @@ Environ 2 000 combats par équipe, avec l'IA simple :
 | Loup, Ours, Chouette, Luciole, Chien (2 attaquants seulement) | 30 % | 12 tours |
 | Loup, Renard, Ours, Chouette, Sanglier (sans Provocation) | 1 % | 10 tours |
 
+Ces résultats datent de l'ancienne collection de départ (Loup, Renard, Ours…). Avec les Essences (2026-10-23, 1 000 combats par équipe), la meilleure équipe, Nature, Vie, Pierre, Ombre et Cieux, gagne 97 % de ses combats en 10,2 tours en moyenne : ce premier combat est très facile. Le détail est dans [monstres.md](monstres.md).
+
 Les combats durent tous entre 7 et 15 tours.
 La composition de l'équipe compte beaucoup : ce combat apprend aussi qu'il faut **3 attaquants et un tank avec Provocation**.

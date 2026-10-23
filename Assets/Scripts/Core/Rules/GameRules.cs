@@ -14,6 +14,9 @@ namespace MonsterCardGame.Core
         public const int FatigueStartTurn = 16;
         public const int FatigueDamageStep = 10;
 
+        // Saignement : dégâts par cumul au début de chaque phase du camp du monstre, en % de ses PV max (arrondi à l'entier inférieur, 1 minimum)
+        public const int BleedPercentPerStack = 5;
+
         // Monstres
         public const int MaxSkillsPerMonster = 3;
     }

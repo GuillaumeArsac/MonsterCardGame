@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: "Thr\xE2k le Perp\xE9tuel"
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
   _monsterName: "Thr\xE2k le Perp\xE9tuel"
-  _artwork: {fileID: 0}
+  _artwork: {fileID: 7638427743125376143, guid: 3a46077efc618b24a8311059a73c7e7f, type: 3}
+  _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
   _role: 2
   _maxHp: 260
   _skills:

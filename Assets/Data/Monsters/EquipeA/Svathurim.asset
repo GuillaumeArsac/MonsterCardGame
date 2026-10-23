@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
   _monsterName: Svathurim
   _artwork: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
+  _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
   _role: 1
   _maxHp: 200
   _skills:

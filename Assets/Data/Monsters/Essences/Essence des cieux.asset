@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: Loup des cendres
+  m_Name: Essence des cieux
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: Loup des cendres
+  _monsterName: Essence des cieux
   _artwork: {fileID: 0}
-  _role: 0
-  _maxHp: 150
+  _cardFrame: {fileID: 0}
+  _role: 1
+  _maxHp: 160
   _skills:
-  - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
+  - {fileID: 11400000, guid: ae9e572a7f892be45970475e26c4bf20, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

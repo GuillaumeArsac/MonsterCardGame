@@ -26,7 +26,7 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
         }
     }
 
-    /// <summary>Rend des PV à chaque cible, sans dépasser ses PV de départ (Soin, Aura apaisante).</summary>
+    /// <summary>Rend des PV à chaque cible, sans dépasser ses PV de départ (Soin, Aura apaisante). Sur une cible qui saigne, retire les saignements au lieu de soigner.</summary>
     [Serializable]
     public class HealEffect : SkillEffect
     {
@@ -119,15 +119,72 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     {
     }
 
-    /// <summary>Le monstre a Provocation : les compétences adverses qui visent un ennemi doivent le cibler.</summary>
+    /// <summary>
+    /// Le monstre a Provocation : les compétences adverses qui visent un ennemi doivent le cibler.
+    /// En passive (Provocation), c'est permanent. Dans une compétence active (Essence de pierre), pour la durée indiquée.
+    /// </summary>
     [Serializable]
     public class TauntEffect : SkillEffect
     {
+        [SerializeField, Min(0), Tooltip("Durée en tours, pour une compétence active. 0 = permanent")]
+        private int _durationTurns;
+
+        public int DurationTurns => _durationTurns;
+
+        public TauntEffect() { }
+        public TauntEffect(int durationTurns) => _durationTurns = durationTurns;
+    }
+
+    /// <summary>
+    /// Saignement (Essence du sang) : au début de chaque phase de son camp, la cible subit, par cumul,
+    /// un pourcentage de ses PV max (GameRules.BleedPercentPerStack), sans réduction. Les cumuls s'additionnent.
+    /// Un soin retire tous les saignements au lieu de rendre des PV.
+    /// </summary>
+    [Serializable]
+    public class BleedEffect : SkillEffect
+    {
+        [SerializeField, Min(1)] private int _stacks = 1;
+
+        public int Stacks => _stacks;
+
+        public BleedEffect() { }
+        public BleedEffect(int stacks) => _stacks = stacks;
+    }
+
+    /// <summary>
+    /// La cible ne peut plus être choisie par les compétences adverses (Essence de l'ombre).
+    /// Les compétences qui ne choisissent pas de cible (Grand balayage) la touchent quand même.
+    /// </summary>
+    [Serializable]
+    public class UntargetableEffect : SkillEffect
+    {
+        [SerializeField, Min(0), Tooltip("Durée en tours. 0 = permanent")]
+        private int _durationTurns = 1;
+
+        public int DurationTurns => _durationTurns;
+
+        public UntargetableEffect() { }
+        public UntargetableEffect(int durationTurns) => _durationTurns = durationTurns;
+    }
+
+    /// <summary>
+    /// Après chaque utilisation, les dégâts de cette compétence augmentent pour le reste du combat (Essence de nature).
+    /// S'applique au monstre qui l'utilise, quelle que soit la cible.
+    /// </summary>
+    [Serializable]
+    public class DamageGrowthEffect : SkillEffect
+    {
+        [SerializeField, Min(0)] private int _amount = 5;
+
+        public int Amount => _amount;
+
+        public DamageGrowthEffect() { }
+        public DamageGrowthEffect(int amount) => _amount = amount;
     }
 
     /// <summary>
     /// Marque un emplacement adverse tiré au hasard (Chasseur de trophées) : un monstre adverse vaincu
-    /// sur cet emplacement rapporte des points en plus, sauf s'il est vaincu par la fatigue.
+    /// sur cet emplacement rapporte des points en plus, fatigue comprise.
     /// </summary>
     [Serializable]
     public class MarkedSlotEffect : SkillEffect

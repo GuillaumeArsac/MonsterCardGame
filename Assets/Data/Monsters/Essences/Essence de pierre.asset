@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: Chien de garde
+  m_Name: Essence de pierre
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: Chien de garde
+  _monsterName: Essence de pierre
   _artwork: {fileID: 0}
+  _cardFrame: {fileID: 0}
   _role: 2
   _maxHp: 260
   _skills:
-  - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
+  - {fileID: 11400000, guid: 8924a542293e3ab4abc5c6b28dea8afc, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

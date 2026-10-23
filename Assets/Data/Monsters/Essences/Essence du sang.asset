@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: "Chouette gu\xE9risseuse"
+  m_Name: Essence du sang
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: "Chouette gu\xE9risseuse"
+  _monsterName: Essence du sang
   _artwork: {fileID: 0}
-  _role: 1
+  _cardFrame: {fileID: 0}
+  _role: 0
   _maxHp: 160
   _skills:
-  - {fileID: 11400000, guid: ef8133ff4420c5742959a123717152cf, type: 2}
+  - {fileID: 11400000, guid: ab8e37f013108f844bb72cdf45afe217, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

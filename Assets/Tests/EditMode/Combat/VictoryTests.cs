@@ -133,7 +133,7 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         }
 
         [Test]
-        public void VaincuParLaFatigue_NeRapporteAucunPoint_MemeSurUnEmplacementMarque()
+        public void VaincuParLaFatigue_RapporteSesPoints_EmplacementMarqueCompris()
         {
             var archer = Mon("Archer adverse", 1000, Catalog.ChasseurDeTrophees);
             var victime = Mon("Victime", 10);
@@ -147,8 +147,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
             AdvanceTo(16, Side.Player);
 
             Assert.That(defeats.Single().ByFatigue, Is.True);
-            Assert.That(defeats.Single().PointsAwarded, Is.EqualTo(0));
-            Assert.That(Engine.GetPoints(Side.Enemy), Is.EqualTo(0));
+            Assert.That(defeats.Single().PointsAwarded, Is.EqualTo(2));
+            Assert.That(Engine.GetPoints(Side.Enemy), Is.EqualTo(2));
         }
 
         [Test]

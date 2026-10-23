@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,17 +27,25 @@ namespace MonsterCardGame.UI.Combat
         [SerializeField] private Image    _highlight;
         [SerializeField] private Image    _frame;
         [SerializeField] private Image    _artwork;
+        [SerializeField, Tooltip("Recadre l'illustration pour qu'elle couvre toute la fenêtre du cadre")]
+        private AspectRatioFitter _artworkFitter;
+        [SerializeField, Tooltip("Cadre posé sur l'illustration")]
+        private Image _border;
+        [SerializeField, Tooltip("Cadre des monstres qui n'en précisent pas : celui de la Forge")]
+        private Sprite _defaultBorder;
         [SerializeField] private TMP_Text _nameLabel;
         [SerializeField] private TMP_Text _hpLabel;
         [SerializeField] private TMP_Text _statusLabel;
+        [SerializeField, Tooltip("Bandeau sombre derrière les effets, caché quand il n'y en a pas")]
+        private Image _statusBackground;
         [SerializeField] private SkillRowView[] _skillRows;
 
         [Header("Couleurs")]
-        [SerializeField] private Color _playerFrame    = new(0.16f, 0.26f, 0.40f);
-        [SerializeField] private Color _enemyFrame     = new(0.42f, 0.17f, 0.17f);
+        [SerializeField] private Color _playerFrame    = Color.white;
+        [SerializeField] private Color _enemyFrame     = new(1.00f, 0.88f, 0.84f);
         [SerializeField] private Color _selectedColor  = new(1.00f, 0.82f, 0.25f);
         [SerializeField] private Color _targetColor    = new(1.00f, 0.40f, 0.30f);
-        [SerializeField] private Color _noArtworkColor = new(0.10f, 0.10f, 0.12f);
+        [SerializeField, Tooltip("Sans illustration, la fenêtre laisse voir le fond")] private Color _noArtworkColor = new(0, 0, 0, 0);
 
         /// <summary>Monstre affiché en combat. Null hors combat.</summary>
         public CombatMonster Monster { get; private set; }
@@ -87,10 +96,7 @@ namespace MonsterCardGame.UI.Combat
             _nameLabel.text = monster.Name;
             _frame.color = monster.Side == Side.Player ? _playerFrame : _enemyFrame;
 
-            var sprite = (monster.Origin as MonsterCardData)?.Artwork
-                      ?? (monster.Origin as OwnedMonster)?.Origin.Artwork;
-            _artwork.sprite = sprite;
-            _artwork.color  = sprite != null ? Color.white : _noArtworkColor;
+            SetVisuals((monster.Origin as MonsterCardData) ?? (monster.Origin as OwnedMonster)?.Origin);
         }
 
         /// <param name="canUseSkill">Dit si une compétence peut être utilisée maintenant par le joueur.</param>
@@ -98,8 +104,9 @@ namespace MonsterCardGame.UI.Combat
         public void Refresh(CardHighlight highlight, Func<int, bool> canUseSkill, int selectedSkill)
         {
             var m = Monster;
-            _hpLabel.text = $"PV {m.Hp} / {m.MaxHp}";
-            _statusLabel.text = StatusText(m);
+            // Médaillon : PV actuels, et PV de départ en petit dessous
+            _hpLabel.text = $"{m.Hp}\n<size=60%>/{m.MaxHp}</size>";
+            SetStatus(StatusText(m));
 
             _highlight.enabled = highlight != CardHighlight.None;
             _highlight.color   = highlight == CardHighlight.Target ? _targetColor : _selectedColor;
@@ -119,10 +126,9 @@ namespace MonsterCardGame.UI.Combat
                               Func<int, bool> choosableSkill = null, int selectedSkill = -1)
         {
             Owned = monster;
-            var card = monster.Origin;
-            ShowInfo(monster.Name, card.Artwork, _playerFrame, highlight);
-            _hpLabel.text = $"PV {monster.MaxHp}";
-            _statusLabel.text = monster.Boost.IsEmpty ? "" : $"Boost {monster.Boost}";
+            ShowInfo(monster.Name, monster.Origin, _playerFrame, highlight);
+            _hpLabel.text = monster.MaxHp.ToString();
+            SetStatus(monster.Boost.IsEmpty ? "" : $"Boost {monster.Boost}");
 
             for (int i = 0; i < _skillRows.Length; i++)
             {
@@ -135,9 +141,9 @@ namespace MonsterCardGame.UI.Combat
         public void ShowCard(MonsterCardData card, CardHighlight highlight, int selectedSkill = -1)
         {
             Card = card;
-            ShowInfo(card.MonsterName, card.Artwork, _enemyFrame, highlight);
-            _hpLabel.text = $"PV {card.MaxHp}";
-            _statusLabel.text = card.StatBoost.IsEmpty ? "" : $"Boost : {card.StatBoost}";
+            ShowInfo(card.MonsterName, card, _enemyFrame, highlight);
+            _hpLabel.text = card.MaxHp.ToString();
+            SetStatus(card.StatBoost.IsEmpty ? "" : $"Boost : {card.StatBoost}");
 
             for (int i = 0; i < _skillRows.Length; i++)
             {
@@ -146,14 +152,30 @@ namespace MonsterCardGame.UI.Combat
             }
         }
 
-        private void ShowInfo(string monsterName, Sprite artwork, Color frame, CardHighlight highlight)
+        private void ShowInfo(string monsterName, MonsterCardData card, Color frame, CardHighlight highlight)
         {
             _nameLabel.text = monsterName;
             _frame.color    = frame;
-            _artwork.sprite = artwork;
-            _artwork.color  = artwork != null ? Color.white : _noArtworkColor;
+            SetVisuals(card);
             _highlight.enabled = highlight != CardHighlight.None;
             _highlight.color   = highlight == CardHighlight.Target ? _targetColor : _selectedColor;
+        }
+
+        /// <summary>Illustration et cadre de la carte : celui du monstre, ou celui de la Forge par défaut.</summary>
+        private void SetVisuals(MonsterCardData card)
+        {
+            if (_border != null) _border.sprite = card != null && card.CardFrame != null ? card.CardFrame : _defaultBorder;
+
+            var sprite = card != null ? card.Artwork : null;
+            _artwork.sprite = sprite;
+            _artwork.color  = sprite != null ? Color.white : _noArtworkColor;
+            if (_artworkFitter != null && sprite != null) _artworkFitter.aspectRatio = sprite.rect.width / sprite.rect.height;
+        }
+
+        private void SetStatus(string text)
+        {
+            _statusLabel.text = text;
+            if (_statusBackground != null) _statusBackground.enabled = text.Length > 0;
         }
 
         private static string StatusText(CombatMonster m)
@@ -161,6 +183,9 @@ namespace MonsterCardGame.UI.Combat
             var parts = new List<string>();
             if (m.DamageBonus > 0)     parts.Add($"+{m.DamageBonus} dégât{(m.DamageBonus > 1 ? "s" : "")} infligé{(m.DamageBonus > 1 ? "s" : "")}");
             if (m.DamageReduction > 0) parts.Add($"-{m.DamageReduction} dégât{(m.DamageReduction > 1 ? "s" : "")} subi{(m.DamageReduction > 1 ? "s" : "")}");
+            if (m.BleedStacks > 0)     parts.Add($"Saignement ×{m.BleedStacks} (-{m.BleedDamage})");
+            if (m.IsUntargetable)      parts.Add("Inciblable");
+            if (m.Modifiers.Any(x => x.Kind == ModifierKind.Taunt)) parts.Add("Provocation");
             return string.Join("  ·  ", parts);
         }
     }

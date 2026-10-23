@@ -12,7 +12,9 @@ namespace MonsterCardGame.Gameplay.Combat
         /// <summary>Le perdant n'a plus aucun monstre, ni en main ni sur le terrain.</summary>
         NoMonstersLeft,
         /// <summary>Les deux camps ont perdu leur dernier monstre en même temps : le joueur perd.</summary>
-        BothSidesEmpty
+        BothSidesEmpty,
+        /// <summary>Les deux camps ont atteint 3 points en même temps (fatigue) : le joueur perd.</summary>
+        BothReachedPoints
     }
 
     public readonly struct MonsterPlacedEvent
@@ -49,14 +51,16 @@ namespace MonsterCardGame.Gameplay.Combat
     public readonly struct DamageEvent
     {
         public readonly CombatMonster Target;
-        /// <summary>Null pour la fatigue.</summary>
+        /// <summary>Null pour la fatigue et le saignement.</summary>
         public readonly CombatMonster Source;
         public readonly int           Amount;
         public readonly int           HpAfter;
         public readonly bool          IsFatigue;
+        public readonly bool          IsBleed;
 
-        public DamageEvent(CombatMonster target, CombatMonster source, int amount, int hpAfter, bool isFatigue)
+        public DamageEvent(CombatMonster target, CombatMonster source, int amount, int hpAfter, bool isFatigue, bool isBleed = false)
         {
+            IsBleed   = isBleed;
             Target    = target;
             Source    = source;
             Amount    = amount;
@@ -82,6 +86,27 @@ namespace MonsterCardGame.Gameplay.Combat
         }
     }
 
+    /// <summary>Saignements appliqués à un monstre, ou retirés par un soin (Added = 0).</summary>
+    public readonly struct BleedEvent
+    {
+        public readonly CombatMonster Target;
+        public readonly CombatMonster Source;
+        /// <summary>Cumuls ajoutés. 0 quand un soin retire les saignements.</summary>
+        public readonly int           Added;
+        /// <summary>Cumuls après l'effet.</summary>
+        public readonly int           Total;
+
+        public bool IsCleansed => Added == 0;
+
+        public BleedEvent(CombatMonster target, CombatMonster source, int added, int total)
+        {
+            Target = target;
+            Source = source;
+            Added  = added;
+            Total  = total;
+        }
+    }
+
     public readonly struct ModifierAppliedEvent
     {
         public readonly CombatMonster  Target;
@@ -101,7 +126,7 @@ namespace MonsterCardGame.Gameplay.Combat
         public readonly CombatMonster Monster;
         /// <summary>Emplacement qu'occupait le monstre.</summary>
         public readonly int           Slot;
-        /// <summary>Points marqués par l'adversaire, emplacement marqué compris. 0 pour la fatigue.</summary>
+        /// <summary>Points marqués par l'adversaire, emplacement marqué compris, fatigue comprise.</summary>
         public readonly int           PointsAwarded;
         public readonly bool          ByFatigue;
 

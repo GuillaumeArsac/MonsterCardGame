@@ -37,6 +37,7 @@ namespace MonsterCardGame.Gameplay.Combat
         public event Action<SkillUsedEvent>       SkillUsed;
         public event Action<DamageEvent>          Damaged;
         public event Action<HealEvent>            Healed;
+        public event Action<BleedEvent>           BleedChanged;
         public event Action<CombatMonster>        Slowed;
         public event Action<ModifierAppliedEvent> ModifierApplied;
         public event Action<CombatMonster>        ReturnedToHand;
@@ -219,10 +220,10 @@ namespace MonsterCardGame.Gameplay.Combat
             };
         }
 
-        /// <summary>Ennemis ciblables : ceux qui ont Provocation s'il y en a, sinon tous.</summary>
+        /// <summary>Ennemis ciblables, sauf les inciblables : ceux qui ont Provocation s'il y en a, sinon tous.</summary>
         private List<CombatMonster> EnemyTargets(Side side)
         {
-            var enemies  = GetField(side.Opponent()).ToList();
+            var enemies  = GetField(side.Opponent()).Where(m => !m.IsUntargetable).ToList();
             var taunters = enemies.Where(m => m.HasTaunt).ToList();
             return taunters.Count > 0 ? taunters : enemies;
         }
@@ -241,7 +242,7 @@ namespace MonsterCardGame.Gameplay.Combat
             _skillUsedThisPhase = true;
 
             SkillUsed?.Invoke(new SkillUsedEvent(monster, skillIndex, skill, targets));
-            ApplyEffects(monster, skill, targets);
+            ApplyEffects(monster, skillIndex, targets);
             CheckEnd();
         }
 
@@ -267,25 +268,58 @@ namespace MonsterCardGame.Gameplay.Combat
 
         // ── Effets ────────────────────────────────────────────────────────
 
-        private void ApplyEffects(CombatMonster source, SkillData skill, IReadOnlyList<CombatMonster> targets)
+        /// <summary>
+        /// Applique les effets dans l'ordre de la fiche. Chaque effet touche les cibles de la compétence,
+        /// ou les monstres qu'il désigne lui-même (ce monstre, tous les alliés).
+        /// </summary>
+        private void ApplyEffects(CombatMonster source, int skillIndex, IReadOnlyList<CombatMonster> targets)
         {
-            foreach (var target in targets)
+            foreach (var effect in source.Skills[skillIndex].Effects)
             {
-                foreach (var effect in skill.Effects)
+                if (effect == null) continue;
+
+                // L'Essence de nature renforce sa propre compétence, quelle que soit la cible
+                if (effect is DamageGrowthEffect growth)
                 {
-                    // Une cible vaincue ou renvoyée en main ne subit pas la suite des effets
-                    if (!target.IsOnField) break;
-                    ApplyEffect(source, effect, target);
+                    source.AddDamageGrowth(skillIndex, growth.Amount);
+                    continue;
                 }
+
+                // Une cible vaincue ou renvoyée en main ne subit pas la suite des effets
+                foreach (var target in EffectTargets(source, effect, targets).ToList())
+                    if (target.IsOnField) ApplyEffect(source, skillIndex, effect, target);
             }
         }
 
-        private void ApplyEffect(CombatMonster source, SkillEffect effect, CombatMonster target)
+        private IEnumerable<CombatMonster> EffectTargets(CombatMonster source, SkillEffect effect, IReadOnlyList<CombatMonster> skillTargets)
+            => effect.AppliesTo switch
+            {
+                EffectTarget.Self      => source.IsOnField ? new[] { source } : Array.Empty<CombatMonster>(),
+                EffectTarget.AllAllies => GetField(source.Side),
+                _                      => skillTargets
+            };
+
+        private void ApplyEffect(CombatMonster source, int skillIndex, SkillEffect effect, CombatMonster target)
         {
             switch (effect)
             {
                 case DamageEffect damage:
-                    DealDamage(source, target, damage.Amount, damage.IgnoresReductions);
+                    DealDamage(source, target, damage.Amount + source.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
+                    break;
+
+                case BleedEffect bleed:
+                    target.BleedStacks += bleed.Stacks;
+                    BleedChanged?.Invoke(new BleedEvent(target, source, bleed.Stacks, target.BleedStacks));
+                    break;
+
+                case UntargetableEffect untargetable:
+                    AddModifier(source, target, new CombatModifier(ModifierKind.Untargetable, 0, source.Side, untargetable.DurationTurns));
+                    break;
+
+                // Une Provocation passive est lue directement sur la fiche ; dans une active, elle dure le temps indiqué
+                case TauntEffect taunt:
+                    if (source.Skills[skillIndex].IsActive)
+                        AddModifier(source, target, new CombatModifier(ModifierKind.Taunt, 0, source.Side, taunt.DurationTurns));
                     break;
 
                 case HealEffect heal:
@@ -314,8 +348,7 @@ namespace MonsterCardGame.Gameplay.Combat
                     SendToHand(target);
                     break;
 
-                // Passives traitées ailleurs : Provocation (ciblage) et emplacement marqué (début du combat)
-                case TauntEffect:
+                // Passive traitée au début du combat
                 case MarkedSlotEffect:
                     break;
 
@@ -333,8 +366,16 @@ namespace MonsterCardGame.Gameplay.Combat
             if (target.Hp <= 0) Defeat(target, byFatigue: false);
         }
 
+        /// <summary>Soin : sur une cible qui saigne, retire tous les saignements au lieu de rendre des PV.</summary>
         private void Heal(CombatMonster source, CombatMonster target, int amount)
         {
+            if (target.BleedStacks > 0)
+            {
+                target.BleedStacks = 0;
+                BleedChanged?.Invoke(new BleedEvent(target, source, 0, 0));
+                return;
+            }
+
             int healed = Math.Min(amount, target.MaxHp - target.Hp);
             if (healed <= 0) return;
 
@@ -356,7 +397,7 @@ namespace MonsterCardGame.Gameplay.Combat
             ReturnedToHand?.Invoke(monster);
         }
 
-        /// <summary>Monstre vaincu : retiré du combat, 1 point pour l'adversaire (plus l'emplacement marqué), sauf par la fatigue.</summary>
+        /// <summary>Monstre vaincu : retiré du combat, 1 point pour l'adversaire (plus l'emplacement marqué), fatigue et saignement compris.</summary>
         private void Defeat(CombatMonster monster, bool byFatigue)
         {
             var side = monster.Side;
@@ -365,7 +406,7 @@ namespace MonsterCardGame.Gameplay.Combat
             _field[side][slot] = null;
             monster.Defeat();
 
-            int points = byFatigue ? 0 : PointsForDefeatAt(side, slot);
+            int points = PointsForDefeatAt(side, slot);
             _points[side.Opponent()] += points;
 
             MonsterDefeated?.Invoke(new MonsterDefeatedEvent(monster, slot, points, byFatigue));
@@ -398,7 +439,7 @@ namespace MonsterCardGame.Gameplay.Combat
         {
             Turn++;
 
-            // Fatigue : dégâts à tous les monstres sur le terrain, sans réduction, sans point
+            // Fatigue : dégâts à tous les monstres sur le terrain, sans réduction. Un monstre vaincu rapporte ses points
             int fatigue = FatigueDamage(Turn);
             if (fatigue > 0)
             {
@@ -425,6 +466,16 @@ namespace MonsterCardGame.Gameplay.Combat
 
             PhaseStarted?.Invoke(new PhaseEvent(side, Turn));
 
+            // Saignement, avant les passives : une Aura apaisante le retire, mais après qu'il a frappé
+            foreach (var monster in GetField(side).Where(m => m.BleedStacks > 0).ToList())
+            {
+                int bleed = monster.BleedDamage;
+                monster.Hp = Math.Max(0, monster.Hp - bleed);
+                Damaged?.Invoke(new DamageEvent(monster, null, bleed, monster.Hp, isFatigue: false, isBleed: true));
+                if (monster.Hp <= 0) Defeat(monster, byFatigue: false);
+            }
+            if (CheckEnd()) return;
+
             // Passives de début de phase, pour les monstres déjà sur le terrain
             foreach (var monster in GetField(side).ToList())
             {
@@ -436,7 +487,7 @@ namespace MonsterCardGame.Gameplay.Combat
 
                     var targets = AutomaticTargets(monster, skill.Target);
                     SkillUsed?.Invoke(new SkillUsedEvent(monster, i, skill, targets));
-                    ApplyEffects(monster, skill, targets);
+                    ApplyEffects(monster, i, targets);
                 }
             }
 
@@ -448,6 +499,10 @@ namespace MonsterCardGame.Gameplay.Combat
         private bool CheckEnd()
         {
             if (State == CombatState.Ended) return true;
+
+            // La fatigue peut faire marquer les deux camps en même temps : le joueur perd
+            if (_points[Side.Player] >= GameRules.PointsToWin && _points[Side.Enemy] >= GameRules.PointsToWin)
+                return End(Side.Enemy, CombatEndReason.BothReachedPoints);
 
             foreach (var side in new[] { Side.Player, Side.Enemy })
                 if (_points[side] >= GameRules.PointsToWin)

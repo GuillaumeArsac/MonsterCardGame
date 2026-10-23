@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: Renard de braise
+  m_Name: Essence des profondeurs
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: Renard de braise
+  _monsterName: Essence des profondeurs
   _artwork: {fileID: 0}
-  _role: 0
-  _maxHp: 140
+  _cardFrame: {fileID: 0}
+  _role: 1
+  _maxHp: 180
   _skills:
-  - {fileID: 11400000, guid: 0602d296c30033143908ef8cee0f2aae, type: 2}
+  - {fileID: 11400000, guid: f3f6f4a9832781f459eff0cf0f155d19, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
     _hp: 0

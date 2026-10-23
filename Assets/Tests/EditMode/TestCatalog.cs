@@ -59,6 +59,29 @@ namespace MonsterCardGame.Tests.EditMode
         public SkillData CoupDeBouclier => Skill("Coup de bouclier", () => SkillData.CreateActive(
             "Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(10), new SlowEffect()));
 
+        // ── Attaques des Essences (docs/competences.md) ──────────────────
+
+        public SkillData EntailleSanglante => Skill("Entaille sanglante", () => SkillData.CreateActive(
+            "Entaille sanglante", MonsterRole.Carry, SkillTarget.Enemy, 2, new DamageEffect(10), new BleedEffect(3)));
+
+        public SkillData FrappeDeLOmbre => Skill("Frappe de l'ombre", () => SkillData.CreateActive(
+            "Frappe de l'ombre", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(40), new UntargetableEffect(1).On(EffectTarget.Self)));
+
+        public SkillData CroissanceSauvage => Skill("Croissance sauvage", () => SkillData.CreateActive(
+            "Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(5), new DamageGrowthEffect(5)));
+
+        public SkillData MareeDesAbysses => Skill("Marée des abysses", () => SkillData.CreateActive(
+            "Marée des abysses", MonsterRole.Support, SkillTarget.AllEnemies, 3, new SlowEffect()));
+
+        public SkillData SouffleDeVie => Skill("Souffle de vie", () => SkillData.CreateActive(
+            "Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 1, new DamageEffect(20), new HealEffect(10).On(EffectTarget.AllAllies)));
+
+        public SkillData FaveurCeleste => Skill("Faveur céleste", () => SkillData.CreateActive(
+            "Faveur céleste", MonsterRole.Support, SkillTarget.Enemy, 2, new DamageEffect(10), new DamageBonusEffect(10, 3).On(EffectTarget.AllAllies)));
+
+        public SkillData DefiDePierre => Skill("Défi de pierre", () => SkillData.CreateActive(
+            "Défi de pierre", MonsterRole.Tank, SkillTarget.Enemy, 0, new DamageEffect(10), new TauntEffect(1).On(EffectTarget.Self)));
+
         public IEnumerable<SkillData> AllSkills => new[]
         {
             GrandBalayage, Griffe, Soin, Benediction, MorsurePerforante, Execution, ChasseurDeTrophees,
@@ -123,6 +146,18 @@ namespace MonsterCardGame.Tests.EditMode
             Monster("Ours brun",            MonsterRole.Carry,   200, 0, Griffe),
             Monster("Chouette guérisseuse", MonsterRole.Support, 160, 0, Soin),
             Monster("Chien de garde",       MonsterRole.Tank,    260, 0, Provocation),
+        };
+
+        /// <summary>Les 7 Essences de départ (docs/monstres.md).</summary>
+        public MonsterCardData[] Essences() => new[]
+        {
+            Monster("Essence du sang",         MonsterRole.Carry,   160, 0, EntailleSanglante),
+            Monster("Essence d'ombre",         MonsterRole.Carry,   100, 0, FrappeDeLOmbre),
+            Monster("Essence de nature",       MonsterRole.Carry,   180, 0, CroissanceSauvage),
+            Monster("Essence de vie",          MonsterRole.Support, 160, 0, SouffleDeVie),
+            Monster("Essence de pierre",       MonsterRole.Tank,    260, 0, DefiDePierre),
+            Monster("Essence des profondeurs", MonsterRole.Support, 180, 0, MareeDesAbysses),
+            Monster("Essence des cieux",       MonsterRole.Support, 160, 0, FaveurCeleste),
         };
 
         public void Dispose()

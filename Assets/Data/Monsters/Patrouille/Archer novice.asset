@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
   _monsterName: Archer novice
   _artwork: {fileID: 0}
+  _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
   _role: 0
   _maxHp: 120
   _skills:

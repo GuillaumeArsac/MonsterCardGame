@@ -60,20 +60,25 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 - **Un seul tank avec Provocation par équipe.** Les simulations ont montré que deux Provocations rendent les carry de l'équipe presque intouchables.
 - **Chaque équipe a une Exécution**, et l'adversaire a le ralentissement de zone (Grand balayage), pour tester ces mécaniques.
 
-## Collection de départ
+## Collection de départ : les Essences
 
-7 monstres de base, avec une seule compétence chacun. Le joueur en choisit 5 pour combattre.
+Les Essences sont des esprits fabriqués à la Forge. Chacune est construite autour d'un thème, et commence avec une seule compétence : son attaque de base (voir [competences.md](competences.md), Attaques des Essences). Le joueur en choisit 5 pour combattre.
 
-| Monstre | Rôle | PV | Compétence |
-|---|---|---|---|
-| **Loup des cendres** | Carry | 150 | Griffe |
-| **Renard de braise** | Carry | 140 | Morsure perforante |
-| **Ours brun** | Carry | 200 | Griffe |
-| **Chouette guérisseuse** | Support | 160 | Soin |
-| **Luciole sacrée** | Support | 160 | Bénédiction |
-| **Chien de garde** | Tank | 260 | Provocation |
-| **Sanglier** | Tank | 240 | Coup de bouclier |
+| Essence | Rôle | PV | Attaque de base | Recharge |
+|---|---|---|---|---|
+| **Essence du sang** | Carry | 160 | Entaille sanglante : 10 dégâts et 3 saignements | 2 |
+| **Essence de nature** | Carry | 180 | Croissance sauvage : 5 dégâts, +5 à chaque utilisation | 0 |
+| **Essence de vie** | Support | 160 | Souffle de vie : 20 dégâts, 10 PV à tous les alliés | 1 |
+| **Essence de pierre** | Tank | 260 | Défi de pierre : 10 dégâts, Provocation jusqu'à sa prochaine phase | 0 |
+| **Essence des profondeurs** | Support | 180 | Marée des abysses : Ralentissement à tous les ennemis | 3 |
+| **Essence d'ombre** | Carry | 100 | Frappe de l'ombre : 40 dégâts, inciblable jusqu'à la fin de la prochaine phase adverse | 1 |
+| **Essence des cieux** | Support | 160 | Faveur céleste : 10 dégâts, +10 dégâts aux alliés pendant 3 tours | 2 |
 
-- **3 attaquants sur 7.** Avec une seule compétence, un support ou un tank n'inflige aucun dégât. Les simulations montrent qu'une équipe de base a besoin d'au moins 3 attaquants pour finir ses combats avant la fatigue.
-- **Les compétences de base sont toutes remplaçables**, contrairement aux compétences uniques des monstres de quête.
-- **Les premiers adversaires doivent avoir 1 ou 2 compétences** et des PV modestes. Face à la horde de Thrâk, l'équipe de base perd tous ses combats.
+L'Essence d'ombre est volontairement forte au départ : avec sa recharge de 1, elle est inciblable pendant toutes les phases adverses. En contrepartie, elle n'a que 100 PV, bien en dessous des repères des carry : les compétences de zone des adversaires suivants (Grand balayage, Marée des abysses) sont son point faible.
+
+L'équipe de début de partie est la meilleure contre la patrouille centaure selon les simulations : Nature, Vie, Pierre, Ombre et Cieux (97 % de victoires, 10,2 tours en moyenne). Les résultats de toutes les équipes sont produits par le menu **MonsterCardGame > Équilibrage > Simuler les équipes de départ**.
+
+- **Les compétences de base sont toutes remplaçables**, contrairement aux compétences uniques des monstres de quête. La Forge pourra redonner son attaque de base à une Essence (voir [progression.md](progression.md)).
+- **Les premiers adversaires doivent avoir 1 ou 2 compétences** et des PV modestes. Face à la horde de Thrâk, aucune équipe d'Essences ne gagne.
+
+L'ancienne collection de départ (Loup des cendres, Renard de braise, Ours brun, Chouette guérisseuse, Luciole sacrée, Chien de garde, Sanglier) n'est plus dans le jeu. Elle reste décrite dans les tests, qui comparent le moteur au simulateur Python.

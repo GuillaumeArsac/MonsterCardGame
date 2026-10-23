@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MonsterCardGame.Core;
 using MonsterCardGame.Gameplay.Skills.Effects;
 
 namespace MonsterCardGame.Gameplay.Skills
@@ -63,19 +64,39 @@ namespace MonsterCardGame.Gameplay.Skills
 
         // ── Effets ────────────────────────────────────────────────────────
 
-        private static string EffectText(SkillEffect effect) => effect switch
+        private static string EffectText(SkillEffect effect)
         {
-            DamageEffect d          => $"inflige {Plural(d.Amount, "dégât")}" + (d.IgnoresReductions ? ", qui ignorent les réductions de dégâts" : ""),
-            HealEffect h            => $"rend {h.Amount} PV, sans dépasser les PV de départ",
-            DamageBonusEffect b     => $"les dégâts infligés augmentent de {b.Amount} {DurationText(b.DurationTurns)}",
-            DamageReductionEffect r => $"les dégâts subis sont réduits de {r.Amount}, sans descendre sous 0, {DurationText(r.DurationTurns)}",
-            SlowEffect              => "applique Ralentissement : +1 au compteur de toutes ses compétences actives, même disponibles",
-            ExecuteEffect x         => $"si la cible a {x.HpThreshold} PV ou moins, elle est vaincue ; sinon, inflige {Plural(x.FallbackDamage, "dégât")}",
-            ReturnToHandEffect      => "renvoie la cible dans la main : elle garde ses PV et perd ses effets temporaires, sans point marqué",
-            TauntEffect             => "ce monstre a Provocation : tant qu'il est sur le terrain, les compétences adverses qui visent un ennemi doivent le cibler",
-            MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus (pas par la fatigue)",
-            _                       => ""
-        };
+            // Effet appliqué à d'autres monstres que les cibles de la compétence
+            string who = effect.AppliesTo switch
+            {
+                EffectTarget.Self      => "ce monstre",
+                EffectTarget.AllAllies => "tous les alliés sur le terrain",
+                _                      => null
+            };
+            string to = who != null ? $" à {who}" : "";
+            string by = who != null ? $" par {who}" : "";
+
+            return effect switch
+            {
+                DamageEffect d          => $"inflige {Plural(d.Amount, "dégât")}{to}" + (d.IgnoresReductions ? ", qui ignorent les réductions de dégâts" : ""),
+                HealEffect h            => $"rend {h.Amount} PV{to}, sans dépasser les PV de départ (à un monstre qui saigne, retire ses saignements au lieu de le soigner)",
+                DamageBonusEffect b     => $"les dégâts infligés{by} augmentent de {b.Amount} {DurationText(b.DurationTurns)}",
+                DamageReductionEffect r => $"les dégâts subis{by} sont réduits de {r.Amount}, sans descendre sous 0, {DurationText(r.DurationTurns)}",
+                SlowEffect              => "applique Ralentissement : +1 au compteur de toutes ses compétences actives, même disponibles",
+                ExecuteEffect x         => $"si la cible a {x.HpThreshold} PV ou moins, elle est vaincue ; sinon, inflige {Plural(x.FallbackDamage, "dégât")}",
+                ReturnToHandEffect      => "renvoie la cible dans la main : elle garde ses PV et perd ses effets temporaires, sans point marqué",
+                TauntEffect t when t.DurationTurns > 0
+                                        => $"{who ?? "la cible"} a Provocation {DurationText(t.DurationTurns)}",
+                TauntEffect             => "ce monstre a Provocation : tant qu'il est sur le terrain, les compétences adverses qui visent un ennemi doivent le cibler",
+                BleedEffect s           => $"applique {Plural(s.Stacks, "saignement")}{to} : au début de chaque phase de son camp, le monstre perd "
+                                         + $"{GameRules.BleedPercentPerStack} % de ses PV max par saignement, jusqu'à un soin",
+                UntargetableEffect u    => $"{who ?? "la cible"} ne peut plus être ciblé par l'adversaire {DurationText(u.DurationTurns)} "
+                                         + "(les compétences sans cible le touchent quand même)",
+                DamageGrowthEffect g    => $"les dégâts de cette compétence augmentent ensuite de {g.Amount} pour le reste du combat",
+                MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus",
+                _                       => ""
+            };
+        }
 
         private static string DurationText(int turns) => turns <= 0 ? "en permanence" : $"pendant {Plural(turns, "tour")}";
 

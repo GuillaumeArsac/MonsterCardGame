@@ -3,11 +3,15 @@ namespace MonsterCardGame.Gameplay.Combat
     public enum ModifierKind
     {
         DamageBonus,
-        DamageReduction
+        DamageReduction,
+        /// <summary>Provocation temporaire (Essence de pierre).</summary>
+        Taunt,
+        /// <summary>Ne peut pas être choisi par les compétences adverses (Essence de l'ombre).</summary>
+        Untargetable
     }
 
     /// <summary>
-    /// Effet temporaire sur un monstre (Bénédiction, Bouclier).
+    /// Effet temporaire sur un monstre (Bénédiction, Bouclier, Provocation temporaire, inciblable).
     /// Un effet de X tours dure jusqu'à la fin de la X-ième phase de l'autre camp que celui qui l'applique.
     /// Référence : docs/competences.md (Durées).
     /// </summary>

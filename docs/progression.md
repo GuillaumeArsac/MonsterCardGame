@@ -12,8 +12,9 @@ Inspiration : les jeux de cartes Yu-Gi-Oh sur GBA et DS.
 
 ## Collection
 
-- Le joueur commence avec **6 ou 7 monstres de base**.
-- Chaque monstre de base a **une seule compétence**, à l'effet standard.
+- Le joueur commence avec **7 Essences** : des esprits fabriqués à la Forge, chacun autour d'un thème (voir [monstres.md](monstres.md)).
+- Chaque Essence a **une seule compétence** au départ : son attaque de base.
+- Une Essence prend peu à peu la forme des monstres dont elle absorbe les compétences et les boosts.
 - Le seul moyen d'obtenir de nouveaux monstres est de réussir des **quêtes secondaires**.
   - Ces monstres ont une **compétence unique**, qui ne peut pas être remplacée.
 - En fin d'aventure, le joueur possède **8 à 12 monstres**, selon le nombre de quêtes secondaires réussies.
@@ -35,6 +36,12 @@ Après chaque **victoire** :
 **Boost de stats**
 - Chaque monstre adverse a un **boost de stats** défini à l'avance, indépendant de ses propres statistiques (par exemple : +40 PV).
 - Un monstre du joueur ne peut porter qu'**un seul** boost de stats. En ajouter un nouveau remplace le précédent.
+
+## La Forge (à concevoir)
+
+- Les Essences sont fabriquées à la Forge.
+- Le joueur peut y retourner pour **redonner à une Essence son attaque de base**, contre des ressources. Les ressources restent à définir.
+- Après un palier de l'aventure (par exemple la défaite du boss des Plaines), la Forge peut aussi donner **une passive** à une Essence.
 
 ## Combats
 

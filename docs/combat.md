@@ -61,7 +61,7 @@ Une carte monstre affiche uniquement :
 ## Monstre vaincu et victoire
 
 - Un monstre vaincu est **retiré du combat**.
-- Chaque monstre vaincu rapporte **1 point** à l'adversaire.
+- Chaque monstre vaincu rapporte **1 point** à l'adversaire. C'est aussi vrai pour un monstre vaincu par la fatigue ou le saignement.
 - Le premier joueur à **3 points** gagne.
 - Un camp qui n'a plus aucun monstre, ni en main ni sur le terrain, **perd**, quel que soit le score.
 
@@ -70,7 +70,8 @@ Une carte monstre affiche uniquement :
 - Après le tour 15, tous les monstres sur le terrain, des deux camps, subissent des dégâts de **fatigue** au début de chaque tour.
 - Ces dégâts augmentent de 10 à chaque tour : 10 dégâts au tour 16, 20 au tour 17, 30 au tour 18, etc.
 - La fatigue garantit qu'un combat finit toujours, sans limiter les stratégies défensives avant le tour 15.
-- Un monstre vaincu par la fatigue **ne rapporte aucun point**.
+- Un monstre vaincu par la fatigue **rapporte ses points**, comme tout monstre vaincu.
+- Si les deux camps atteignent 3 points en même temps, **le joueur perd** et l'adversaire gagne.
 - Si les deux camps perdent leur dernier monstre en même temps sans qu'aucun n'ait atteint 3 points, **le joueur perd** et l'adversaire gagne.
   Le jeu étant uniquement en PvE, cela empêche le joueur de gagner en se soignant en boucle et en laissant la fatigue faire le travail.
 

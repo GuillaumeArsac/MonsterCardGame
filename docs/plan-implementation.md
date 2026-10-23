@@ -125,10 +125,13 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 
 - **Les combats suivants des Plaines :** Thrâk et Vaelisse (boss) restent à concevoir dans `combats-scenario.md`. Ce sont eux qui débloqueront, à terme, les Ruines.
 
-- **La Forge dans le récit :** la fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore d'améliorer la Forge aux niveaux 2 et 3, une mécanique de l'ancienne version. Le dépeçage la remplace. Il faut décider ce que devient la Forge : simple élément narratif, ou lieu du dépeçage.
+- **La Forge dans le récit :** elle fabrique les Essences (voir plus bas). La fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore de l'améliorer aux niveaux 2 et 3, une mécanique de l'ancienne version : elle est à réécrire.
 - **La patrouille centaure** (`combats-scenario.md`) attend une validation. Une mauvaise composition d'équipe y est très punie : il faudra peut-être un dialogue qui conseille l'équipe avant ce premier combat.
 - **L'équilibre entre les équipes de test A et B** a bougé depuis la règle « un monstre utilise toutes ses compétences disponibles » : voir les résultats à jour dans `monstres.md`.
 
 ## Équilibrage du contenu de départ
 
 - **Échelle des valeurs (2026-10-23) :** les PV, dégâts, soins, bonus, réductions, le seuil d'Exécution, les boosts et la fatigue ont été multipliés par 10, pour un équilibrage plus fin. Les temps de recharge, les durées et les points ne changent pas. L'IA divise ces valeurs par 10 dans ses notes (`CombatAI.Unit`) : elle joue comme avant, et les simulations donnent les mêmes résultats. Le simulateur Python (`tools/simulation`) est resté à l'ancienne échelle.
+- **Les Essences (2026-10-23) :** la collection de départ devient 7 Essences, des esprits fabriqués à la Forge (`docs/monstres.md`). Le moteur gère maintenant le saignement, l'inciblable, la Provocation temporaire, les dégâts croissants, et les effets qui touchent ce monstre ou tous ses alliés en plus de la cible (`SkillEffect.AppliesTo`). Un soin retire les saignements au lieu de rendre des PV. La fatigue rapporte maintenant des points ; si les deux camps atteignent 3 points en même temps, le joueur perd.
+  Le menu **MonsterCardGame > Équilibrage > Simuler les équipes de départ** simule les 21 équipes possibles contre la patrouille et la horde, et écrit le rapport dans `Logs/Simulations/equipes-de-depart.md`. Une sauvegarde qui ne contient que les anciens monstres de départ repart des Essences.
+- **La Forge, à concevoir :** y redonner son attaque de base à une Essence contre des ressources (à définir), et y obtenir une passive après un palier de l'aventure (par exemple le boss des Plaines). Voir `docs/progression.md`.

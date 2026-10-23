@@ -24,7 +24,16 @@ namespace MonsterCardGame.Editor
         private const string CardPrefabPath = "Assets/Prefabs/Combat/MonsterCard.prefab";
         private const string EncounterPath  = "Assets/Data/Encounters/test-horde-de-thrak.asset";
 
-        private static readonly Vector2 CardSize = new(190, 280);
+        private const string CardBackgroundPath = "Assets/Images/Others/SYL_fond_carte.png";
+        private const string CardBorderPath     = "Assets/Images/Others/SYL_contour_plus_bande_forge.png";
+        /// <summary>Encre brune des textes posés sur le cadre (nom, PV).</summary>
+        private static readonly Color CardInk = new(0.25f, 0.11f, 0.04f);
+
+        /// <summary>Même proportions que les visuels de la carte (992 × 1386).</summary>
+        private static readonly Vector2 CardSize = new(200, 280);
+        private const float SkillRowHeight = 20;
+        /// <summary>Position verticale de l'illustration dans la fenêtre : 1 = haut de l'image visible, 0,5 = centrée.</summary>
+        private const float ArtworkPivotY = 1f;
         private static readonly Vector2 SlotSize = new(210, 300);
         private const float SlotSpacing = 260;
 
@@ -45,6 +54,10 @@ namespace MonsterCardGame.Editor
 
         // ── Prefab de carte ───────────────────────────────────────────────
 
+        /// <summary>
+        /// Carte en calques (visuels SYL, 992 × 1386) : fond parchemin, illustration dans la fenêtre du haut,
+        /// cadre de la Forge par-dessus. Les positions sont mesurées sur les images, ramenées à la taille de la carte.
+        /// </summary>
         private static void BuildCardPrefab()
         {
             var root = new GameObject("MonsterCard", typeof(RectTransform));
@@ -52,37 +65,70 @@ namespace MonsterCardGame.Editor
             rect.sizeDelta = CardSize;
 
             var highlight = Stretch(NewImage("Surbrillance", root.transform, Color.white), -6);
-            var frame     = Stretch(NewImage("Cadre", root.transform, Color.gray), 0);
-            var button    = root.AddComponent<Button>();
+
+            // Fond : il reçoit les clics et prend la teinte du camp
+            var frame = Stretch(NewImage("Fond", root.transform, Color.white), 0);
+            frame.GetComponent<Image>().sprite = LoadSprite(CardBackgroundPath);
+            var button = root.AddComponent<Button>();
             button.targetGraphic = frame.GetComponent<Image>();
             button.transition    = Selectable.Transition.None;
 
-            var nameLabel = NewText("Nom", root.transform, "Nom", 20, TextAlignmentOptions.Center, FontStyles.Bold);
-            TopBand(nameLabel.rectTransform, 4, 28);
-            AutoSize(nameLabel, 13, 20);
+            // Fenêtre transparente du cadre, jusqu'au bandeau du nom. L'illustration la couvre entièrement :
+            // elle est recadrée par le masque, et le cadre cache ce qui dépasse sur ses bords
+            var window = NewEmpty("Fenêtre", root.transform);
+            TopBand(window, 4, 156, inset: 8);
+            window.gameObject.AddComponent<RectMask2D>();
+            var artwork = NewImage("Illustration", window, Color.white);
+            artwork.GetComponent<Image>().raycastTarget = false;
+            Center(artwork, Vector2.zero, Vector2.zero);
+            // Ancrée en haut : une illustration plus haute que la fenêtre est coupée en bas, pas en haut
+            artwork.pivot = new Vector2(0.5f, ArtworkPivotY);
+            var fitter = artwork.gameObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
 
-            var artwork = NewImage("Illustration", root.transform, Color.white);
-            artwork.GetComponent<Image>().preserveAspect = true;
-            TopBand(artwork, 34, 100, inset: 8);
+            var border = Stretch(NewImage("Cadre", root.transform, Color.white), 0);
+            border.GetComponent<Image>().sprite = LoadSprite(CardBorderPath);
+            border.GetComponent<Image>().raycastTarget = false;
 
-            var hp = NewText("PV", root.transform, "PV", 20, TextAlignmentOptions.Center, FontStyles.Bold);
-            TopBand(hp.rectTransform, 136, 24);
-
-            var status = NewText("Effets", root.transform, "", 15, TextAlignmentOptions.Center);
+            // Effets en cours, en bas de l'illustration, sur un bandeau sombre affiché seulement s'il y en a
+            var statusBackground = NewImage("Fond des effets", root.transform, new Color(0, 0, 0, 0.6f));
+            statusBackground.GetComponent<Image>().raycastTarget = false;
+            TopBand(statusBackground, 123, 18, inset: 18);
+            var status = NewText("Effets", statusBackground, "", 11, TextAlignmentOptions.Center);
             status.color = new Color(1f, 0.85f, 0.5f);
-            TopBand(status.rectTransform, 160, 20);
+            Stretch(status.rectTransform, 0);
+            AutoSize(status, 8, 11);
 
+            // PV dans le médaillon de gauche (entre sa position sur le cadre de la Forge et sur celui des Plaines)
+            var hp = NewText("PV", root.transform, "PV", 16, TextAlignmentOptions.Center, FontStyles.Bold);
+            hp.color = CardInk;
+            hp.lineSpacing = -30;
+            hp.textWrappingMode = TextWrappingModes.NoWrap;
+            hp.overflowMode = TextOverflowModes.Overflow;
+            Anchor(hp.rectTransform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(31, -30), new Vector2(38, 38));
+
+            // Nom dans le bandeau orange
+            var nameLabel = NewText("Nom", root.transform, "Nom", 16, TextAlignmentOptions.Center, FontStyles.Bold);
+            nameLabel.color = CardInk;
+            // Entre les deux losanges du bandeau
+            TopBand(nameLabel.rectTransform, 161, 37, inset: 42);
+            AutoSize(nameLabel, 9, 16);
+
+            // Compétences sur le parchemin du bas
             var skills = new GameObject("Compétences", typeof(RectTransform)).GetComponent<RectTransform>();
             skills.SetParent(root.transform, false);
             skills.anchorMin = new Vector2(0, 0);
             skills.anchorMax = new Vector2(1, 0);
             skills.pivot     = new Vector2(0.5f, 0);
-            skills.anchoredPosition = new Vector2(0, 6);
-            skills.sizeDelta = new Vector2(-12, 3 * 30 + 2 * 3);
+            skills.anchoredPosition = new Vector2(0, 9);
+            skills.sizeDelta = new Vector2(-28, 3 * SkillRowHeight + 2 * 3);
+            // Lignes de hauteur fixe, depuis le haut du parchemin, quel que soit le nombre de compétences
             var layout = skills.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.spacing = 3;
+            layout.childAlignment = TextAnchor.UpperCenter;
             layout.childControlWidth = layout.childControlHeight = true;
-            layout.childForceExpandWidth = layout.childForceExpandHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = false;
 
             var rows = Enumerable.Range(0, 3).Select(i => BuildSkillRow(skills, i)).ToArray();
 
@@ -91,9 +137,13 @@ namespace MonsterCardGame.Editor
             Assign(view, "_highlight", highlight.GetComponent<Image>());
             Assign(view, "_frame", frame.GetComponent<Image>());
             Assign(view, "_artwork", artwork.GetComponent<Image>());
+            Assign(view, "_artworkFitter", fitter);
+            Assign(view, "_border", border.GetComponent<Image>());
+            Assign(view, "_defaultBorder", border.GetComponent<Image>().sprite);
             Assign(view, "_nameLabel", nameLabel);
             Assign(view, "_hpLabel", hp);
             Assign(view, "_statusLabel", status);
+            Assign(view, "_statusBackground", statusBackground.GetComponent<Image>());
             AssignArray(view, "_skillRows", rows);
 
             EnsureFolder("Assets/Prefabs/Combat");
@@ -101,21 +151,29 @@ namespace MonsterCardGame.Editor
             Object.DestroyImmediate(root);
         }
 
+        private static Sprite LoadSprite(string path)
+        {
+            var sprite = AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>().FirstOrDefault();
+            if (sprite == null) Debug.LogWarning($"[CombatSceneGenerator] Sprite introuvable : {path}");
+            return sprite;
+        }
+
         private static SkillRowView BuildSkillRow(Transform parent, int index)
         {
             var row = NewImage($"Compétence {index + 1}", parent, Color.black);
+            row.gameObject.AddComponent<LayoutElement>().preferredHeight = SkillRowHeight;
             var button = row.gameObject.AddComponent<Button>();
             button.targetGraphic = row.GetComponent<Image>();
             button.transition = Selectable.Transition.None;
 
-            var label = NewText("Nom", row, "Compétence", 15, TextAlignmentOptions.MidlineLeft);
+            var label = NewText("Nom", row, "Compétence", 12, TextAlignmentOptions.MidlineLeft);
             Stretch(label.rectTransform, 0);
-            label.margin = new Vector4(6, 0, 70, 0);
-            AutoSize(label, 11, 15);
+            label.margin = new Vector4(5, 0, 50, 0);
+            AutoSize(label, 9, 12);
 
-            var counter = NewText("Compteur", row, "prête", 13, TextAlignmentOptions.MidlineRight);
+            var counter = NewText("Compteur", row, "prête", 10, TextAlignmentOptions.MidlineRight);
             Stretch(counter.rectTransform, 0);
-            counter.margin = new Vector4(0, 0, 6, 0);
+            counter.margin = new Vector4(0, 0, 5, 0);
             counter.color = new Color(0.85f, 0.85f, 0.85f);
 
             var view = row.gameObject.AddComponent<SkillRowView>();

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f5e1f7827483242b8b596efb51fbd0, type: 3}
+  m_Name: "Faveur c\xE9leste"
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Skills.SkillData
+  _skillName: "Faveur c\xE9leste"
+  _type: 0
+  _role: 1
+  _target: 1
+  _cooldown: 2
+  _trigger: 0
+  _effects:
+  - rid: 3690274877296083119
+  - rid: 3690274877296083120
+  references:
+    version: 2
+    RefIds:
+    - rid: 3690274877296083119
+      type: {class: DamageEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
+      data:
+        _appliesTo: 0
+        _amount: 10
+        _ignoresReductions: 0
+    - rid: 3690274877296083120
+      type: {class: DamageBonusEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
+      data:
+        _appliesTo: 2
+        _amount: 10
+        _durationTurns: 3

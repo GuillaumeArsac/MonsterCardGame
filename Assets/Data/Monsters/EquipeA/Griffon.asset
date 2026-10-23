@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
   _monsterName: Griffon
   _artwork: {fileID: -5838028541306521313, guid: 106f0dfe7d33bb442aa9170bca549836, type: 3}
+  _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
   _role: 0
   _maxHp: 160
   _skills:

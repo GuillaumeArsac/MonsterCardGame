@@ -20,7 +20,7 @@ namespace MonsterCardGame.Editor
         private const string SkinningScenePath = "Assets/Scenes/Skinning.unity";
         private const string CardPrefabPath    = "Assets/Prefabs/Combat/MonsterCard.prefab";
 
-        private static readonly Vector2 CardSize = new(190, 280);
+        private static readonly Vector2 CardSize = new(200, 280);
 
         [MenuItem("MonsterCardGame/Progression/Générer les écrans Équipe et Dépeçage")]
         public static void Generate()
@@ -59,7 +59,7 @@ namespace MonsterCardGame.Editor
             Center(grid, position, size);
             var layout = grid.gameObject.AddComponent<GridLayoutGroup>();
             layout.cellSize = CardSize;
-            layout.spacing = new Vector2(16, 16);
+            layout.spacing = new Vector2(8, 16);
             layout.childAlignment = TextAnchor.UpperCenter;
             layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             layout.constraintCount = 6;
@@ -92,7 +92,7 @@ namespace MonsterCardGame.Editor
             var canvas = canvasGo.transform;
             TopBar(canvas, "Équipe");
 
-            // Alignés sur le bord gauche des cartes (6 colonnes de 190 + 5 × 16, centrées sur la grille)
+            // Alignés sur le bord gauche des cartes (6 colonnes de 200 + 5 × 8, centrées sur la grille)
             var teamLabel = NewText("Équipe", canvas, "", 30, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
             Center(teamLabel.rectTransform, new Vector2(-570, 410), new Vector2(560, 50));
             var hint = NewText("Consigne", canvas, "", 22, TextAlignmentOptions.MidlineLeft);

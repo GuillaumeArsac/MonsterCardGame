@@ -124,9 +124,9 @@ namespace MonsterCardGame.Gameplay.Combat.AI
 
                 if (!CombatEngine.RequiresTargetChoice(skill.Target))
                 {
-                    if (kind == SkillKind.AreaDamage && !engine.GetField(monster.Side.Opponent()).Any()) continue;
+                    if (kind is SkillKind.AreaDamage or SkillKind.AreaSlow && !engine.GetField(monster.Side.Opponent()).Any()) continue;
                     var self = skill.Target == SkillTarget.Self ? monster : null;
-                    options.Add(new Option { Score = Score(engine, monster, skill, kind, self), SkillIndex = i, Target = self });
+                    options.Add(new Option { Score = Score(engine, monster, i, kind, self), SkillIndex = i, Target = self });
                     continue;
                 }
 
@@ -135,25 +135,29 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 foreach (var target in engine.GetValidTargets(monster, i))
                 {
                     if ((target.Side != monster.Side) != offensive) continue;
-                    options.Add(new Option { Score = Score(engine, monster, skill, kind, target), SkillIndex = i, Target = target });
+                    options.Add(new Option { Score = Score(engine, monster, i, kind, target), SkillIndex = i, Target = target });
                 }
             }
             return options;
         }
 
-        private double Score(CombatEngine engine, CombatMonster m, SkillData skill, SkillKind kind, CombatMonster t)
+        private double Score(CombatEngine engine, CombatMonster m, int skillIndex, SkillKind kind, CombatMonster t)
         {
             double noise = _random.NextDouble() * Noise;
+            var skill = m.Skills[skillIndex];
 
             switch (kind)
             {
                 case SkillKind.SingleDamage:
                 {
                     var damage = skill.GetEffect<DamageEffect>();
-                    int d = CombatEngine.ComputeDamage(m, t, damage.Amount, damage.IgnoresReductions);
-                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + noise;
-                    return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + noise;
+                    int d = CombatEngine.ComputeDamage(m, t, damage.Amount + m.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
+                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + ExtraValue(engine, m, skill, null) + noise;
+                    return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + ExtraValue(engine, m, skill, t) + noise;
                 }
+
+                case SkillKind.AreaSlow:
+                    return engine.GetField(m.Side.Opponent()).Sum(e => 0.5 * Threat(e)) + noise;
 
                 case SkillKind.Execute:
                 {
@@ -184,6 +188,8 @@ namespace MonsterCardGame.Gameplay.Combat.AI
 
                 case SkillKind.Heal:
                 {
+                    // Sur un monstre qui saigne, le soin retire les saignements
+                    if (t.BleedStacks > 0) return BleedValue(t, t.BleedStacks) + noise;
                     int missing = t.MaxHp - t.Hp;
                     if (missing < 2 * Unit) return -1;
                     return Math.Min(skill.GetEffect<HealEffect>().Amount, missing) / Unit * (t.Hp <= DangerHp ? 1.5 : 0.9) + noise;
@@ -206,6 +212,47 @@ namespace MonsterCardGame.Gameplay.Combat.AI
             }
         }
 
+        /// <summary>Saignement évité ou infligé : environ deux déclenchements avant un soin ou la défaite.</summary>
+        private static double BleedValue(CombatMonster monster, int stacks)
+            => 2.0 * stacks * Math.Max(1, monster.MaxHp * GameRules.BleedPercentPerStack / 100) / Unit;
+
+        /// <summary>
+        /// Valeur des effets d'une attaque en plus de ses dégâts : saignement sur la cible (si elle survit),
+        /// et effets sur ce monstre ou ses alliés (inciblable, Provocation, dégâts croissants, soin, bonus).
+        /// </summary>
+        private static double ExtraValue(CombatEngine engine, CombatMonster m, SkillData skill, CombatMonster survivingTarget)
+        {
+            double value = 0;
+            var allies = engine.GetField(m.Side).ToList();
+            foreach (var effect in skill.Effects)
+            {
+                switch (effect)
+                {
+                    case BleedEffect bleed when effect.AppliesTo == EffectTarget.SkillTargets && survivingTarget != null:
+                        value += BleedValue(survivingTarget, bleed.Stacks);
+                        break;
+                    case UntargetableEffect:
+                        value += 1;
+                        break;
+                    case TauntEffect:
+                        value += allies.Count > 1 ? 1 : 0.3;
+                        break;
+                    case DamageGrowthEffect growth:
+                        value += 2 * growth.Amount / Unit;
+                        break;
+                    case HealEffect heal when effect.AppliesTo == EffectTarget.AllAllies:
+                        foreach (var ally in allies)
+                            value += ally.BleedStacks > 0 ? BleedValue(ally, ally.BleedStacks)
+                                                          : Math.Min(heal.Amount, ally.MaxHp - ally.Hp) / Unit * 0.9;
+                        break;
+                    case DamageBonusEffect bonus when effect.AppliesTo == EffectTarget.AllAllies:
+                        value += 1.6 * bonus.Amount / Unit * allies.Count(a => a.Skills.Any(s => s.IsActive && s.GetEffect<DamageEffect>() != null));
+                        break;
+                }
+            }
+            return value;
+        }
+
         /// <summary>Dangerosité d'un monstre : somme du poids de ses compétences actives, plus son bonus de dégâts.</summary>
         private static double Threat(CombatMonster monster)
         {
@@ -218,7 +265,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
         /// <summary>
         /// Poids d'une compétence dans la menace. Formule choisie pour retrouver les valeurs du simulateur :
         /// Griffe 3, Morsure perforante 2, Exécution 2, Grand balayage 2, Coup de bouclier 1,5,
-        /// Soin 2, Bénédiction 2,5, Bouclier 1, Repli 0,5.
+        /// Soin 2, Bénédiction 2,5, Bouclier 1, Repli 0,5. Les effets en plus d'une attaque (Essences) l'alourdissent.
         /// </summary>
         internal static double ThreatWeight(SkillData skill)
         {
@@ -230,7 +277,12 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     double weight = skill.GetEffect<DamageEffect>().Amount / Unit;
                     if (skill.GetEffect<SlowEffect>() != null)  weight += 0.5;
                     if (skill.Target == SkillTarget.AllEnemies) weight += 0.5;
+                    if (skill.GetEffect<BleedEffect>() is { } bleed)      weight += 0.5 * bleed.Stacks;
+                    if (skill.GetEffect<DamageGrowthEffect>() != null)    weight += 1;
+                    if (skill.GetEffect<HealEffect>() is { } heal)        weight += heal.Amount / Unit;
+                    if (skill.GetEffect<DamageBonusEffect>() is { } more) weight += 2.5 * more.Amount / Unit;
                     return weight;
+                case SkillKind.AreaSlow: return 1.5;
                 case SkillKind.Execute: return 2;
                 case SkillKind.Heal:    return skill.GetEffect<HealEffect>().Amount / Unit / 2.0;
                 case SkillKind.Protect: return skill.GetEffect<DamageReductionEffect>().Amount / Unit / 2.0;
@@ -251,6 +303,8 @@ namespace MonsterCardGame.Gameplay.Combat.AI
             SingleDamageSlow,
             /// <summary>Dégâts à tous les ennemis (Grand balayage).</summary>
             AreaDamage,
+            /// <summary>Ralentissement de tous les ennemis, sans dégâts (Essence des profondeurs).</summary>
+            AreaSlow,
             Execute,
             Heal,
             /// <summary>Réduction de dégâts sur un allié (Bouclier).</summary>
@@ -276,6 +330,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
             if (skill.GetEffect<HealEffect>() != null)         return skill.Target == SkillTarget.AllAllies ? SkillKind.Unknown : SkillKind.Heal;
             if (skill.GetEffect<DamageReductionEffect>() != null) return skill.Target == SkillTarget.AllAllies ? SkillKind.Unknown : SkillKind.Protect;
             if (skill.GetEffect<DamageBonusEffect>() != null && skill.Target == SkillTarget.AllAllies) return SkillKind.Bless;
+            if (skill.GetEffect<SlowEffect>() != null && skill.Target == SkillTarget.AllEnemies)       return SkillKind.AreaSlow;
             return SkillKind.Unknown;
         }
     }

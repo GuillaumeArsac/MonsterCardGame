@@ -15,6 +15,9 @@ namespace MonsterCardGame.Gameplay.Monsters
 
         [SerializeField] private Sprite _artwork;
 
+        [SerializeField, Tooltip("Cadre de la carte, selon l'origine du monstre (Plaines…). Vide : cadre de la Forge, celui des Essences")]
+        private Sprite _cardFrame;
+
         [SerializeField, Tooltip("Pour le design et l'IA seulement, n'est pas affiché sur la carte")]
         private MonsterRole _role;
 
@@ -35,6 +38,7 @@ namespace MonsterCardGame.Gameplay.Monsters
 
         public string                   MonsterName => _monsterName;
         public Sprite                   Artwork     => _artwork;
+        public Sprite                   CardFrame   => _cardFrame;
         public MonsterRole              Role        => _role;
         public int                      MaxHp       => _maxHp;
         public IReadOnlyList<SkillData> Skills      => _skills;
@@ -43,7 +47,8 @@ namespace MonsterCardGame.Gameplay.Monsters
 
         /// <summary>Remplit la carte. Pour les scripts d'éditeur et les tests.</summary>
         public void Init(string monsterName, MonsterRole role, int maxHp, IEnumerable<SkillData> skills,
-                         StatBoost statBoost = default, SkillData uniqueSkill = null, Sprite artwork = null)
+                         StatBoost statBoost = default, SkillData uniqueSkill = null, Sprite artwork = null,
+                         Sprite cardFrame = null)
         {
             _monsterName = monsterName;
             _role        = role;
@@ -52,6 +57,7 @@ namespace MonsterCardGame.Gameplay.Monsters
             _statBoost   = statBoost;
             _uniqueSkill = uniqueSkill;
             _artwork     = artwork;
+            _cardFrame   = cardFrame;
             Validate();
         }
 
