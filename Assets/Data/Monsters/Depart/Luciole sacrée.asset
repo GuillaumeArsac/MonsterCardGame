@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: "Luciole sacr\xE9e"
   _artwork: {fileID: 0}
   _role: 1
-  _maxHp: 16
+  _maxHp: 160
   _skills:
   - {fileID: 11400000, guid: fdc02d82b2100db4a83d8550b32d65f2, type: 2}
   _uniqueSkill: {fileID: 0}

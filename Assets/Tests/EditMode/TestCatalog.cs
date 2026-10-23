@@ -21,31 +21,31 @@ namespace MonsterCardGame.Tests.EditMode
         // ── Compétences (docs/competences.md) ─────────────────────────────
 
         public SkillData GrandBalayage => Skill("Grand balayage", () => SkillData.CreateActive(
-            "Grand balayage", MonsterRole.Tank, SkillTarget.AllEnemies, 3, new DamageEffect(1), new SlowEffect()));
+            "Grand balayage", MonsterRole.Tank, SkillTarget.AllEnemies, 3, new DamageEffect(10), new SlowEffect()));
 
         public SkillData Griffe => Skill("Griffe", () => SkillData.CreateActive(
-            "Griffe", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(3)));
+            "Griffe", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(30)));
 
         public SkillData Soin => Skill("Soin", () => SkillData.CreateActive(
-            "Soin", MonsterRole.Support, SkillTarget.AnyMonster, 2, new HealEffect(4)));
+            "Soin", MonsterRole.Support, SkillTarget.AnyMonster, 2, new HealEffect(40)));
 
         public SkillData Benediction => Skill("Bénédiction", () => SkillData.CreateActive(
-            "Bénédiction", MonsterRole.Support, SkillTarget.AllAllies, 3, new DamageBonusEffect(1, 6)));
+            "Bénédiction", MonsterRole.Support, SkillTarget.AllAllies, 3, new DamageBonusEffect(10, 6)));
 
         public SkillData MorsurePerforante => Skill("Morsure perforante", () => SkillData.CreateActive(
-            "Morsure perforante", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(2, ignoresReductions: true)));
+            "Morsure perforante", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(20, ignoresReductions: true)));
 
         public SkillData Execution => Skill("Exécution", () => SkillData.CreateActive(
-            "Exécution", MonsterRole.Carry, SkillTarget.AnyMonster, 4, new ExecuteEffect(8, 1)));
+            "Exécution", MonsterRole.Carry, SkillTarget.AnyMonster, 4, new ExecuteEffect(80, 10)));
 
         public SkillData ChasseurDeTrophees => Skill("Chasseur de trophées", () => SkillData.CreatePassive(
             "Chasseur de trophées", MonsterRole.Carry, SkillTarget.None, PassiveTrigger.StartOfCombat, new MarkedSlotEffect(1)));
 
         public SkillData Bouclier => Skill("Bouclier", () => SkillData.CreateActive(
-            "Bouclier", MonsterRole.Support, SkillTarget.AnyMonster, 3, new DamageReductionEffect(2, 2)));
+            "Bouclier", MonsterRole.Support, SkillTarget.AnyMonster, 3, new DamageReductionEffect(20, 2)));
 
         public SkillData AuraApaisante => Skill("Aura apaisante", () => SkillData.CreatePassive(
-            "Aura apaisante", MonsterRole.Support, SkillTarget.AllAllies, PassiveTrigger.StartOfOwnPhase, new HealEffect(1)));
+            "Aura apaisante", MonsterRole.Support, SkillTarget.AllAllies, PassiveTrigger.StartOfOwnPhase, new HealEffect(10)));
 
         public SkillData Repli => Skill("Repli", () => SkillData.CreateActive(
             "Repli", MonsterRole.Support, SkillTarget.OtherAlly, 4, new ReturnToHandEffect()));
@@ -54,10 +54,10 @@ namespace MonsterCardGame.Tests.EditMode
             "Provocation", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new TauntEffect()));
 
         public SkillData Carapace => Skill("Carapace", () => SkillData.CreatePassive(
-            "Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(1, 0)));
+            "Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(10, 0)));
 
         public SkillData CoupDeBouclier => Skill("Coup de bouclier", () => SkillData.CreateActive(
-            "Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(1), new SlowEffect()));
+            "Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(10), new SlowEffect()));
 
         public IEnumerable<SkillData> AllSkills => new[]
         {
@@ -84,11 +84,11 @@ namespace MonsterCardGame.Tests.EditMode
             var encounter = Track(ScriptableObject.CreateInstance<EncounterData>());
             encounter.Init("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, new[]
             {
-                Monster("Éclaireur centaure", MonsterRole.Carry,   14, 2, Griffe),
-                Monster("Archer novice",      MonsterRole.Carry,   12, 2, MorsurePerforante),
-                Monster("Jeune taureau",      MonsterRole.Tank,    20, 2, Provocation, Carapace),
-                Monster("Porte-étendard",     MonsterRole.Support, 14, 2, AuraApaisante),
-                Monster("Cavalier rabatteur", MonsterRole.Carry,   16, 2, Griffe, CoupDeBouclier),
+                Monster("Éclaireur centaure", MonsterRole.Carry,   140, 20, Griffe),
+                Monster("Archer novice",      MonsterRole.Carry,   120, 20, MorsurePerforante),
+                Monster("Jeune taureau",      MonsterRole.Tank,    200, 20, Provocation, Carapace),
+                Monster("Porte-étendard",     MonsterRole.Support, 140, 20, AuraApaisante),
+                Monster("Cavalier rabatteur", MonsterRole.Carry,   160, 20, Griffe, CoupDeBouclier),
             });
             return encounter;
         }
@@ -98,31 +98,31 @@ namespace MonsterCardGame.Tests.EditMode
         /// <summary>Équipe A, équipe de test du joueur.</summary>
         public MonsterCardData[] TeamA() => new[]
         {
-            Monster("Griffon",          MonsterRole.Carry,   16, 0, Griffe, Execution),
-            Monster("Archer centaure",  MonsterRole.Carry,   14, 0, MorsurePerforante, ChasseurDeTrophees),
-            Monster("Orbe de lumière",  MonsterRole.Support, 18, 0, Soin, Benediction, AuraApaisante),
-            Monster("Svathurim",        MonsterRole.Support, 20, 0, Griffe, Bouclier, Repli),
-            Monster("Paladin centaure", MonsterRole.Tank,    28, 0, Provocation, Carapace, CoupDeBouclier),
+            Monster("Griffon",          MonsterRole.Carry,   160, 0, Griffe, Execution),
+            Monster("Archer centaure",  MonsterRole.Carry,   140, 0, MorsurePerforante, ChasseurDeTrophees),
+            Monster("Orbe de lumière",  MonsterRole.Support, 180, 0, Soin, Benediction, AuraApaisante),
+            Monster("Svathurim",        MonsterRole.Support, 200, 0, Griffe, Bouclier, Repli),
+            Monster("Paladin centaure", MonsterRole.Tank,    280, 0, Provocation, Carapace, CoupDeBouclier),
         };
 
         /// <summary>Équipe B, la horde de Thrâk.</summary>
         public MonsterCardData[] TeamB() => new[]
         {
-            Monster("Thrâk le Perpétuel",  MonsterRole.Tank,    26, 0, Provocation, Griffe, GrandBalayage),
-            Monster("Aigle Runique Géant", MonsterRole.Carry,   18, 0, Griffe, Execution, ChasseurDeTrophees),
-            Monster("Guerrier centaure",   MonsterRole.Carry,   16, 0, MorsurePerforante, CoupDeBouclier),
-            Monster("Chaman centaure",     MonsterRole.Support, 16, 0, Griffe, Soin, Benediction),
-            Monster("Taureau de guerre",   MonsterRole.Tank,    30, 0, Carapace, Griffe, CoupDeBouclier),
+            Monster("Thrâk le Perpétuel",  MonsterRole.Tank,    260, 0, Provocation, Griffe, GrandBalayage),
+            Monster("Aigle Runique Géant", MonsterRole.Carry,   180, 0, Griffe, Execution, ChasseurDeTrophees),
+            Monster("Guerrier centaure",   MonsterRole.Carry,   160, 0, MorsurePerforante, CoupDeBouclier),
+            Monster("Chaman centaure",     MonsterRole.Support, 160, 0, Griffe, Soin, Benediction),
+            Monster("Taureau de guerre",   MonsterRole.Tank,    300, 0, Carapace, Griffe, CoupDeBouclier),
         };
 
         /// <summary>Meilleure équipe de 5 de la collection de départ (clé « Départ » du simulateur).</summary>
         public MonsterCardData[] TeamStart() => new[]
         {
-            Monster("Loup des cendres",     MonsterRole.Carry,   15, 0, Griffe),
-            Monster("Renard de braise",     MonsterRole.Carry,   14, 0, MorsurePerforante),
-            Monster("Ours brun",            MonsterRole.Carry,   20, 0, Griffe),
-            Monster("Chouette guérisseuse", MonsterRole.Support, 16, 0, Soin),
-            Monster("Chien de garde",       MonsterRole.Tank,    26, 0, Provocation),
+            Monster("Loup des cendres",     MonsterRole.Carry,   150, 0, Griffe),
+            Monster("Renard de braise",     MonsterRole.Carry,   140, 0, MorsurePerforante),
+            Monster("Ours brun",            MonsterRole.Carry,   200, 0, Griffe),
+            Monster("Chouette guérisseuse", MonsterRole.Support, 160, 0, Soin),
+            Monster("Chien de garde",       MonsterRole.Tank,    260, 0, Provocation),
         };
 
         public void Dispose()

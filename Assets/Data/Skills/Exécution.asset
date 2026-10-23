@@ -19,12 +19,12 @@ MonoBehaviour:
   _cooldown: 4
   _trigger: 0
   _effects:
-  - rid: 3690274877296083052
+  - rid: 3690274877296083089
   references:
     version: 2
     RefIds:
-    - rid: 3690274877296083052
+    - rid: 3690274877296083089
       type: {class: ExecuteEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
-        _hpThreshold: 8
-        _fallbackDamage: 1
+        _hpThreshold: 80
+        _fallbackDamage: 10

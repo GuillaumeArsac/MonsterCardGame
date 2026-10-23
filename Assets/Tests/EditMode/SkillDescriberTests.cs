@@ -24,20 +24,20 @@ namespace MonsterCardGame.Tests.EditMode
             var skill = _catalog.GrandBalayage;
 
             Assert.That(SkillDescriber.Summary(skill), Does.StartWith("Active · recharge 3"));
-            Assert.That(SkillDescriber.Effect(skill), Does.StartWith("Inflige 1 dégât et applique Ralentissement"));
+            Assert.That(SkillDescriber.Effect(skill), Does.StartWith("Inflige 10 dégâts et applique Ralentissement"));
             Assert.That(SkillDescriber.TargetingNote(skill), Does.Contain("ignore la Provocation"));
         }
 
         [Test]
         public void MorsurePerforante_IgnoreLesReductions()
         {
-            Assert.That(SkillDescriber.Effect(_catalog.MorsurePerforante), Does.Contain("2 dégâts, qui ignorent les réductions"));
+            Assert.That(SkillDescriber.Effect(_catalog.MorsurePerforante), Does.Contain("20 dégâts, qui ignorent les réductions"));
         }
 
         [Test]
         public void Benediction_DureeEnTours_Carapace_Permanente()
         {
-            Assert.That(SkillDescriber.Effect(_catalog.Benediction), Does.Contain("augmentent de 1 pendant 6 tours"));
+            Assert.That(SkillDescriber.Effect(_catalog.Benediction), Does.Contain("augmentent de 10 pendant 6 tours"));
             Assert.That(SkillDescriber.Effect(_catalog.Carapace), Does.Contain("en permanence"));
         }
 
@@ -55,7 +55,7 @@ namespace MonsterCardGame.Tests.EditMode
             var text = SkillDescriber.FullText(_catalog.Griffe);
 
             Assert.That(text, Does.Contain("Cible : un monstre sur le terrain, allié ou ennemi"));
-            Assert.That(text, Does.Contain("Inflige 3 dégâts."));
+            Assert.That(text, Does.Contain("Inflige 30 dégâts."));
             Assert.That(text, Does.Contain("soumise à la Provocation"));
         }
     }

@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Chaman centaure
   _artwork: {fileID: 0}
   _role: 1
-  _maxHp: 16
+  _maxHp: 160
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   - {fileID: 11400000, guid: ef8133ff4420c5742959a123717152cf, type: 2}

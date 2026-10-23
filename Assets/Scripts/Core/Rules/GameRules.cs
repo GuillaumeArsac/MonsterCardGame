@@ -10,8 +10,9 @@ namespace MonsterCardGame.Core
         // Victoire
         public const int PointsToWin = 3;
 
-        // Fatigue : à partir de ce tour, dégâts croissants (1, puis 2, puis 3...) au début de chaque tour
+        // Fatigue : à partir de ce tour, dégâts croissants (10, puis 20, puis 30...) au début de chaque tour
         public const int FatigueStartTurn = 16;
+        public const int FatigueDamageStep = 10;
 
         // Monstres
         public const int MaxSkillsPerMonster = 3;

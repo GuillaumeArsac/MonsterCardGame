@@ -13,9 +13,9 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void MonstreVaincu_EstRetire_EtRapporte1PointALAdversaire()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var enemy = Mon("Adversaire", 3);
-            var reserve = Mon("Réserve", 20);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var enemy = Mon("Adversaire", 30);
+            var reserve = Mon("Réserve", 200);
             Start(new[] { loup }, new[] { enemy, reserve }, new[] { (loup, 0) }, new[] { (enemy, 1) });
 
             Use(loup, Catalog.Griffe, enemy);
@@ -29,9 +29,9 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void VaincreSonPropreAllie_DonneLePointALAdversaire()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var allie = Mon("Allié fragile", 3);
-            var enemy = Mon("Adversaire", 20);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var allie = Mon("Allié fragile", 30);
+            var enemy = Mon("Adversaire", 200);
             Start(new[] { loup, allie }, new[] { enemy }, new[] { (loup, 0), (allie, 1) }, new[] { (enemy, 0) });
 
             Use(loup, Catalog.Griffe, allie);
@@ -43,7 +43,7 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void TroisPoints_GagneLeCombat()
         {
-            var hydre = Mon("Hydre", 20, Catalog.Griffe, Catalog.Griffe, Catalog.Griffe);
+            var hydre = Mon("Hydre", 200, Catalog.Griffe, Catalog.Griffe, Catalog.Griffe);
             var enemies = Enumerable.Range(0, 4).Select(i => Mon($"Fragile {i}", 3)).ToArray();
             CombatEndedEvent? ended = null;
             Engine = new CombatEngine(new[] { hydre }, enemies, new Random(1));
@@ -63,9 +63,9 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void CampSansMonstre_PerdQuelQueSoitLeScore()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var fragile = Mon("Fragile", 3);
-            var enemy = Mon("Adversaire", 3, Catalog.Griffe);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var fragile = Mon("Fragile", 30);
+            var enemy = Mon("Adversaire", 30, Catalog.Griffe);
             Start(new[] { loup, fragile }, new[] { enemy }, new[] { (loup, 0), (fragile, 1) }, new[] { (enemy, 0) });
             Use(loup, Catalog.Griffe, fragile);
             Assert.That(Engine.GetPoints(Side.Enemy), Is.EqualTo(1));
@@ -82,8 +82,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void ChasseurDeTrophees_MarqueUnEmplacementAdverseAvantLaMiseEnPlace()
         {
-            var archer = Mon("Archer", 14, Catalog.ChasseurDeTrophees);
-            Engine = new CombatEngine(new[] { archer }, new[] { Mon("Adversaire", 20) }, new Random(1));
+            var archer = Mon("Archer", 140, Catalog.ChasseurDeTrophees);
+            Engine = new CombatEngine(new[] { archer }, new[] { Mon("Adversaire", 200) }, new Random(1));
 
             Assert.That(Engine.GetMarkedSlots(Side.Enemy).Count, Is.EqualTo(1));
             Assert.That(Engine.GetMarkedSlots(Side.Enemy)[0], Is.InRange(0, 2));
@@ -93,10 +93,10 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void EmplacementMarque_RapporteUnPointDePlus_MemeSiLeChasseurEstEnMain()
         {
-            var archer = Mon("Archer adverse", 14, Catalog.ChasseurDeTrophees);
-            var aigle = Mon("Aigle adverse", 18, Catalog.Griffe);
-            var victime = Mon("Victime", 3);
-            var reserve = Mon("Réserve", 20);
+            var archer = Mon("Archer adverse", 140, Catalog.ChasseurDeTrophees);
+            var aigle = Mon("Aigle adverse", 180, Catalog.Griffe);
+            var victime = Mon("Victime", 30);
+            var reserve = Mon("Réserve", 200);
             Engine = new CombatEngine(new[] { victime, reserve }, new[] { aigle, archer }, new Random(7));
             int marked = Engine.GetMarkedSlots(Side.Player)[0];
             int defeatPoints = -1;
@@ -115,29 +115,29 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Fatigue_APartirDuTour16_DegatsCroissantsAuDebutDuTour()
         {
-            var joueur = Mon("Joueur", 100, Catalog.Carapace);
-            var enemy = Mon("Adversaire", 100);
+            var joueur = Mon("Joueur", 1000, Catalog.Carapace);
+            var enemy = Mon("Adversaire", 1000);
             StartDuel(joueur, enemy);
 
             AdvanceTo(15, Side.Enemy);
-            Assert.That(joueur.Hp, Is.EqualTo(100), "aucune fatigue jusqu'au tour 15");
+            Assert.That(joueur.Hp, Is.EqualTo(1000), "aucune fatigue jusqu'au tour 15");
 
             AdvanceTo(16, Side.Player);
-            Assert.That(joueur.Hp, Is.EqualTo(99), "1 dégât au tour 16, sans réduction");
-            Assert.That(enemy.Hp, Is.EqualTo(99), "les deux camps");
+            Assert.That(joueur.Hp, Is.EqualTo(990), "10 dégâts au tour 16, sans réduction");
+            Assert.That(enemy.Hp, Is.EqualTo(990), "les deux camps");
 
             AdvanceTo(17, Side.Player);
-            Assert.That(joueur.Hp, Is.EqualTo(97));
+            Assert.That(joueur.Hp, Is.EqualTo(970));
             AdvanceTo(18, Side.Player);
-            Assert.That(joueur.Hp, Is.EqualTo(94));
+            Assert.That(joueur.Hp, Is.EqualTo(940));
         }
 
         [Test]
         public void VaincuParLaFatigue_NeRapporteAucunPoint_MemeSurUnEmplacementMarque()
         {
-            var archer = Mon("Archer adverse", 100, Catalog.ChasseurDeTrophees);
-            var victime = Mon("Victime", 1);
-            var reserve = Mon("Réserve", 100);
+            var archer = Mon("Archer adverse", 1000, Catalog.ChasseurDeTrophees);
+            var victime = Mon("Victime", 10);
+            var reserve = Mon("Réserve", 1000);
             Engine = new CombatEngine(new[] { victime, reserve }, new[] { archer }, new Random(3));
             int marked = Engine.GetMarkedSlots(Side.Player)[0];
             var defeats = new List<MonsterDefeatedEvent>();
@@ -154,7 +154,7 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void LesDeuxCampsPerdentLeurDernierMonstreEnMemeTemps_LeJoueurPerd()
         {
-            StartDuel(Mon("Joueur", 1), Mon("Adversaire", 1));
+            StartDuel(Mon("Joueur", 10), Mon("Adversaire", 10));
 
             while (Engine.State != CombatState.Ended) Engine.EndPhase();
 
@@ -168,8 +168,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Evenements_DansLOrdre_PourUneAttaqueQuiFinitLeCombat()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var enemy = Mon("Adversaire", 3);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var enemy = Mon("Adversaire", 30);
             var log = new List<string>();
             Engine = new CombatEngine(new[] { loup }, new[] { enemy }, new Random(1));
             Engine.MonsterPlaced   += e => log.Add($"pose {e.Monster.Name}");
@@ -185,7 +185,7 @@ namespace MonsterCardGame.Tests.EditMode.Combat
             Assert.That(log, Is.EqualTo(new[]
             {
                 "pose Loup", "pose Adversaire", "début Player 1",
-                "compétence Griffe", "dégâts 3", "vaincu Adversaire", "fin Player"
+                "compétence Griffe", "dégâts 30", "vaincu Adversaire", "fin Player"
             }));
         }
 
@@ -193,8 +193,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         public void EffetInconnu_EstSignale()
         {
             var bizarre = Active("Bizarre", 0, new UnknownEffect());
-            var monstre = Mon("Monstre", 20, bizarre);
-            StartDuel(monstre, Mon("Adversaire", 20));
+            var monstre = Mon("Monstre", 200, bizarre);
+            StartDuel(monstre, Mon("Adversaire", 200));
 
             Assert.Throws<NotSupportedException>(() => Use(monstre, bizarre, monstre));
         }

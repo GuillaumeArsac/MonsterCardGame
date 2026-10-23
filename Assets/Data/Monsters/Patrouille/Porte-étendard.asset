@@ -15,9 +15,9 @@ MonoBehaviour:
   _monsterName: "Porte-\xE9tendard"
   _artwork: {fileID: 0}
   _role: 1
-  _maxHp: 14
+  _maxHp: 140
   _skills:
   - {fileID: 11400000, guid: 208c79da78cc05d41b5202e5df0d8a00, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 2
+    _hp: 20

@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Loup des cendres
   _artwork: {fileID: 0}
   _role: 0
-  _maxHp: 15
+  _maxHp: 150
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   _uniqueSkill: {fileID: 0}

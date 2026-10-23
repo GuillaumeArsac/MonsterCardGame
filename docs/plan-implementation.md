@@ -128,3 +128,7 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 - **La Forge dans le récit :** la fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore d'améliorer la Forge aux niveaux 2 et 3, une mécanique de l'ancienne version. Le dépeçage la remplace. Il faut décider ce que devient la Forge : simple élément narratif, ou lieu du dépeçage.
 - **La patrouille centaure** (`combats-scenario.md`) attend une validation. Une mauvaise composition d'équipe y est très punie : il faudra peut-être un dialogue qui conseille l'équipe avant ce premier combat.
 - **L'équilibre entre les équipes de test A et B** a bougé depuis la règle « un monstre utilise toutes ses compétences disponibles » : voir les résultats à jour dans `monstres.md`.
+
+## Équilibrage du contenu de départ
+
+- **Échelle des valeurs (2026-10-23) :** les PV, dégâts, soins, bonus, réductions, le seuil d'Exécution, les boosts et la fatigue ont été multipliés par 10, pour un équilibrage plus fin. Les temps de recharge, les durées et les points ne changent pas. L'IA divise ces valeurs par 10 dans ses notes (`CombatAI.Unit`) : elle joue comme avant, et les simulations donnent les mêmes résultats. Le simulateur Python (`tools/simulation`) est resté à l'ancienne échelle.

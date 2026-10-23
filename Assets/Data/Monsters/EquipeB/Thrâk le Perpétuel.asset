@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: "Thr\xE2k le Perp\xE9tuel"
   _artwork: {fileID: 0}
   _role: 2
-  _maxHp: 26
+  _maxHp: 260
   _skills:
   - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}

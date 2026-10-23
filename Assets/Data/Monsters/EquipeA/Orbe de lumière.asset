@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: "Orbe de lumi\xE8re"
   _artwork: {fileID: 2322374121114253753, guid: 1e94fc195f0a357478131303846dbfaa, type: 3}
   _role: 1
-  _maxHp: 18
+  _maxHp: 180
   _skills:
   - {fileID: 11400000, guid: ef8133ff4420c5742959a123717152cf, type: 2}
   - {fileID: 11400000, guid: fdc02d82b2100db4a83d8550b32d65f2, type: 2}

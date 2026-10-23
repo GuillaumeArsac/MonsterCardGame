@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Svathurim
   _artwork: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
   _role: 1
-  _maxHp: 20
+  _maxHp: 200
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   - {fileID: 11400000, guid: d52e8115de8cdcb4cb402bb70f91a8bd, type: 2}

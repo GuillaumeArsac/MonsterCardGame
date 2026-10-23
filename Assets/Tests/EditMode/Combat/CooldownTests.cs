@@ -11,13 +11,13 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         /// <summary>Comme Coup de bouclier, mais à recharge 0 : utilisable dès le premier tour.</summary>
         private SkillData _coupRapide;
 
-        [SetUp] public void SetUp() => _coupRapide = Active("Coup rapide", 0, new DamageEffect(1), new SlowEffect());
+        [SetUp] public void SetUp() => _coupRapide = Active("Coup rapide", 0, new DamageEffect(10), new SlowEffect());
         [Test]
         public void ExempleDeLaDoc_CompetenceA0Immediate_CompetenceA1AuTour2()
         {
-            var recharge1 = Active("Recharge 1", 1, new DamageEffect(1));
-            var monstre = Mon("Monstre", 20, Catalog.Griffe, recharge1);
-            var enemy = Mon("Adversaire", 40);
+            var recharge1 = Active("Recharge 1", 1, new DamageEffect(10));
+            var monstre = Mon("Monstre", 200, Catalog.Griffe, recharge1);
+            var enemy = Mon("Adversaire", 400);
             StartDuel(monstre, enemy);
 
             Assert.That(CanUse(monstre, Catalog.Griffe), Is.True, "recharge 0 : dès le tour 1");
@@ -34,8 +34,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Recharge0_UneSeuleFoisParPhase()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var enemy = Mon("Adversaire", 40);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var enemy = Mon("Adversaire", 400);
             StartDuel(loup, enemy);
 
             Use(loup, Catalog.Griffe, enemy);
@@ -48,21 +48,21 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void TroisGriffe_TroisUtilisationsParPhase()
         {
-            var monstre = Mon("Trois griffes", 20, Catalog.Griffe, Catalog.Griffe, Catalog.Griffe);
-            var enemy = Mon("Adversaire", 40);
+            var monstre = Mon("Trois griffes", 200, Catalog.Griffe, Catalog.Griffe, Catalog.Griffe);
+            var enemy = Mon("Adversaire", 400);
             StartDuel(monstre, enemy);
 
             for (int i = 0; i < 3; i++)
                 Engine.UseSkill(monstre, i, enemy);
 
-            Assert.That(enemy.Hp, Is.EqualTo(40 - 9));
+            Assert.That(enemy.Hp, Is.EqualTo(400 - 90));
         }
 
         [Test]
         public void Recharge2_UnePhaseSurDeux()
         {
-            var chouette = Mon("Chouette", 16, Catalog.Soin);
-            StartDuel(chouette, Mon("Adversaire", 40));
+            var chouette = Mon("Chouette", 160, Catalog.Soin);
+            StartDuel(chouette, Mon("Adversaire", 400));
 
             Assert.That(CanUse(chouette, Catalog.Soin), Is.False, "tour 1 : compteur à 2");
             AdvanceTo(2, Side.Player);
@@ -80,8 +80,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Compteurs_NeBaissentQuALaFinDeLaPhaseDeLeurCamp()
         {
-            var joueur = Mon("Joueur", 20);
-            var chaman = Mon("Chaman", 16, Catalog.Soin);
+            var joueur = Mon("Joueur", 200);
+            var chaman = Mon("Chaman", 160, Catalog.Soin);
             StartDuel(joueur, chaman);
             int soin = IndexOf(chaman, Catalog.Soin);
 
@@ -95,8 +95,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Ralentissement_BloqueUneCompetenceDisponible_PendantLaProchainePhaseDuMonstre()
         {
-            var sanglier = Mon("Sanglier", 24, _coupRapide);
-            var loup = Mon("Loup adverse", 15, Catalog.Griffe);
+            var sanglier = Mon("Sanglier", 240, _coupRapide);
+            var loup = Mon("Loup adverse", 150, Catalog.Griffe);
             Start(new[] { sanglier }, new[] { loup }, new[] { (sanglier, 0) }, new[] { (loup, 0) });
             AdvanceTo(2, Side.Player);
 
@@ -113,8 +113,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Ralentissement_ParLAdversaire_BloqueLaProchainePhaseDuJoueur()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var sanglier = Mon("Sanglier adverse", 24, _coupRapide);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var sanglier = Mon("Sanglier adverse", 240, _coupRapide);
             StartDuel(loup, sanglier);
             AdvanceTo(2, Side.Enemy);
 
@@ -127,22 +127,22 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Ralentissement_SAppliqueMemeSiLesDegatsSontReduitsA0()
         {
-            var sanglier = Mon("Sanglier", 24, _coupRapide);
-            var taureau = Mon("Taureau", 30, Catalog.Carapace, Catalog.Griffe);
+            var sanglier = Mon("Sanglier", 240, _coupRapide);
+            var taureau = Mon("Taureau", 300, Catalog.Carapace, Catalog.Griffe);
             Start(new[] { sanglier }, new[] { taureau }, new[] { (sanglier, 0) }, new[] { (taureau, 0) });
             AdvanceTo(2, Side.Player);
 
             Use(sanglier, _coupRapide, taureau);
 
-            Assert.That(taureau.Hp, Is.EqualTo(30), "Carapace réduit 1 dégât à 0");
+            Assert.That(taureau.Hp, Is.EqualTo(300), "Carapace réduit 10 dégâts à 0");
             Assert.That(taureau.GetCooldown(IndexOf(taureau, Catalog.Griffe)), Is.EqualTo(1));
         }
 
         [Test]
         public void Ralentissement_TouchePasLesPassives_EtNAPasDeDuree()
         {
-            var sanglier = Mon("Sanglier", 24, _coupRapide);
-            var loup = Mon("Loup adverse", 15, Catalog.Griffe, Catalog.Carapace);
+            var sanglier = Mon("Sanglier", 240, _coupRapide);
+            var loup = Mon("Loup adverse", 150, Catalog.Griffe, Catalog.Carapace);
             StartDuel(sanglier, loup);
             AdvanceTo(2, Side.Player);
 

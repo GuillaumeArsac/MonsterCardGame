@@ -68,7 +68,7 @@ Une carte monstre affiche uniquement :
 ## Fatigue
 
 - Après le tour 15, tous les monstres sur le terrain, des deux camps, subissent des dégâts de **fatigue** au début de chaque tour.
-- Ces dégâts augmentent de 1 à chaque tour : 1 dégât au tour 16, 2 au tour 17, 3 au tour 18, etc.
+- Ces dégâts augmentent de 10 à chaque tour : 10 dégâts au tour 16, 20 au tour 17, 30 au tour 18, etc.
 - La fatigue garantit qu'un combat finit toujours, sans limiter les stratégies défensives avant le tour 15.
 - Un monstre vaincu par la fatigue **ne rapporte aucun point**.
 - Si les deux camps perdent leur dernier monstre en même temps sans qu'aucun n'ait atteint 3 points, **le joueur perd** et l'adversaire gagne.

@@ -15,9 +15,9 @@ MonoBehaviour:
   _monsterName: "\xC9claireur centaure"
   _artwork: {fileID: 0}
   _role: 0
-  _maxHp: 14
+  _maxHp: 140
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 2
+    _hp: 20

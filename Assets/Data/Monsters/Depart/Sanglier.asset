@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Sanglier
   _artwork: {fileID: 0}
   _role: 2
-  _maxHp: 24
+  _maxHp: 240
   _skills:
   - {fileID: 11400000, guid: b646b7c59f03bb248be753c6eadefa45, type: 2}
   _uniqueSkill: {fileID: 0}

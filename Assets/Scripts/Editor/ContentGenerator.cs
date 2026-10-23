@@ -62,19 +62,19 @@ namespace MonsterCardGame.Editor
 
         private static void GenerateSkills()
         {
-            Active("Grand balayage", MonsterRole.Tank, SkillTarget.AllEnemies, 3, new DamageEffect(1), new SlowEffect());
-            Active("Griffe", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(3));
-            Active("Soin", MonsterRole.Support, SkillTarget.AnyMonster, 2, new HealEffect(4));
-            Active("Bénédiction", MonsterRole.Support, SkillTarget.AllAllies, 3, new DamageBonusEffect(1, 6));
-            Active("Morsure perforante", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(2, ignoresReductions: true));
-            Active("Exécution", MonsterRole.Carry, SkillTarget.AnyMonster, 4, new ExecuteEffect(8, 1));
+            Active("Grand balayage", MonsterRole.Tank, SkillTarget.AllEnemies, 3, new DamageEffect(10), new SlowEffect());
+            Active("Griffe", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(30));
+            Active("Soin", MonsterRole.Support, SkillTarget.AnyMonster, 2, new HealEffect(40));
+            Active("Bénédiction", MonsterRole.Support, SkillTarget.AllAllies, 3, new DamageBonusEffect(10, 6));
+            Active("Morsure perforante", MonsterRole.Carry, SkillTarget.AnyMonster, 0, new DamageEffect(20, ignoresReductions: true));
+            Active("Exécution", MonsterRole.Carry, SkillTarget.AnyMonster, 4, new ExecuteEffect(80, 10));
             Passive("Chasseur de trophées", MonsterRole.Carry, SkillTarget.None, PassiveTrigger.StartOfCombat, new MarkedSlotEffect(1));
-            Active("Bouclier", MonsterRole.Support, SkillTarget.AnyMonster, 3, new DamageReductionEffect(2, 2));
-            Passive("Aura apaisante", MonsterRole.Support, SkillTarget.AllAllies, PassiveTrigger.StartOfOwnPhase, new HealEffect(1));
+            Active("Bouclier", MonsterRole.Support, SkillTarget.AnyMonster, 3, new DamageReductionEffect(20, 2));
+            Passive("Aura apaisante", MonsterRole.Support, SkillTarget.AllAllies, PassiveTrigger.StartOfOwnPhase, new HealEffect(10));
             Active("Repli", MonsterRole.Support, SkillTarget.OtherAlly, 4, new ReturnToHandEffect());
             Passive("Provocation", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new TauntEffect());
-            Passive("Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(1, 0));
-            Active("Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(1), new SlowEffect());
+            Passive("Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(10, 0));
+            Active("Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(10), new SlowEffect());
         }
 
         private static void Active(string name, MonsterRole role, SkillTarget target, int cooldown, params SkillEffect[] effects)
@@ -110,41 +110,41 @@ namespace MonsterCardGame.Editor
         // Les 5 premiers forment l'équipe de début de partie : la meilleure selon les simulations (docs/combats-scenario.md)
         private static List<MonsterCardData> GenerateStarters() => new()
         {
-            Monster("Depart", "Loup des cendres",     MonsterRole.Carry,   15, 0, null, "Griffe"),
-            Monster("Depart", "Renard de braise",     MonsterRole.Carry,   14, 0, null, "Morsure perforante"),
-            Monster("Depart", "Ours brun",            MonsterRole.Carry,   20, 0, null, "Griffe"),
-            Monster("Depart", "Chouette guérisseuse", MonsterRole.Support, 16, 0, null, "Soin"),
-            Monster("Depart", "Chien de garde",       MonsterRole.Tank,    26, 0, null, "Provocation"),
-            Monster("Depart", "Luciole sacrée",       MonsterRole.Support, 16, 0, null, "Bénédiction"),
-            Monster("Depart", "Sanglier",             MonsterRole.Tank,    24, 0, null, "Coup de bouclier"),
+            Monster("Depart", "Loup des cendres",     MonsterRole.Carry,   150, 0, null, "Griffe"),
+            Monster("Depart", "Renard de braise",     MonsterRole.Carry,   140, 0, null, "Morsure perforante"),
+            Monster("Depart", "Ours brun",            MonsterRole.Carry,   200, 0, null, "Griffe"),
+            Monster("Depart", "Chouette guérisseuse", MonsterRole.Support, 160, 0, null, "Soin"),
+            Monster("Depart", "Chien de garde",       MonsterRole.Tank,    260, 0, null, "Provocation"),
+            Monster("Depart", "Luciole sacrée",       MonsterRole.Support, 160, 0, null, "Bénédiction"),
+            Monster("Depart", "Sanglier",             MonsterRole.Tank,    240, 0, null, "Coup de bouclier"),
         };
 
         // Les docs ne donnent pas de boost de stats aux équipes de test : 0 en attendant.
         private static List<MonsterCardData> GenerateTeamA() => new()
         {
-            Monster("EquipeA", "Griffon",          MonsterRole.Carry,   16, 0, "Griffin",         "Griffe", "Exécution"),
-            Monster("EquipeA", "Archer centaure",  MonsterRole.Carry,   14, 0, "Centaur Archer",  "Morsure perforante", "Chasseur de trophées"),
-            Monster("EquipeA", "Orbe de lumière",  MonsterRole.Support, 18, 0, "Light Orb",       "Soin", "Bénédiction", "Aura apaisante"),
-            Monster("EquipeA", "Svathurim",        MonsterRole.Support, 20, 0, "Svathurim",       "Griffe", "Bouclier", "Repli"),
-            Monster("EquipeA", "Paladin centaure", MonsterRole.Tank,    28, 0, "Centaur Paladin", "Provocation", "Carapace", "Coup de bouclier"),
+            Monster("EquipeA", "Griffon",          MonsterRole.Carry,   160, 0, "Griffin",         "Griffe", "Exécution"),
+            Monster("EquipeA", "Archer centaure",  MonsterRole.Carry,   140, 0, "Centaur Archer",  "Morsure perforante", "Chasseur de trophées"),
+            Monster("EquipeA", "Orbe de lumière",  MonsterRole.Support, 180, 0, "Light Orb",       "Soin", "Bénédiction", "Aura apaisante"),
+            Monster("EquipeA", "Svathurim",        MonsterRole.Support, 200, 0, "Svathurim",       "Griffe", "Bouclier", "Repli"),
+            Monster("EquipeA", "Paladin centaure", MonsterRole.Tank,    280, 0, "Centaur Paladin", "Provocation", "Carapace", "Coup de bouclier"),
         };
 
         private static List<MonsterCardData> GenerateTeamB() => new()
         {
-            Monster("EquipeB", "Thrâk le Perpétuel",  MonsterRole.Tank,    26, 0, null,               "Provocation", "Griffe", "Grand balayage"),
-            Monster("EquipeB", "Aigle Runique Géant", MonsterRole.Carry,   18, 0, "Giant Rune Eagle", "Griffe", "Exécution", "Chasseur de trophées"),
-            Monster("EquipeB", "Guerrier centaure",   MonsterRole.Carry,   16, 0, "CentaurWarrior",   "Morsure perforante", "Coup de bouclier"),
-            Monster("EquipeB", "Chaman centaure",     MonsterRole.Support, 16, 0, null,               "Griffe", "Soin", "Bénédiction"),
-            Monster("EquipeB", "Taureau de guerre",   MonsterRole.Tank,    30, 0, null,               "Carapace", "Griffe", "Coup de bouclier"),
+            Monster("EquipeB", "Thrâk le Perpétuel",  MonsterRole.Tank,    260, 0, null,               "Provocation", "Griffe", "Grand balayage"),
+            Monster("EquipeB", "Aigle Runique Géant", MonsterRole.Carry,   180, 0, "Giant Rune Eagle", "Griffe", "Exécution", "Chasseur de trophées"),
+            Monster("EquipeB", "Guerrier centaure",   MonsterRole.Carry,   160, 0, "CentaurWarrior",   "Morsure perforante", "Coup de bouclier"),
+            Monster("EquipeB", "Chaman centaure",     MonsterRole.Support, 160, 0, null,               "Griffe", "Soin", "Bénédiction"),
+            Monster("EquipeB", "Taureau de guerre",   MonsterRole.Tank,    300, 0, null,               "Carapace", "Griffe", "Coup de bouclier"),
         };
 
         private static List<MonsterCardData> GeneratePatrol() => new()
         {
-            Monster("Patrouille", "Éclaireur centaure", MonsterRole.Carry,   14, 2, null, "Griffe"),
-            Monster("Patrouille", "Archer novice",      MonsterRole.Carry,   12, 2, null, "Morsure perforante"),
-            Monster("Patrouille", "Jeune taureau",      MonsterRole.Tank,    20, 2, null, "Provocation", "Carapace"),
-            Monster("Patrouille", "Porte-étendard",     MonsterRole.Support, 14, 2, null, "Aura apaisante"),
-            Monster("Patrouille", "Cavalier rabatteur", MonsterRole.Carry,   16, 2, null, "Griffe", "Coup de bouclier"),
+            Monster("Patrouille", "Éclaireur centaure", MonsterRole.Carry,   140, 20, null, "Griffe"),
+            Monster("Patrouille", "Archer novice",      MonsterRole.Carry,   120, 20, null, "Morsure perforante"),
+            Monster("Patrouille", "Jeune taureau",      MonsterRole.Tank,    200, 20, null, "Provocation", "Carapace"),
+            Monster("Patrouille", "Porte-étendard",     MonsterRole.Support, 140, 20, null, "Aura apaisante"),
+            Monster("Patrouille", "Cavalier rabatteur", MonsterRole.Carry,   160, 20, null, "Griffe", "Coup de bouclier"),
         };
 
         private static MonsterCardData Monster(string folder, string name, MonsterRole role, int hp, int boostHp,

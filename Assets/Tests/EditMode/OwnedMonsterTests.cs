@@ -14,7 +14,7 @@ namespace MonsterCardGame.Tests.EditMode
         [TearDown] public void TearDown() => _catalog.Dispose();
 
         private OwnedMonster OursBrun()
-            => new(_catalog.Monster("Ours brun", MonsterRole.Carry, 20, 0, _catalog.Griffe));
+            => new(_catalog.Monster("Ours brun", MonsterRole.Carry, 200, 0, _catalog.Griffe));
 
         [Test]
         public void NouveauMonstre_ReprendLesCompetencesDeSaCarte_SansBoost()
@@ -23,7 +23,7 @@ namespace MonsterCardGame.Tests.EditMode
 
             Assert.That(ours.Skills, Is.EqualTo(new[] { _catalog.Griffe }));
             Assert.That(ours.Boost.IsEmpty, Is.True);
-            Assert.That(ours.MaxHp, Is.EqualTo(20));
+            Assert.That(ours.MaxHp, Is.EqualTo(200));
             Assert.That(ours.LockedSkillIndex, Is.EqualTo(OwnedMonster.NoLockedSkill));
         }
 
@@ -74,7 +74,7 @@ namespace MonsterCardGame.Tests.EditMode
         [Test]
         public void CompetenceUnique_NePeutPasEtreRemplacee()
         {
-            var card = _catalog.QuestMonster("Monstre de quête", MonsterRole.Support, 18, _catalog.Repli, _catalog.Griffe);
+            var card = _catalog.QuestMonster("Monstre de quête", MonsterRole.Support, 180, _catalog.Repli, _catalog.Griffe);
             var monstre = new OwnedMonster(card);
 
             Assert.That(monstre.LockedSkillIndex, Is.EqualTo(0));
@@ -89,27 +89,27 @@ namespace MonsterCardGame.Tests.EditMode
         {
             var ours = OursBrun();
 
-            ours.SetBoost(new StatBoost(4));
+            ours.SetBoost(new StatBoost(40));
 
-            Assert.That(ours.MaxHp, Is.EqualTo(24));
+            Assert.That(ours.MaxHp, Is.EqualTo(240));
         }
 
         [Test]
         public void NouveauBoost_RemplaceLePrecedent()
         {
             var ours = OursBrun();
-            ours.SetBoost(new StatBoost(8));
+            ours.SetBoost(new StatBoost(80));
 
-            ours.SetBoost(new StatBoost(2));
+            ours.SetBoost(new StatBoost(20));
 
-            Assert.That(ours.Boost.Hp, Is.EqualTo(2));
-            Assert.That(ours.MaxHp, Is.EqualTo(22));
+            Assert.That(ours.Boost.Hp, Is.EqualTo(20));
+            Assert.That(ours.MaxHp, Is.EqualTo(220));
         }
 
         [Test]
         public void MonstreRecharge_AvecTropDeCompetences_EstRefuse()
         {
-            var card = _catalog.Monster("Ours brun", MonsterRole.Carry, 20, 0, _catalog.Griffe);
+            var card = _catalog.Monster("Ours brun", MonsterRole.Carry, 200, 0, _catalog.Griffe);
             var skills = new[] { _catalog.Griffe, _catalog.Griffe, _catalog.Griffe, _catalog.Griffe };
 
             Assert.Throws<ArgumentException>(() => new OwnedMonster(card, skills, StatBoost.None, OwnedMonster.NoLockedSkill));

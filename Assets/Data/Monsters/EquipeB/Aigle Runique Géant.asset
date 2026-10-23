@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: "Aigle Runique G\xE9ant"
   _artwork: {fileID: 5685368299745277139, guid: 11caa8af49e8fbb49b7ab94c2ed98d22, type: 3}
   _role: 0
-  _maxHp: 18
+  _maxHp: 180
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   - {fileID: 11400000, guid: c3f01958022e63c4c8d5db9a60a293df, type: 2}

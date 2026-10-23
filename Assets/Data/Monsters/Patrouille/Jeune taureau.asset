@@ -15,10 +15,10 @@ MonoBehaviour:
   _monsterName: Jeune taureau
   _artwork: {fileID: 0}
   _role: 2
-  _maxHp: 20
+  _maxHp: 200
   _skills:
   - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
   - {fileID: 11400000, guid: fa00f28448666cf4383758f06cfb4df0, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 2
+    _hp: 20

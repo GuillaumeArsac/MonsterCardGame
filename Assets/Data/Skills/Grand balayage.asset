@@ -19,16 +19,16 @@ MonoBehaviour:
   _cooldown: 3
   _trigger: 0
   _effects:
-  - rid: 3690274877296083065
-  - rid: 3690274877296083066
+  - rid: 3690274877296083099
+  - rid: 3690274877296083100
   references:
     version: 2
     RefIds:
-    - rid: 3690274877296083065
+    - rid: 3690274877296083099
       type: {class: DamageEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
-        _amount: 1
+        _amount: 10
         _ignoresReductions: 0
-    - rid: 3690274877296083066
+    - rid: 3690274877296083100
       type: {class: SlowEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data: 

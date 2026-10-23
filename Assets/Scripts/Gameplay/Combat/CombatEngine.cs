@@ -109,9 +109,9 @@ namespace MonsterCardGame.Gameplay.Combat
         /// <summary>Points que rapporte à l'adversaire un monstre de ce camp vaincu sur cet emplacement.</summary>
         public int PointsForDefeatAt(Side side, int slot) => 1 + _markedSlots[side].Count(s => s == slot);
 
-        /// <summary>Dégâts de fatigue au début du tour : 0 avant le tour 16, puis 1, 2, 3...</summary>
+        /// <summary>Dégâts de fatigue au début du tour : 0 avant le tour 16, puis 10, 20, 30...</summary>
         public static int FatigueDamage(int turn)
-            => turn < GameRules.FatigueStartTurn ? 0 : turn - GameRules.FatigueStartTurn + 1;
+            => turn < GameRules.FatigueStartTurn ? 0 : (turn - GameRules.FatigueStartTurn + 1) * GameRules.FatigueDamageStep;
 
         /// <summary>Dégâts qu'infligerait <paramref name="source"/> à <paramref name="target"/> : bonus, puis réductions.</summary>
         public static int ComputeDamage(CombatMonster source, CombatMonster target, int baseAmount, bool ignoresReductions)

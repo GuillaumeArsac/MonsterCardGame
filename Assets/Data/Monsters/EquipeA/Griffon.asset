@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Griffon
   _artwork: {fileID: -5838028541306521313, guid: 106f0dfe7d33bb442aa9170bca549836, type: 3}
   _role: 0
-  _maxHp: 16
+  _maxHp: 160
   _skills:
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   - {fileID: 11400000, guid: c3f01958022e63c4c8d5db9a60a293df, type: 2}

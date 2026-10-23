@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Guerrier centaure
   _artwork: {fileID: 7074244693025174430, guid: 79ce601bde7269f43be30ec3e0161e00, type: 3}
   _role: 0
-  _maxHp: 16
+  _maxHp: 160
   _skills:
   - {fileID: 11400000, guid: 0602d296c30033143908ef8cee0f2aae, type: 2}
   - {fileID: 11400000, guid: b646b7c59f03bb248be753c6eadefa45, type: 2}

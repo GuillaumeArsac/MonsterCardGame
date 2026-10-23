@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Archer centaure
   _artwork: {fileID: 6492404114584110865, guid: b2349cb9294ed2249b00bc156043f8de, type: 3}
   _role: 0
-  _maxHp: 14
+  _maxHp: 140
   _skills:
   - {fileID: 11400000, guid: 0602d296c30033143908ef8cee0f2aae, type: 2}
   - {fileID: 11400000, guid: 209df53f84ed90e40af34e4ab7ef71b8, type: 2}

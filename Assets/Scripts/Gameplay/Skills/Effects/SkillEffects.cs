@@ -10,7 +10,7 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     [Serializable]
     public class DamageEffect : SkillEffect
     {
-        [SerializeField, Min(0)] private int _amount = 1;
+        [SerializeField, Min(0)] private int _amount = 10;
 
         [SerializeField, Tooltip("Si vrai, les réductions de dégâts ne s'appliquent pas (les bonus s'appliquent normalement)")]
         private bool _ignoresReductions;
@@ -30,7 +30,7 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     [Serializable]
     public class HealEffect : SkillEffect
     {
-        [SerializeField, Min(0)] private int _amount = 1;
+        [SerializeField, Min(0)] private int _amount = 10;
 
         public int Amount => _amount;
 
@@ -42,7 +42,7 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     [Serializable]
     public class DamageBonusEffect : SkillEffect
     {
-        [SerializeField, Min(0)] private int _amount = 1;
+        [SerializeField, Min(0)] private int _amount = 10;
 
         [SerializeField, Min(0), Tooltip("Durée en tours. 0 = permanent")]
         private int _durationTurns;
@@ -63,7 +63,7 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     [Serializable]
     public class DamageReductionEffect : SkillEffect
     {
-        [SerializeField, Min(0)] private int _amount = 1;
+        [SerializeField, Min(0)] private int _amount = 10;
 
         [SerializeField, Min(0), Tooltip("Durée en tours. 0 = permanent")]
         private int _durationTurns;
@@ -94,10 +94,10 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     public class ExecuteEffect : SkillEffect
     {
         [SerializeField, Min(0), Tooltip("La cible est vaincue si ses PV sont inférieurs ou égaux à ce seuil")]
-        private int _hpThreshold = 8;
+        private int _hpThreshold = 80;
 
         [SerializeField, Min(0), Tooltip("Dégâts infligés si la cible est au-dessus du seuil")]
-        private int _fallbackDamage = 1;
+        private int _fallbackDamage = 10;
 
         public int HpThreshold    => _hpThreshold;
         public int FallbackDamage => _fallbackDamage;

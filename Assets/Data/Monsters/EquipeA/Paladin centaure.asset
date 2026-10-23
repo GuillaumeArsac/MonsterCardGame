@@ -15,7 +15,7 @@ MonoBehaviour:
   _monsterName: Paladin centaure
   _artwork: {fileID: 6933485420400295074, guid: de247805b6abb4f40bf6d9a80a52e529, type: 3}
   _role: 2
-  _maxHp: 28
+  _maxHp: 280
   _skills:
   - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
   - {fileID: 11400000, guid: fa00f28448666cf4383758f06cfb4df0, type: 2}

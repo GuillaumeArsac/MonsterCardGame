@@ -49,36 +49,36 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         [Test]
         public void Phase_VaincLaCibleQuandCEstPossible()
         {
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var fragile = Mon("Fragile", 3);
-            var solide = Mon("Solide", 30);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var fragile = Mon("Fragile", 30);
+            var solide = Mon("Solide", 300);
             Start(new[] { loup }, new[] { fragile, solide }, new[] { (loup, 0) }, new[] { (fragile, 0), (solide, 1) });
 
             new CombatAI(new Random(1)).PlayPhase(Engine);
 
             Assert.That(fragile.Zone, Is.EqualTo(MonsterZone.Defeated));
-            Assert.That(solide.Hp, Is.EqualTo(30));
+            Assert.That(solide.Hp, Is.EqualTo(300));
         }
 
         [Test]
         public void Phase_PoseDAbordPuisAgit()
         {
-            var tank = Mon("Tank", 30);
-            var loup = Mon("Loup", 15, Catalog.Griffe);
-            var enemy = Mon("Adversaire", 40);
+            var tank = Mon("Tank", 300);
+            var loup = Mon("Loup", 150, Catalog.Griffe);
+            var enemy = Mon("Adversaire", 400);
             Start(new[] { tank, loup }, new[] { enemy }, new[] { (tank, 0) }, new[] { (enemy, 0) });
 
             new CombatAI(new Random(1)).PlayPhase(Engine);
 
             Assert.That(loup.IsOnField, Is.True);
-            Assert.That(enemy.Hp, Is.EqualTo(37));
+            Assert.That(enemy.Hp, Is.EqualTo(370));
         }
 
         [Test]
         public void Phase_NeSoignePasUnAllieEnBonneSante()
         {
-            var chouette = Mon("Chouette", 16, Catalog.Soin);
-            StartDuel(chouette, Mon("Adversaire", 40));
+            var chouette = Mon("Chouette", 160, Catalog.Soin);
+            StartDuel(chouette, Mon("Adversaire", 400));
             AdvanceTo(3, Side.Player);
 
             new CombatAI(new Random(1)).PlayPhase(Engine);

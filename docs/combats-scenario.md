@@ -19,16 +19,16 @@ Les règles sont dans [combat.md](combat.md), les compétences dans [competences
 
 | Monstre | Rôle | PV | Compétences | Boost de stats |
 |---|---|---|---|---|
-| **Éclaireur centaure** | Carry | 14 | Griffe | +2 PV |
-| **Archer novice** | Carry | 12 | Morsure perforante | +2 PV |
-| **Jeune taureau** | Tank | 20 | Provocation, Carapace | +2 PV |
-| **Porte-étendard** | Support | 14 | Aura apaisante | +2 PV |
-| **Cavalier rabatteur** | Carry | 16 | Griffe, Coup de bouclier | +2 PV |
+| **Éclaireur centaure** | Carry | 140 | Griffe | +20 PV |
+| **Archer novice** | Carry | 120 | Morsure perforante | +20 PV |
+| **Jeune taureau** | Tank | 200 | Provocation, Carapace | +20 PV |
+| **Porte-étendard** | Support | 140 | Aura apaisante | +20 PV |
+| **Cavalier rabatteur** | Carry | 160 | Griffe, Coup de bouclier | +20 PV |
 
 ### Ce que le combat apprend au joueur
 
 - **La Provocation :** le Jeune taureau force à frapper le tank en premier.
-- **La Carapace :** Griffe ne lui inflige que 2 dégâts, alors que Morsure perforante l'ignore. Le Renard de braise prend tout son sens.
+- **La Carapace :** Griffe ne lui inflige que 20 dégâts, alors que Morsure perforante l'ignore. Le Renard de braise prend tout son sens.
 - **Le ralentissement :** le Cavalier rabatteur retarde les compétences du joueur.
 - **Le dépeçage :** deux compétences sont nouvelles pour le joueur (Carapace, Aura apaisante). Les autres permettent de doubler une attaque sur un monstre, par exemple une deuxième Griffe pour l'Ours brun.
 

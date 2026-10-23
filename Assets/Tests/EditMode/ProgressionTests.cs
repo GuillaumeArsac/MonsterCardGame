@@ -22,8 +22,8 @@ namespace MonsterCardGame.Tests.EditMode
             _catalog  = new TestCatalog();
             _starters = _catalog.TeamStart().Concat(new[]
             {
-                _catalog.Monster("Luciole sacrée", MonsterRole.Support, 16, 0, _catalog.Benediction),
-                _catalog.Monster("Sanglier",       MonsterRole.Tank,    24, 0, _catalog.CoupDeBouclier),
+                _catalog.Monster("Luciole sacrée", MonsterRole.Support, 160, 0, _catalog.Benediction),
+                _catalog.Monster("Sanglier",       MonsterRole.Tank,    240, 0, _catalog.CoupDeBouclier),
             }).ToArray();
             foreach (var card in _starters) card.name = card.MonsterName;
             foreach (var skill in _catalog.AllSkills) skill.name = skill.SkillName;
@@ -81,7 +81,7 @@ namespace MonsterCardGame.Tests.EditMode
         {
             var collection = NewGame();
             var ours = collection.Monsters.First(m => m.Name == "Ours brun");
-            var offer = new SkinningOffer(_catalog.Monster("Cavalier", MonsterRole.Carry, 16, 2, _catalog.Griffe, _catalog.CoupDeBouclier));
+            var offer = new SkinningOffer(_catalog.Monster("Cavalier", MonsterRole.Carry, 160, 20, _catalog.Griffe, _catalog.CoupDeBouclier));
 
             offer.GiveSkill(_catalog.Griffe, ours);
 
@@ -93,8 +93,8 @@ namespace MonsterCardGame.Tests.EditMode
         [Test]
         public void Depecage_MonstreATroisCompetences_RemplaceCelleChoisie()
         {
-            var ours = new OwnedMonster(_catalog.Monster("Ours", MonsterRole.Carry, 20, 0, _catalog.Griffe, _catalog.Soin, _catalog.Repli));
-            var offer = new SkinningOffer(_catalog.Monster("Jeune taureau", MonsterRole.Tank, 20, 2, _catalog.Provocation, _catalog.Carapace));
+            var ours = new OwnedMonster(_catalog.Monster("Ours", MonsterRole.Carry, 200, 0, _catalog.Griffe, _catalog.Soin, _catalog.Repli));
+            var offer = new SkinningOffer(_catalog.Monster("Jeune taureau", MonsterRole.Tank, 200, 20, _catalog.Provocation, _catalog.Carapace));
 
             Assert.That(SkinningOffer.NeedsReplacement(ours), Is.True);
             offer.GiveSkill(_catalog.Carapace, ours, replacedIndex: 2);
@@ -105,19 +105,19 @@ namespace MonsterCardGame.Tests.EditMode
         [Test]
         public void Depecage_Boost_RemplaceLeBoostPrecedent()
         {
-            var ours = new OwnedMonster(_catalog.Monster("Ours", MonsterRole.Carry, 20, 0, _catalog.Griffe));
-            ours.SetBoost(new StatBoost(8));
-            var offer = new SkinningOffer(_catalog.Monster("Éclaireur", MonsterRole.Carry, 14, 2, _catalog.Griffe));
+            var ours = new OwnedMonster(_catalog.Monster("Ours", MonsterRole.Carry, 200, 0, _catalog.Griffe));
+            ours.SetBoost(new StatBoost(80));
+            var offer = new SkinningOffer(_catalog.Monster("Éclaireur", MonsterRole.Carry, 140, 20, _catalog.Griffe));
 
             offer.GiveBoost(ours);
 
-            Assert.That(ours.MaxHp, Is.EqualTo(22));
+            Assert.That(ours.MaxHp, Is.EqualTo(220));
         }
 
         [Test]
         public void Depecage_CompetencesProposees_SansDoublon_EtPasDeBoostVide()
         {
-            var offer = new SkinningOffer(_catalog.Monster("Hydre", MonsterRole.Carry, 20, 0, _catalog.Griffe, _catalog.Griffe));
+            var offer = new SkinningOffer(_catalog.Monster("Hydre", MonsterRole.Carry, 200, 0, _catalog.Griffe, _catalog.Griffe));
 
             Assert.That(offer.Skills, Is.EqualTo(new[] { _catalog.Griffe }));
             Assert.That(offer.HasBoost, Is.False);
@@ -163,7 +163,7 @@ namespace MonsterCardGame.Tests.EditMode
             var collection = NewGame();
             var ours = collection.Monsters.First(m => m.Name == "Ours brun");
             ours.AddSkill(_catalog.Carapace);
-            ours.SetBoost(new StatBoost(4));
+            ours.SetBoost(new StatBoost(40));
             var sanglier = collection.Monsters.First(m => m.Name == "Sanglier");
             collection.RemoveFromTeam(collection.Team[0]);
             collection.AddToTeam(sanglier);
@@ -178,14 +178,14 @@ namespace MonsterCardGame.Tests.EditMode
             Assert.That(reloaded.Monsters.Select(m => m.Name), Is.EqualTo(collection.Monsters.Select(m => m.Name)));
             var oursReloaded = reloaded.Monsters.First(m => m.Name == "Ours brun");
             Assert.That(oursReloaded.Skills, Is.EqualTo(new[] { _catalog.Griffe, _catalog.Carapace }));
-            Assert.That(oursReloaded.MaxHp, Is.EqualTo(24));
+            Assert.That(oursReloaded.MaxHp, Is.EqualTo(240));
             Assert.That(reloaded.Team.Select(m => m.Name), Is.EqualTo(collection.Team.Select(m => m.Name)));
         }
 
         [Test]
         public void Sauvegarde_GardeLaCompetenceUniqueVerrouillee()
         {
-            var quest = _catalog.QuestMonster("Monstre de quête", MonsterRole.Support, 18, _catalog.Repli, _catalog.Griffe);
+            var quest = _catalog.QuestMonster("Monstre de quête", MonsterRole.Support, 180, _catalog.Repli, _catalog.Griffe);
             quest.name = "Monstre de quête";
             _starters = _starters.Append(quest).ToArray();
             var collection = NewGame();

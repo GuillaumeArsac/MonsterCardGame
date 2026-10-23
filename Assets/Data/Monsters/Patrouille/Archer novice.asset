@@ -15,9 +15,9 @@ MonoBehaviour:
   _monsterName: Archer novice
   _artwork: {fileID: 0}
   _role: 0
-  _maxHp: 12
+  _maxHp: 120
   _skills:
   - {fileID: 11400000, guid: 0602d296c30033143908ef8cee0f2aae, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 2
+    _hp: 20

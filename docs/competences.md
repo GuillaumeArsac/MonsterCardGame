@@ -9,7 +9,7 @@ Les règles du combat sont dans [combat.md](combat.md).
 - Un soin ne peut pas faire dépasser à un monstre ses PV de départ.
 
 **Cumul**
-- Les effets identiques se cumulent. Par exemple, deux bonus de +1 dégât donnent +2 dégâts.
+- Les effets identiques se cumulent. Par exemple, deux bonus de +10 dégâts donnent +20 dégâts.
 
 **Ordre de calcul des dégâts**
 1. On applique d'abord les **bonus** de dégâts.
@@ -79,7 +79,7 @@ Une fiche doit être assez précise pour que n'importe qui obtienne le même ré
 | **Type** | Active |
 | **Rôle visé** | Tank |
 | **Cible** | Tous les ennemis sur le terrain |
-| **Effet** | Inflige 1 dégât à chaque ennemi sur le terrain et lui applique Ralentissement |
+| **Effet** | Inflige 10 dégâts à chaque ennemi sur le terrain et lui applique Ralentissement |
 | **Temps de recharge** | 3 |
 | **Durée** | Instantané |
 
@@ -92,7 +92,7 @@ Ne choisit pas de cible : ignore la Provocation.
 | **Type** | Active |
 | **Rôle visé** | Carry |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Inflige 3 dégâts |
+| **Effet** | Inflige 30 dégâts |
 | **Temps de recharge** | 0 |
 | **Durée** | Instantané |
 
@@ -105,7 +105,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Type** | Active |
 | **Rôle visé** | Support |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Rend 4 PV |
+| **Effet** | Rend 40 PV |
 | **Temps de recharge** | 2 |
 | **Durée** | Instantané |
 
@@ -118,7 +118,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Type** | Active |
 | **Rôle visé** | Support |
 | **Cible** | Tous les alliés sur le terrain |
-| **Effet** | Les dégâts infligés par chaque allié ciblé augmentent de 1 |
+| **Effet** | Les dégâts infligés par chaque allié ciblé augmentent de 10 |
 | **Temps de recharge** | 3 |
 | **Durée** | 6 tours |
 
@@ -131,7 +131,7 @@ Seuls les alliés présents sur le terrain au moment de l'utilisation reçoivent
 | **Type** | Active |
 | **Rôle visé** | Carry |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Inflige 2 dégâts. Ces dégâts ignorent les réductions de dégâts |
+| **Effet** | Inflige 20 dégâts. Ces dégâts ignorent les réductions de dégâts |
 | **Temps de recharge** | 0 |
 | **Durée** | Instantané |
 
@@ -144,7 +144,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Les bonus de dégât
 | **Type** | Active |
 | **Rôle visé** | Carry |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Si la cible a 8 PV ou moins, elle est vaincue. Sinon, inflige 1 dégât |
+| **Effet** | Si la cible a 80 PV ou moins, elle est vaincue. Sinon, inflige 10 dégâts |
 | **Temps de recharge** | 4 |
 | **Durée** | Instantané |
 
@@ -172,7 +172,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation. Une cible vaincue ra
 | **Type** | Active |
 | **Rôle visé** | Support |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Les dégâts subis par la cible sont réduits de 2 |
+| **Effet** | Les dégâts subis par la cible sont réduits de 20 |
 | **Temps de recharge** | 3 |
 | **Durée** | 2 tours |
 
@@ -185,7 +185,7 @@ Si elle vise un ennemi, elle est soumise à la Provocation.
 | **Type** | Passive |
 | **Rôle visé** | Support |
 | **Cible** | Tous les alliés sur le terrain |
-| **Effet** | Rend 1 PV à chaque allié sur le terrain, y compris ce monstre |
+| **Effet** | Rend 10 PV à chaque allié sur le terrain, y compris ce monstre |
 | **Durée** | Instantané, à chaque déclenchement |
 | **Déclencheur** | Au début de chaque phase de ce monstre |
 
@@ -220,7 +220,7 @@ Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il e
 | **Type** | Passive |
 | **Rôle visé** | Tank |
 | **Cible** | Ce monstre |
-| **Effet** | Les dégâts subis par ce monstre sont réduits de 1, sans descendre sous 0 |
+| **Effet** | Les dégâts subis par ce monstre sont réduits de 10, sans descendre sous 0 |
 | **Durée** | Permanente |
 | **Déclencheur** | Quand ce monstre subit des dégâts |
 
@@ -231,7 +231,7 @@ Un monstre renvoyé en main n'est pas vaincu : aucun point n'est marqué. S'il e
 | **Type** | Active |
 | **Rôle visé** | Tank |
 | **Cible** | N'importe quel monstre sur le terrain, allié ou ennemi |
-| **Effet** | Inflige 1 dégât et applique Ralentissement |
+| **Effet** | Inflige 10 dégâts et applique Ralentissement |
 | **Temps de recharge** | 3 |
 | **Durée** | Instantané |
 

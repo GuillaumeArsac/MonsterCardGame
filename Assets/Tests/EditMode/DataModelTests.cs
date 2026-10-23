@@ -33,7 +33,7 @@ namespace MonsterCardGame.Tests.EditMode
         {
             var damage = _catalog.MorsurePerforante.GetEffect<DamageEffect>();
 
-            Assert.That(damage.Amount, Is.EqualTo(2));
+            Assert.That(damage.Amount, Is.EqualTo(20));
             Assert.That(damage.IgnoresReductions, Is.True);
             Assert.That(_catalog.Griffe.GetEffect<DamageEffect>().IgnoresReductions, Is.False);
         }
@@ -77,7 +77,7 @@ namespace MonsterCardGame.Tests.EditMode
                 var damage = copy.GetEffect<DamageEffect>();
                 Assert.That(damage, Is.Not.Null);
                 Assert.That(damage, Is.Not.SameAs(_catalog.MorsurePerforante.GetEffect<DamageEffect>()));
-                Assert.That(damage.Amount, Is.EqualTo(2));
+                Assert.That(damage.Amount, Is.EqualTo(20));
                 Assert.That(damage.IgnoresReductions, Is.True);
             }
             finally
@@ -94,7 +94,7 @@ namespace MonsterCardGame.Tests.EditMode
             Assert.That(encounter.Type, Is.EqualTo(EncounterType.Scenario));
             Assert.That(encounter.IsRepeatable, Is.False);
             Assert.That(encounter.Monsters.Count, Is.EqualTo(GameRules.TeamSize));
-            Assert.That(encounter.Monsters.Select(m => m.StatBoost.Hp), Has.All.EqualTo(2));
+            Assert.That(encounter.Monsters.Select(m => m.StatBoost.Hp), Has.All.EqualTo(20));
             Assert.That(encounter.Monsters.Max(m => m.Skills.Count), Is.LessThanOrEqualTo(GameRules.MaxSkillsPerMonster));
         }
     }

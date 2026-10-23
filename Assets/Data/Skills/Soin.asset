@@ -19,11 +19,11 @@ MonoBehaviour:
   _cooldown: 2
   _trigger: 0
   _effects:
-  - rid: 3690274877296083064
+  - rid: 3690274877296083098
   references:
     version: 2
     RefIds:
-    - rid: 3690274877296083064
+    - rid: 3690274877296083098
       type: {class: HealEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
-        _amount: 4
+        _amount: 40

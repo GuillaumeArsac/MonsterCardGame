@@ -32,8 +32,8 @@ namespace MonsterCardGame.Tests.EditMode.Combat
         private MonsterCardData[] Depart(params string[] names)
         {
             var all = _catalog.TeamStart().ToList();
-            all.Add(_catalog.Monster("Luciole sacrée", Gameplay.Skills.MonsterRole.Support, 16, 0, _catalog.Benediction));
-            all.Add(_catalog.Monster("Sanglier",       Gameplay.Skills.MonsterRole.Tank,    24, 0, _catalog.CoupDeBouclier));
+            all.Add(_catalog.Monster("Luciole sacrée", Gameplay.Skills.MonsterRole.Support, 160, 0, _catalog.Benediction));
+            all.Add(_catalog.Monster("Sanglier",       Gameplay.Skills.MonsterRole.Tank,    240, 0, _catalog.CoupDeBouclier));
             return names.Select(n => all.First(m => m.MonsterName.StartsWith(n))).ToArray();
         }
 

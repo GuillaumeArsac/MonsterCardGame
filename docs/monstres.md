@@ -10,12 +10,12 @@ Ces repères servent de base pour créer de nouveaux monstres. Ce ne sont pas de
 
 | Rôle | PV | Repères |
 |---|---|---|
-| Carry | 14 à 18 | Une compétence de dégâts à recharge 0 (environ 2 à 3 dégâts par phase) |
-| Support | 16 à 20 | Une compétence à recharge 0 ou une passive, pour agir dès la pose |
-| Tank | 26 à 30 | Provocation et/ou Carapace |
+| Carry | 140 à 180 | Une compétence de dégâts à recharge 0 (environ 20 à 30 dégâts par phase) |
+| Support | 160 à 200 | Une compétence à recharge 0 ou une passive, pour agir dès la pose |
+| Tank | 260 à 300 | Provocation et/ou Carapace |
 
 - **Un seul tank avec Provocation par équipe.** Avec deux, les carry de l'équipe deviennent presque intouchables.
-- **Une équipe de 3 monstres sur le terrain inflige environ 6 à 8 dégâts par phase.** C'est ce rythme qui donne des combats d'environ 9 à 12 tours.
+- **Une équipe de 3 monstres sur le terrain inflige environ 60 à 80 dégâts par phase.** C'est ce rythme qui donne des combats d'environ 9 à 12 tours.
 - **Une compétence avec une recharge de 4 ou plus sert rarement** : le monstre est posé avec ses compteurs au maximum.
 
 Résultats des simulations avec les deux équipes ci-dessous (2 000 combats par configuration, IA simple, voir [tools/simulation](../tools/simulation/README.md)) :
@@ -34,11 +34,11 @@ Une équipe équilibrée : 2 carry, 2 supports, 1 tank.
 
 | Monstre | Rôle | PV | Compétences |
 |---|---|---|---|
-| **Griffon** | Carry | 16 | Griffe, Exécution |
-| **Archer centaure** | Carry | 14 | Morsure perforante, Chasseur de trophées |
-| **Orbe de lumière** | Support | 18 | Soin, Bénédiction, Aura apaisante |
-| **Svathurim** | Support | 20 | Griffe, Bouclier, Repli |
-| **Paladin centaure** | Tank | 28 | Provocation, Carapace, Coup de bouclier |
+| **Griffon** | Carry | 160 | Griffe, Exécution |
+| **Archer centaure** | Carry | 140 | Morsure perforante, Chasseur de trophées |
+| **Orbe de lumière** | Support | 180 | Soin, Bénédiction, Aura apaisante |
+| **Svathurim** | Support | 200 | Griffe, Bouclier, Repli |
+| **Paladin centaure** | Tank | 280 | Provocation, Carapace, Coup de bouclier |
 
 ### Équipe B — la horde de Thrâk (adversaire des Plaines)
 
@@ -46,11 +46,11 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 
 | Monstre | Rôle | PV | Compétences |
 |---|---|---|---|
-| **Thrâk le Perpétuel** | Tank | 26 | Provocation, Griffe, Grand balayage |
-| **Aigle Runique Géant** | Carry | 18 | Griffe, Exécution, Chasseur de trophées |
-| **Guerrier centaure** | Carry | 16 | Morsure perforante, Coup de bouclier |
-| **Chaman centaure** | Support | 16 | Griffe, Soin, Bénédiction |
-| **Taureau de guerre** | Tank | 30 | Carapace, Griffe, Coup de bouclier |
+| **Thrâk le Perpétuel** | Tank | 260 | Provocation, Griffe, Grand balayage |
+| **Aigle Runique Géant** | Carry | 180 | Griffe, Exécution, Chasseur de trophées |
+| **Guerrier centaure** | Carry | 160 | Morsure perforante, Coup de bouclier |
+| **Chaman centaure** | Support | 160 | Griffe, Soin, Bénédiction |
+| **Taureau de guerre** | Tank | 300 | Carapace, Griffe, Coup de bouclier |
 
 ## Principes suivis
 
@@ -66,13 +66,13 @@ Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralen
 
 | Monstre | Rôle | PV | Compétence |
 |---|---|---|---|
-| **Loup des cendres** | Carry | 15 | Griffe |
-| **Renard de braise** | Carry | 14 | Morsure perforante |
-| **Ours brun** | Carry | 20 | Griffe |
-| **Chouette guérisseuse** | Support | 16 | Soin |
-| **Luciole sacrée** | Support | 16 | Bénédiction |
-| **Chien de garde** | Tank | 26 | Provocation |
-| **Sanglier** | Tank | 24 | Coup de bouclier |
+| **Loup des cendres** | Carry | 150 | Griffe |
+| **Renard de braise** | Carry | 140 | Morsure perforante |
+| **Ours brun** | Carry | 200 | Griffe |
+| **Chouette guérisseuse** | Support | 160 | Soin |
+| **Luciole sacrée** | Support | 160 | Bénédiction |
+| **Chien de garde** | Tank | 260 | Provocation |
+| **Sanglier** | Tank | 240 | Coup de bouclier |
 
 - **3 attaquants sur 7.** Avec une seule compétence, un support ou un tank n'inflige aucun dégât. Les simulations montrent qu'une équipe de base a besoin d'au moins 3 attaquants pour finir ses combats avant la fatigue.
 - **Les compétences de base sont toutes remplaçables**, contrairement aux compétences uniques des monstres de quête.

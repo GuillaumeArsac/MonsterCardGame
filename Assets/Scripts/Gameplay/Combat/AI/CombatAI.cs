@@ -15,8 +15,13 @@ namespace MonsterCardGame.Gameplay.Combat.AI
     /// </summary>
     public class CombatAI
     {
+        /// <summary>
+        /// Valeur d'un dégât dans les notes. Les PV et les dégâts ont été multipliés par 10 pour un équilibrage plus fin :
+        /// les notes divisent les PV et les dégâts par cette unité, pour garder le comportement du simulateur.
+        /// </summary>
+        private const double Unit = 10;
         /// <summary>En dessous de ces PV, un monstre est en danger (Soin plus urgent, Bouclier plus utile).</summary>
-        private const int DangerHp = 8;
+        private const int DangerHp = 80;
         /// <summary>Note d'une action qui vainc la cible, par point marqué.</summary>
         private const double KillScore = 10;
         /// <summary>Bruit ajouté à chaque note, pour varier les parties.</summary>
@@ -147,14 +152,14 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount, damage.IgnoresReductions);
                     if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + noise;
-                    return d + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + noise;
+                    return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + noise;
                 }
 
                 case SkillKind.Execute:
                 {
                     var execute = skill.GetEffect<ExecuteEffect>();
                     if (t.Hp <= execute.HpThreshold) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + noise;
-                    return CombatEngine.ComputeDamage(m, t, execute.FallbackDamage, false) * 0.8 + noise;
+                    return CombatEngine.ComputeDamage(m, t, execute.FallbackDamage, false) / Unit * 0.8 + noise;
                 }
 
                 case SkillKind.SingleDamageSlow:
@@ -162,7 +167,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount, damage.IgnoresReductions);
                     if (d >= t.Hp) return KillScore + Threat(t) + noise;
-                    return d + 0.4 * Threat(t) + noise;
+                    return d / Unit + 0.4 * Threat(t) + noise;
                 }
 
                 case SkillKind.AreaDamage:
@@ -172,7 +177,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     foreach (var enemy in engine.GetField(m.Side.Opponent()))
                     {
                         int d = CombatEngine.ComputeDamage(m, enemy, damage.Amount, damage.IgnoresReductions);
-                        value += d + 0.4 * Threat(enemy) + (d >= enemy.Hp ? KillScore : 0);
+                        value += d / Unit + 0.4 * Threat(enemy) + (d >= enemy.Hp ? KillScore : 0);
                     }
                     return value + noise;
                 }
@@ -180,12 +185,12 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 case SkillKind.Heal:
                 {
                     int missing = t.MaxHp - t.Hp;
-                    if (missing < 2) return -1;
-                    return Math.Min(skill.GetEffect<HealEffect>().Amount, missing) * (t.Hp <= DangerHp ? 1.5 : 0.9) + noise;
+                    if (missing < 2 * Unit) return -1;
+                    return Math.Min(skill.GetEffect<HealEffect>().Amount, missing) / Unit * (t.Hp <= DangerHp ? 1.5 : 0.9) + noise;
                 }
 
                 case SkillKind.Protect:
-                    return 0.5 + Math.Max(0, DangerHp - t.Hp) * 0.5 + (t.Role == MonsterRole.Carry ? 1 : 0) + noise;
+                    return 0.5 + Math.Max(0, DangerHp - t.Hp) / Unit * 0.5 + (t.Role == MonsterRole.Carry ? 1 : 0) + noise;
 
                 case SkillKind.Bless:
                 {
@@ -194,7 +199,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 }
 
                 case SkillKind.Retreat:
-                    return t.Hp <= 3 && engine.GetHand(m.Side).Count > 0 ? 6 + noise : -1;
+                    return t.Hp <= 3 * Unit && engine.GetHand(m.Side).Count > 0 ? 6 + noise : -1;
 
                 default:
                     return -5;
@@ -204,7 +209,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
         /// <summary>Dangerosité d'un monstre : somme du poids de ses compétences actives, plus son bonus de dégâts.</summary>
         private static double Threat(CombatMonster monster)
         {
-            double threat = monster.DamageBonus;
+            double threat = monster.DamageBonus / Unit;
             foreach (var skill in monster.Skills)
                 if (skill.IsActive) threat += ThreatWeight(skill);
             return threat;
@@ -222,14 +227,14 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 case SkillKind.SingleDamage:
                 case SkillKind.SingleDamageSlow:
                 case SkillKind.AreaDamage:
-                    double weight = skill.GetEffect<DamageEffect>().Amount;
+                    double weight = skill.GetEffect<DamageEffect>().Amount / Unit;
                     if (skill.GetEffect<SlowEffect>() != null)  weight += 0.5;
                     if (skill.Target == SkillTarget.AllEnemies) weight += 0.5;
                     return weight;
                 case SkillKind.Execute: return 2;
-                case SkillKind.Heal:    return skill.GetEffect<HealEffect>().Amount / 2.0;
-                case SkillKind.Protect: return skill.GetEffect<DamageReductionEffect>().Amount / 2.0;
-                case SkillKind.Bless:   return 2.5 * skill.GetEffect<DamageBonusEffect>().Amount;
+                case SkillKind.Heal:    return skill.GetEffect<HealEffect>().Amount / Unit / 2.0;
+                case SkillKind.Protect: return skill.GetEffect<DamageReductionEffect>().Amount / Unit / 2.0;
+                case SkillKind.Bless:   return 2.5 * skill.GetEffect<DamageBonusEffect>().Amount / Unit;
                 case SkillKind.Retreat: return 0.5;
                 default:                return 0;
             }
