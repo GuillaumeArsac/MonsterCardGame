@@ -35,22 +35,24 @@ namespace MonsterCardGame.Editor
             var teamA    = GenerateTeamA();
             var teamB    = GenerateTeamB();
             var patrol   = GeneratePatrol();
+            var vanguard = GenerateVanguard();
 
             var encounters = new List<EncounterData>
             {
                 Encounter("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, patrol),
+                Encounter("plaines-avant-garde-de-thrak", "L'avant-garde de Thrâk", EncounterType.Scenario, vanguard),
                 Encounter("test-horde-de-thrak", "La horde de Thrâk (équipe de test B)", EncounterType.Free, teamB),
             };
 
-            GenerateZones(patrol: encounters[0], horde: encounters[1]);
+            GenerateZones(scenario: new[] { encounters[0], encounters[1] }, horde: encounters[2]);
 
             var database = GetOrCreate<ContentDatabase>("Assets/Resources", ContentDatabase.ResourcePath);
-            database.Init(Skills.Values, starters.Concat(teamA).Concat(teamB).Concat(patrol), starters, encounters);
+            database.Init(Skills.Values, starters.Concat(teamA).Concat(teamB).Concat(patrol).Concat(vanguard), starters, encounters);
             Save(database);
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[ContentGenerator] {Skills.Count} compétences, {starters.Count} monstres de départ, " +
-                      $"équipes A et B, patrouille centaure générés dans {Root}");
+                      $"équipes A et B, patrouille centaure et avant-garde de Thrâk générées dans {Root}");
         }
 
         public static IReadOnlyList<MonsterCardData> LoadTeam(string folder)
@@ -157,6 +159,16 @@ namespace MonsterCardGame.Editor
             Monster("Patrouille", "Cavalier rabatteur", MonsterRole.Carry,   160, 20, null, "Griffe", "Coup de bouclier"),
         };
 
+        // Combat 2 (docs/combats-scenario.md). Les illustrations SYL_ sont des PNG de Images/Others
+        private static List<MonsterCardData> GenerateVanguard() => new()
+        {
+            Monster("AvantGarde", "Guerrier du clan",  MonsterRole.Tank,    220, 30, "Others/SYL_centaure_guerrier.png", "Provocation", "Griffe"),
+            Monster("AvantGarde", "Archer du clan",    MonsterRole.Carry,   140, 30, "Others/SYL_centaure_archer.png",   "Morsure perforante"),
+            Monster("AvantGarde", "Paladin du clan",   MonsterRole.Support, 160, 30, "Others/SLY_centaure_paladin.png",  "Soin"),
+            Monster("AvantGarde", "Lancier du clan",   MonsterRole.Carry,   180, 30, null,                               "Grand balayage"),
+            Monster("AvantGarde", "Éclaireur vétéran", MonsterRole.Carry,   150, 30, null,                               "Griffe"),
+        };
+
         private static MonsterCardData Monster(string folder, string name, MonsterRole role, int hp, int boostHp,
                                                string artwork, params string[] skills)
         {
@@ -175,7 +187,8 @@ namespace MonsterCardGame.Editor
         private static Sprite LoadArtwork(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return null;
-            var path = $"{ArtworkFolder}/{fileName}.jpg";
+            // Un nom simple désigne un .jpg de CardSprites ; un chemin avec extension part de Assets/Images
+            var path = Path.HasExtension(fileName) ? $"Assets/Images/{fileName}" : $"{ArtworkFolder}/{fileName}.jpg";
             var sprite = AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>().FirstOrDefault();
             if (sprite == null) Debug.LogWarning($"[ContentGenerator] Illustration introuvable : {path}");
             return sprite;
@@ -198,7 +211,7 @@ namespace MonsterCardGame.Editor
         /// Combats des zones. L'identité des zones (nom, illustration, position) se règle à la main dans leurs assets :
         /// seules les Ruines sont créées si elles manquent.
         /// </summary>
-        private static void GenerateZones(EncounterData patrol, EncounterData horde)
+        private static void GenerateZones(IEnumerable<EncounterData> scenario, EncounterData horde)
         {
             var plains = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Plains.asset");
             if (plains == null)
@@ -209,7 +222,7 @@ namespace MonsterCardGame.Editor
 
             // Vaelisse, boss des Plaines, n'est pas encore conçue : sans boss, les Ruines restent verrouillées.
             // La horde de Thrâk (équipe de test B) sert de combat libre en attendant les vrais combats libres.
-            plains.SetEncounters(new[] { patrol }, new[] { horde }, null);
+            plains.SetEncounters(scenario, new[] { horde }, null);
             Save(plains);
 
             var ruins = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Ruins.asset");

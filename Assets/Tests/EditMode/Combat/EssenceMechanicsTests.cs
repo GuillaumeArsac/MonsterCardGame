@@ -249,6 +249,23 @@ namespace MonsterCardGame.Tests.EditMode.Combat
             Assert.That(report.AverageTurns, Is.LessThan(CombatSimulation.MaxTurns));
         }
 
+        /// <summary>
+        /// Combat 2 : plus dur que la patrouille, sans être hors de portée.
+        /// Simulation du 2026-10-24 : 79 % pour l'équipe de début de partie (docs/combats-scenario.md).
+        /// </summary>
+        [Test]
+        public void AvantGardeDeThrak_EquipeDeDebutDePartie_GagneEnviron4CombatsSur5()
+        {
+            var essences = Catalog.Essences();
+            var team = new[] { "nature", "vie", "pierre", "ombre", "cieux" }
+                       .Select(n => essences.First(e => e.MonsterName.EndsWith(n))).ToArray();
+            var vanguard = Catalog.AvantGardeDeThrak().Monsters.ToArray();
+
+            var report = CombatSimulation.Run(() => team.Select(CombatMonster.From), () => vanguard.Select(CombatMonster.From), 300, seed: 12345);
+
+            Assert.That(report.PlayerWinRate, Is.InRange(0.65, 0.92), report.ToString());
+        }
+
         [Test]
         public void Description_DesAttaquesDesEssences()
         {

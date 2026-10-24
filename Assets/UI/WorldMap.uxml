@@ -7,6 +7,7 @@
             <ui:Label text="Carte du Monde" class="worldmap-title" />
             <ui:VisualElement class="header-actions">
                 <ui:Button name="team-btn" text="Équipe" class="nav-btn" />
+                <ui:Button name="reset-btn" text="Nouvelle partie" class="nav-btn nav-btn--danger" />
             </ui:VisualElement>
         </ui:VisualElement>
 

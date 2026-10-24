@@ -123,7 +123,7 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 
 ## Points de conception encore ouverts
 
-- **Les combats suivants des Plaines :** Thrâk et Vaelisse (boss) restent à concevoir dans `combats-scenario.md`. Ce sont eux qui débloqueront, à terme, les Ruines.
+- **Les combats suivants des Plaines :** le combat 2, l'avant-garde de Thrâk, est fait (2026-10-24). Thrâk et Vaelisse (boss) restent à concevoir dans `combats-scenario.md`. Ce sont eux qui débloqueront, à terme, les Ruines.
 
 - **La Forge dans le récit :** elle fabrique les Essences (voir plus bas). La fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore de l'améliorer aux niveaux 2 et 3, une mécanique de l'ancienne version : elle est à réécrire.
 - **La patrouille centaure** (`combats-scenario.md`) attend une validation. Une mauvaise composition d'équipe y est très punie : il faudra peut-être un dialogue qui conseille l'équipe avant ce premier combat.

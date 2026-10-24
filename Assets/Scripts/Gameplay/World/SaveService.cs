@@ -62,6 +62,14 @@ namespace MonsterCardGame.Gameplay.World
             Core.GameLog.Info("SaveService", $"Sauvegarde chargée — {data.CompletedEncounters.Count} combat(s) gagné(s), {_collection.Monsters.Count} monstre(s)");
         }
 
+        public void ResetGame()
+        {
+            _progression.LoadCompleted(System.Array.Empty<string>());
+            StartNewCollection();
+            Save();
+            Core.GameLog.Info("SaveService", "Sauvegarde réinitialisée : nouvelle partie");
+        }
+
         private void StartNewCollection()
         {
             if (_content == null) return;

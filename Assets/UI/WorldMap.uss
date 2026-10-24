@@ -317,3 +317,17 @@
     color: rgb(65, 85, 65);
     border-color: rgb(38, 52, 38);
 }
+
+/* Nouvelle partie : discret, puis rouge vif pendant la demande de confirmation */
+.nav-btn--danger {
+    background-color: rgb(60, 36, 34);
+    color: rgb(215, 170, 160);
+    border-color: rgb(110, 60, 55);
+}
+
+.nav-btn--danger-armed {
+    background-color: rgb(150, 40, 35);
+    color: rgb(255, 225, 215);
+    border-color: rgb(220, 90, 80);
+    -unity-font-style: bold;
+}

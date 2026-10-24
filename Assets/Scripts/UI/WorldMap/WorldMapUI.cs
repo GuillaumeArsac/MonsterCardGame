@@ -27,6 +27,9 @@ namespace MonsterCardGame.UI.WorldMap
         private VisualElement _encounterList;
         private Label         _fightStatusLabel;
         private Button        _fightButton;
+        private Button        _resetButton;
+        /// <summary>Vrai après un premier clic sur « Nouvelle partie » : le second efface la sauvegarde.</summary>
+        private bool          _resetArmed;
 
         private VisualElement _selectedMarker;
         private ZoneData      _selectedZone;
@@ -49,12 +52,44 @@ namespace MonsterCardGame.UI.WorldMap
 
             root.Q<Button>("team-btn").clicked += () => SceneManager.LoadScene(SceneNames.Team);
             _fightButton.clicked += LaunchSelectedEncounter;
+
+            _resetButton = root.Q<Button>("reset-btn");
+            _resetButton.clicked += OnResetClicked;
         }
 
         private void Start()
         {
             BuildZoneMarkers();
             RefreshFight();
+        }
+
+        // ── Nouvelle partie ───────────────────────────────────────────────
+
+        /// <summary>
+        /// Premier clic : demande confirmation pendant quelques secondes. Second clic : oublie les combats gagnés,
+        /// rend la collection de départ, sauvegarde et recharge la carte.
+        /// </summary>
+        private void OnResetClicked()
+        {
+            if (!_resetArmed)
+            {
+                SetResetArmed(true);
+                _resetButton.schedule.Execute(() => SetResetArmed(false)).StartingIn(ResetConfirmDelayMs);
+                return;
+            }
+
+            Services.Get<CombatSession>().Clear();
+            Services.Get<ISaveService>().ResetGame();
+            SceneManager.LoadScene(SceneNames.WorldMap);
+        }
+
+        private const long ResetConfirmDelayMs = 4000;
+
+        private void SetResetArmed(bool armed)
+        {
+            _resetArmed = armed;
+            _resetButton.text = armed ? "Tout effacer ? Cliquer pour confirmer" : "Nouvelle partie";
+            _resetButton.EnableInClassList("nav-btn--danger-armed", armed);
         }
 
         // ── Marqueurs de zones ────────────────────────────────────────────

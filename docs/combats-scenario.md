@@ -47,3 +47,45 @@ Ces résultats datent de l'ancienne collection de départ (Loup, Renard, Ours…
 
 Les combats durent tous entre 7 et 15 tours.
 La composition de l'équipe compte beaucoup : ce combat apprend aussi qu'il faut **3 attaquants et un tank avec Provocation**.
+
+## Combat 2 — L'avant-garde de Thrâk
+
+| Champ | Valeur |
+|---|---|
+| **Zone** | Les Plaines Libres |
+| **Moment** | Après la patrouille centaure, avant l'affrontement avec Thrâk |
+| **Type** | Monstres normaux de zone |
+| **Équipe du joueur attendue** | Les Essences, avec la récompense du dépeçage de la patrouille |
+| **Objectif de difficulté** | Plus dur que la patrouille : l'équipe de début de partie gagne environ 4 combats sur 5 |
+
+**Contexte :** après la patrouille, l'avant-garde des clans garde la route du campement de Thrâk. Ses guerriers viennent des trois clans de Thrâk : le Guerrier (monture taureau), le Paladin (élan) et l'Archer (chèvre).
+
+### Équipe adverse
+
+| Monstre | Rôle | PV | Compétences | Boost de stats |
+|---|---|---|---|---|
+| **Guerrier du clan** | Tank | 220 | Provocation, Griffe | +30 PV |
+| **Archer du clan** | Carry | 140 | Morsure perforante | +30 PV |
+| **Paladin du clan** | Support | 160 | Soin | +30 PV |
+| **Lancier du clan** | Carry | 180 | Grand balayage | +30 PV |
+| **Éclaireur vétéran** | Carry | 150 | Griffe | +30 PV |
+
+### Ce que le combat apprend au joueur
+
+- **Les compétences de zone contre l'Ombre :** le Grand balayage du Lancier touche l'Essence d'ombre même quand elle est inciblable, et elle n'a que 100 PV.
+- **Le soin contre le saignement :** le Soin du Paladin retire les saignements de l'Essence du sang.
+- **Un tank qui frappe :** contrairement au Jeune taureau de la patrouille, le Guerrier attaque aussi.
+
+### Résultats des simulations
+
+1 000 combats par équipe (2026-10-24), sans la récompense du dépeçage de la patrouille :
+
+| Équipe du joueur | Victoires |
+|---|---|
+| Nature, Vie, Pierre, Sang, Profondeurs (la meilleure) | 90 % |
+| Nature, Vie, Pierre, Ombre, Cieux (l'équipe de début de partie) | 79 % |
+| Nature, Ombre, Cieux, Sang, Profondeurs (la pire, sans Pierre ni Vie) | 18 % |
+
+Les combats durent de 10 à 14 tours en moyenne. L'Essence de pierre devient indispensable : 75 % de victoires en moyenne avec elle, 42 % sans.
+
+Deux autres versions ont été écartées. L'une était trop dure : avec quatre attaques à recharge 0, Exécution et Bouclier, la meilleure équipe ne gagnait que 16 % de ses combats. L'autre était trop facile : avec un Guerrier sans attaque, toutes les équipes gagnaient presque à coup sûr, souvent à la fatigue.

@@ -116,6 +116,21 @@ namespace MonsterCardGame.Tests.EditMode
             return encounter;
         }
 
+        /// <summary>Combat 2, l'avant-garde de Thrâk (docs/combats-scenario.md).</summary>
+        public EncounterData AvantGardeDeThrak()
+        {
+            var encounter = Track(ScriptableObject.CreateInstance<EncounterData>());
+            encounter.Init("plaines-avant-garde-de-thrak", "L'avant-garde de Thrâk", EncounterType.Scenario, new[]
+            {
+                Monster("Guerrier du clan",  MonsterRole.Tank,    220, 30, Provocation, Griffe),
+                Monster("Archer du clan",    MonsterRole.Carry,   140, 30, MorsurePerforante),
+                Monster("Paladin du clan",   MonsterRole.Support, 160, 30, Soin),
+                Monster("Lancier du clan",   MonsterRole.Carry,   180, 30, GrandBalayage),
+                Monster("Éclaireur vétéran", MonsterRole.Carry,   150, 30, Griffe),
+            });
+            return encounter;
+        }
+
         // ── Équipes de test (docs/monstres.md, tools/simulation) ──────────
 
         /// <summary>Équipe A, équipe de test du joueur.</summary>
