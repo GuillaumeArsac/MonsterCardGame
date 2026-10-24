@@ -104,7 +104,7 @@ namespace MonsterCardGame.Editor
             Anchor((RectTransform)worldMap.transform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-50, 50), new Vector2(420, 64));
 
             AddRightClickHint(canvas);
-            AddCardDetailsPopup(canvas);
+            AddCardDetailsPopup(canvas, CardPrefab());
 
             var screen = canvasGo.AddComponent<TeamScreen>();
             Assign(screen, "_cardPrefab", CardPrefab());
@@ -142,7 +142,7 @@ namespace MonsterCardGame.Editor
             Anchor((RectTransform)confirm.transform, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-50, 40), new Vector2(300, 70));
 
             AddRightClickHint(canvas);
-            AddCardDetailsPopup(canvas);
+            AddCardDetailsPopup(canvas, CardPrefab());
 
             var screen = canvasGo.AddComponent<SkinningScreen>();
             Assign(screen, "_cardPrefab", CardPrefab());

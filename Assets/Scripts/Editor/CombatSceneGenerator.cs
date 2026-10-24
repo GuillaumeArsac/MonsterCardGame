@@ -271,7 +271,7 @@ namespace MonsterCardGame.Editor
             Anchor((RectTransform)continueButton.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(150, 40), new Vector2(260, 64));
 
             AddRightClickHint(canvas);
-            AddCardDetailsPopup(canvas);
+            AddCardDetailsPopup(canvas, cardPrefab);
 
             // Contrôleur
             var screen = canvasGo.AddComponent<CombatScreen>();

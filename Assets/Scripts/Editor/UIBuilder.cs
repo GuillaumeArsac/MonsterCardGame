@@ -59,32 +59,53 @@ namespace MonsterCardGame.Editor
         /// Panneau de détail des compétences, ouvert par un clic droit sur une carte.
         /// À ajouter en dernier, pour qu'il passe devant le reste de l'écran.
         /// </summary>
-        public static CardDetailsPopup AddCardDetailsPopup(Transform canvas)
+        /// <summary>Taille de la carte agrandie dans le panneau de détail.</summary>
+        private const float DetailsCardScale = 1.6f;
+
+        public static CardDetailsPopup AddCardDetailsPopup(Transform canvas, MonsterCardView cardPrefab)
         {
             // Le support reste actif (il écoute Échap) ; seul le fond s'affiche et se cache
             var holder = Stretch(NewEmpty("Détail des cartes", canvas), 0);
             var overlay = Stretch(NewImage("Fond", holder, new Color(0, 0, 0, 0.65f)), 0);
 
+            // Panneau : la carte à gauche, le nom et les compétences à droite
             var panel = NewImage("Panneau", overlay, new Color(0.07f, 0.08f, 0.11f, 1f));
-            Center(panel, Vector2.zero, new Vector2(780, 0));
-            var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(30, 30, 26, 22);
-            layout.spacing = 14;
+            Center(panel, Vector2.zero, new Vector2(1180, 0));
+            var layout = panel.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.padding = new RectOffset(30, 30, 26, 26);
+            layout.spacing = 34;
+            layout.childAlignment = TextAnchor.UpperLeft;
             layout.childControlWidth = layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = false;
+            layout.childForceExpandWidth = layout.childForceExpandHeight = false;
             panel.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            var title = NewText("Titre", panel, "Monstre", 34, TextAlignmentOptions.Center, FontStyles.Bold);
-            var body  = NewText("Compétences", panel, "", 22, TextAlignmentOptions.TopLeft);
+            var cardSize = (Vector2)((RectTransform)cardPrefab.transform).sizeDelta * DetailsCardScale;
+            var cardAnchor = NewEmpty("Carte", panel);
+            var cardLayout = cardAnchor.gameObject.AddComponent<LayoutElement>();
+            cardLayout.preferredWidth  = cardLayout.minWidth  = cardSize.x;
+            cardLayout.preferredHeight = cardLayout.minHeight = cardSize.y;
+
+            var column = NewEmpty("Compétences", panel);
+            column.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
+            var columnLayout = column.gameObject.AddComponent<VerticalLayoutGroup>();
+            columnLayout.spacing = 14;
+            columnLayout.childAlignment = TextAnchor.UpperLeft;
+            columnLayout.childControlWidth = columnLayout.childControlHeight = true;
+            columnLayout.childForceExpandWidth = true;
+            columnLayout.childForceExpandHeight = false;
+
+            var title = NewText("Titre", column, "Monstre", 34, TextAlignmentOptions.Left, FontStyles.Bold);
+            var body  = NewText("Texte", column, "", 22, TextAlignmentOptions.TopLeft);
             body.overflowMode = TextOverflowModes.Overflow;
-            var footer = NewText("Fermer", panel, "Clic ou Échap pour fermer", 16, TextAlignmentOptions.Center);
+            var footer = NewText("Fermer", column, "Clic ou Échap pour fermer", 16, TextAlignmentOptions.Left);
             footer.color = new Color(0.6f, 0.6f, 0.65f);
 
             var popup = holder.gameObject.AddComponent<CardDetailsPopup>();
             Assign(popup, "_root", overlay.gameObject);
             Assign(popup, "_titleLabel", title);
             Assign(popup, "_bodyLabel", body);
+            Assign(popup, "_cardPrefab", cardPrefab);
+            Assign(popup, "_cardAnchor", cardAnchor);
             return popup;
         }
 

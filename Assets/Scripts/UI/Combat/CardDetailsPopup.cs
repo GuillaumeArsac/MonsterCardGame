@@ -9,7 +9,7 @@ using MonsterCardGame.Gameplay.Skills;
 namespace MonsterCardGame.UI.Combat
 {
     /// <summary>
-    /// Détail des compétences d'une carte, ouvert par un clic droit sur la carte.
+    /// Détail d'une carte, ouvert par un clic droit : la carte agrandie à gauche, ses compétences expliquées à droite.
     /// Un clic (gauche ou droit) ou Échap le ferme. Une instance par écran, trouvée par les cartes.
     /// </summary>
     public class CardDetailsPopup : MonoBehaviour, IPointerClickHandler
@@ -17,6 +17,12 @@ namespace MonsterCardGame.UI.Combat
         [SerializeField] private GameObject _root;
         [SerializeField] private TMP_Text   _titleLabel;
         [SerializeField] private TMP_Text   _bodyLabel;
+        [SerializeField, Tooltip("Carte copiée à gauche du panneau")]
+        private MonsterCardView _cardPrefab;
+        [SerializeField, Tooltip("Emplacement de la carte : sa taille donne l'agrandissement")]
+        private RectTransform _cardAnchor;
+
+        private MonsterCardView _preview;
 
         [Header("Couleurs")]
         [SerializeField] private Color _skillNameColor = new(1f, 0.82f, 0.35f);
@@ -47,6 +53,7 @@ namespace MonsterCardGame.UI.Combat
         public void Show(MonsterCardView card)
         {
             _titleLabel.text = card.DisplayName;
+            ShowPreview(card);
 
             var text = new StringBuilder();
             var skills = card.DisplayedSkills;
@@ -69,6 +76,35 @@ namespace MonsterCardGame.UI.Combat
             _root.SetActive(true);
             _root.transform.SetAsLastSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_root.transform);
+        }
+
+        /// <summary>Copie agrandie de la carte, dans le même état (PV, effets, recharges). Elle ne prend pas les clics.</summary>
+        private void ShowPreview(MonsterCardView card)
+        {
+            if (_cardPrefab == null || _cardAnchor == null) return;
+
+            if (_preview == null)
+            {
+                _preview = Instantiate(_cardPrefab, _cardAnchor);
+                var group = _preview.gameObject.AddComponent<CanvasGroup>();
+                group.blocksRaycasts = false;
+                group.interactable   = false;
+
+                var rect = (RectTransform)_preview.transform;
+                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = Vector2.zero;
+                var element = _cardAnchor.GetComponent<LayoutElement>();
+                float width = element != null ? element.preferredWidth : rect.sizeDelta.x;
+                rect.localScale = Vector3.one * (width / rect.sizeDelta.x);
+            }
+
+            if (card.Monster != null)
+            {
+                _preview.Bind(card.Monster);
+                _preview.Refresh(CardHighlight.None, _ => false, -1);
+            }
+            else if (card.Owned != null) _preview.ShowOwned(card.Owned, CardHighlight.None);
+            else if (card.Card != null)  _preview.ShowCard(card.Card, CardHighlight.None);
         }
 
         public void Close() => _root.SetActive(false);
