@@ -93,6 +93,8 @@ namespace MonsterCardGame.Gameplay.Skills
                 UntargetableEffect u    => $"{who ?? "la cible"} ne peut plus être ciblé par l'adversaire {DurationText(u.DurationTurns)} "
                                          + "(les compétences sans cible le touchent quand même)",
                 DamageGrowthEffect g    => $"les dégâts de cette compétence augmentent ensuite de {g.Amount} pour le reste du combat",
+                MaxHpGrowthEffect p     => $"ce monstre gagne ensuite {p.Amount} PV pour le reste du combat, PV de départ compris",
+                LifeStealEffect         => "l'allié le plus blessé sur le terrain récupère autant de PV que les dégâts infligés (s'il saigne, ses saignements sont retirés à la place)",
                 MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus",
                 _                       => ""
             };

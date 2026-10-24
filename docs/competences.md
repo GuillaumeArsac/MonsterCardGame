@@ -290,11 +290,11 @@ Soumise à la Provocation. Avec la recharge de 1, elle frappe à chaque phase à
 | **Type** | Active |
 | **Rôle visé** | Carry |
 | **Cible** | Un ennemi sur le terrain |
-| **Effet** | Inflige 5 dégâts. Ensuite, les dégâts de cette compétence augmentent de 5 |
+| **Effet** | Inflige 20 dégâts. Ensuite, les dégâts de cette compétence augmentent de 5, et ce monstre gagne 10 PV (PV de départ compris) |
 | **Temps de recharge** | 0 |
-| **Durée** | L'augmentation dure tout le combat, même après un retour en main |
+| **Durée** | Les gains durent tout le combat, même après un retour en main |
 
-Soumise à la Provocation. Les coups infligent 5, puis 10, puis 15 dégâts, etc.
+Soumise à la Provocation. Les coups infligent 20, puis 25, puis 30 dégâts, etc. Après 10 attaques, l'Essence a 280 PV de départ : une carry qui devient de plus en plus robuste.
 
 ### Marée des abysses (Essence des profondeurs)
 
@@ -316,11 +316,11 @@ Ne choisit pas de cible : ignore la Provocation et touche les monstres inciblabl
 | **Type** | Active |
 | **Rôle visé** | Support |
 | **Cible** | Un ennemi sur le terrain |
-| **Effet** | Inflige 20 dégâts. Rend 10 PV à tous les alliés sur le terrain, y compris ce monstre |
-| **Temps de recharge** | 1 |
+| **Effet** | Inflige 15 dégâts. L'allié le plus blessé sur le terrain (y compris ce monstre) récupère autant de PV que la cible en a perdu |
+| **Temps de recharge** | 0 |
 | **Durée** | Instantané |
 
-Soumise à la Provocation. Un allié qui saigne perd ses saignements au lieu d'être soigné.
+Soumise à la Provocation. Les réductions de dégâts de la cible réduisent aussi le vol de vie. C'est un soin : un allié qui saigne perd ses saignements au lieu d'être soigné.
 
 ### Faveur céleste (Essence des cieux)
 

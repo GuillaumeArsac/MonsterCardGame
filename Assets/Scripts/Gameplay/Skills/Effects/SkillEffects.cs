@@ -183,6 +183,30 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     }
 
     /// <summary>
+    /// Après chaque utilisation, ce monstre gagne des PV pour le reste du combat : ses PV de départ et ses PV actuels
+    /// augmentent d'autant (Essence de nature). S'applique au monstre qui l'utilise, quelle que soit la cible.
+    /// </summary>
+    [Serializable]
+    public class MaxHpGrowthEffect : SkillEffect
+    {
+        [SerializeField, Min(0)] private int _amount = 10;
+
+        public int Amount => _amount;
+
+        public MaxHpGrowthEffect() { }
+        public MaxHpGrowthEffect(int amount) => _amount = amount;
+    }
+
+    /// <summary>
+    /// Vol de vie (Essence de vie) : l'allié le plus blessé sur le terrain récupère autant de PV que les dégâts
+    /// infligés par les effets précédents de la compétence. C'est un soin : sur un allié qui saigne, il retire les saignements.
+    /// </summary>
+    [Serializable]
+    public class LifeStealEffect : SkillEffect
+    {
+    }
+
+    /// <summary>
     /// Marque un emplacement adverse tiré au hasard (Chasseur de trophées) : un monstre adverse vaincu
     /// sur cet emplacement rapporte des points en plus, fatigue comprise.
     /// </summary>

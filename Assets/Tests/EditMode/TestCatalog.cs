@@ -68,13 +68,13 @@ namespace MonsterCardGame.Tests.EditMode
             "Frappe de l'ombre", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(40), new UntargetableEffect(1).On(EffectTarget.Self)));
 
         public SkillData CroissanceSauvage => Skill("Croissance sauvage", () => SkillData.CreateActive(
-            "Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(5), new DamageGrowthEffect(5)));
+            "Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(20), new DamageGrowthEffect(5), new MaxHpGrowthEffect(10)));
 
         public SkillData MareeDesAbysses => Skill("Marée des abysses", () => SkillData.CreateActive(
             "Marée des abysses", MonsterRole.Support, SkillTarget.AllEnemies, 3, new SlowEffect()));
 
         public SkillData SouffleDeVie => Skill("Souffle de vie", () => SkillData.CreateActive(
-            "Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 1, new DamageEffect(20), new HealEffect(10).On(EffectTarget.AllAllies)));
+            "Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 0, new DamageEffect(15), new LifeStealEffect()));
 
         public SkillData FaveurCeleste => Skill("Faveur céleste", () => SkillData.CreateActive(
             "Faveur céleste", MonsterRole.Support, SkillTarget.Enemy, 2, new DamageEffect(10), new DamageBonusEffect(10, 3).On(EffectTarget.AllAllies)));

@@ -152,8 +152,8 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 {
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount + m.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
-                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + ExtraValue(engine, m, skill, null) + noise;
-                    return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + ExtraValue(engine, m, skill, t) + noise;
+                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + ExtraValue(engine, m, skill, null, d) + noise;
+                    return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + ExtraValue(engine, m, skill, t, d) + noise;
                 }
 
                 case SkillKind.AreaSlow:
@@ -218,9 +218,9 @@ namespace MonsterCardGame.Gameplay.Combat.AI
 
         /// <summary>
         /// Valeur des effets d'une attaque en plus de ses dégâts : saignement sur la cible (si elle survit),
-        /// et effets sur ce monstre ou ses alliés (inciblable, Provocation, dégâts croissants, soin, bonus).
+        /// et effets sur ce monstre ou ses alliés (inciblable, Provocation, dégâts croissants, soin, bonus, PV gagnés, vol de vie).
         /// </summary>
-        private static double ExtraValue(CombatEngine engine, CombatMonster m, SkillData skill, CombatMonster survivingTarget)
+        private static double ExtraValue(CombatEngine engine, CombatMonster m, SkillData skill, CombatMonster survivingTarget, int damage)
         {
             double value = 0;
             var allies = engine.GetField(m.Side).ToList();
@@ -240,6 +240,17 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     case DamageGrowthEffect growth:
                         value += 2 * growth.Amount / Unit;
                         break;
+                    case MaxHpGrowthEffect hpGrowth:
+                        value += hpGrowth.Amount / Unit;
+                        break;
+                    case LifeStealEffect:
+                    {
+                        var wounded = allies.OrderByDescending(a => a.MaxHp - a.Hp).FirstOrDefault();
+                        if (wounded == null) break;
+                        value += wounded.BleedStacks > 0 ? BleedValue(wounded, wounded.BleedStacks)
+                                                         : Math.Min(damage, wounded.MaxHp - wounded.Hp) / Unit * 0.9;
+                        break;
+                    }
                     case HealEffect heal when effect.AppliesTo == EffectTarget.AllAllies:
                         foreach (var ally in allies)
                             value += ally.BleedStacks > 0 ? BleedValue(ally, ally.BleedStacks)
@@ -279,6 +290,8 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     if (skill.Target == SkillTarget.AllEnemies) weight += 0.5;
                     if (skill.GetEffect<BleedEffect>() is { } bleed)      weight += 0.5 * bleed.Stacks;
                     if (skill.GetEffect<DamageGrowthEffect>() != null)    weight += 1;
+                    if (skill.GetEffect<MaxHpGrowthEffect>() != null)     weight += 0.5;
+                    if (skill.GetEffect<LifeStealEffect>() != null)       weight += 1;
                     if (skill.GetEffect<HealEffect>() is { } heal)        weight += heal.Amount / Unit;
                     if (skill.GetEffect<DamageBonusEffect>() is { } more) weight += 2.5 * more.Amount / Unit;
                     return weight;

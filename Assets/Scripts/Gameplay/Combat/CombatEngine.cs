@@ -274,20 +274,36 @@ namespace MonsterCardGame.Gameplay.Combat
         /// </summary>
         private void ApplyEffects(CombatMonster source, int skillIndex, IReadOnlyList<CombatMonster> targets)
         {
+            // PV retirés par les dégâts de la compétence, pour le vol de vie
+            int dealt = 0;
+
             foreach (var effect in source.Skills[skillIndex].Effects)
             {
                 if (effect == null) continue;
 
-                // L'Essence de nature renforce sa propre compétence, quelle que soit la cible
+                // Effets sur ce monstre, quelle que soit la cible (Essence de nature)
                 if (effect is DamageGrowthEffect growth)
                 {
                     source.AddDamageGrowth(skillIndex, growth.Amount);
                     continue;
                 }
+                if (effect is MaxHpGrowthEffect hpGrowth)
+                {
+                    if (source.IsOnField) source.GrowMaxHp(hpGrowth.Amount);
+                    continue;
+                }
+
+                // Vol de vie (Essence de vie) : l'allié le plus blessé récupère les PV retirés par la compétence
+                if (effect is LifeStealEffect)
+                {
+                    var wounded = GetField(source.Side).OrderByDescending(m => m.MaxHp - m.Hp).FirstOrDefault();
+                    if (wounded != null && dealt > 0) Heal(source, wounded, dealt);
+                    continue;
+                }
 
                 // Une cible vaincue ou renvoyée en main ne subit pas la suite des effets
                 foreach (var target in EffectTargets(source, effect, targets).ToList())
-                    if (target.IsOnField) ApplyEffect(source, skillIndex, effect, target);
+                    if (target.IsOnField) dealt += ApplyEffect(source, skillIndex, effect, target);
             }
         }
 
@@ -299,13 +315,13 @@ namespace MonsterCardGame.Gameplay.Combat
                 _                      => skillTargets
             };
 
-        private void ApplyEffect(CombatMonster source, int skillIndex, SkillEffect effect, CombatMonster target)
+        /// <summary>Applique un effet à une cible. Retourne les PV retirés par des dégâts (0 pour les autres effets).</summary>
+        private int ApplyEffect(CombatMonster source, int skillIndex, SkillEffect effect, CombatMonster target)
         {
             switch (effect)
             {
                 case DamageEffect damage:
-                    DealDamage(source, target, damage.Amount + source.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
-                    break;
+                    return DealDamage(source, target, damage.Amount + source.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
 
                 case BleedEffect bleed:
                     target.BleedStacks += bleed.Stacks;
@@ -355,15 +371,19 @@ namespace MonsterCardGame.Gameplay.Combat
                 default:
                     throw new NotSupportedException($"Effet non géré par le moteur : {effect?.GetType().Name}");
             }
+            return 0;
         }
 
-        private void DealDamage(CombatMonster source, CombatMonster target, int baseAmount, bool ignoresReductions)
+        /// <summary>Inflige des dégâts. Retourne les PV réellement retirés.</summary>
+        private int DealDamage(CombatMonster source, CombatMonster target, int baseAmount, bool ignoresReductions)
         {
             int amount = ComputeDamage(source, target, baseAmount, ignoresReductions);
-            target.Hp = Math.Max(0, target.Hp - amount);
+            int removed = Math.Min(amount, target.Hp);
+            target.Hp -= removed;
             Damaged?.Invoke(new DamageEvent(target, source, amount, target.Hp, isFatigue: false));
 
             if (target.Hp <= 0) Defeat(target, byFatigue: false);
+            return removed;
         }
 
         /// <summary>Soin : sur une cible qui saigne, retire tous les saignements au lieu de rendre des PV.</summary>

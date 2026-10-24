@@ -80,9 +80,9 @@ namespace MonsterCardGame.Editor
             // Attaques de base des Essences (docs/competences.md, Essences)
             Active("Entaille sanglante", MonsterRole.Carry, SkillTarget.Enemy, 2, new DamageEffect(10), new BleedEffect(3));
             Active("Frappe de l'ombre", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(40), new UntargetableEffect(1).On(EffectTarget.Self));
-            Active("Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(5), new DamageGrowthEffect(5));
+            Active("Croissance sauvage", MonsterRole.Carry, SkillTarget.Enemy, 0, new DamageEffect(20), new DamageGrowthEffect(5), new MaxHpGrowthEffect(10));
             Active("Marée des abysses", MonsterRole.Support, SkillTarget.AllEnemies, 3, new SlowEffect());
-            Active("Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 1, new DamageEffect(20), new HealEffect(10).On(EffectTarget.AllAllies));
+            Active("Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 0, new DamageEffect(15), new LifeStealEffect());
             Active("Faveur céleste", MonsterRole.Support, SkillTarget.Enemy, 2, new DamageEffect(10), new DamageBonusEffect(10, 3).On(EffectTarget.AllAllies));
             Active("Défi de pierre", MonsterRole.Tank, SkillTarget.Enemy, 0, new DamageEffect(10), new TauntEffect(1).On(EffectTarget.Self));
             Passive("Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(10, 0));

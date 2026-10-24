@@ -16,22 +16,21 @@ MonoBehaviour:
   _type: 0
   _role: 1
   _target: 1
-  _cooldown: 1
+  _cooldown: 0
   _trigger: 0
   _effects:
-  - rid: 3690274877296083111
-  - rid: 3690274877296083112
+  - rid: 3690274877296083145
+  - rid: 3690274877296083146
   references:
     version: 2
     RefIds:
-    - rid: 3690274877296083111
+    - rid: 3690274877296083145
       type: {class: DamageEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
         _appliesTo: 0
-        _amount: 20
+        _amount: 15
         _ignoresReductions: 0
-    - rid: 3690274877296083112
-      type: {class: HealEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
+    - rid: 3690274877296083146
+      type: {class: LifeStealEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
-        _appliesTo: 2
-        _amount: 10
+        _appliesTo: 0

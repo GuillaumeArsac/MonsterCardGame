@@ -88,4 +88,6 @@ La composition de l'équipe compte beaucoup : ce combat apprend aussi qu'il faut
 
 Les combats durent de 10 à 14 tours en moyenne. L'Essence de pierre devient indispensable : 75 % de victoires en moyenne avec elle, 42 % sans.
 
+**À rééquilibrer :** depuis la refonte de l'Essence de nature et de l'Essence de vie (2026-10-24), l'équipe de début de partie gagne ce combat presque à coup sûr (100 %), et la moyenne des 21 équipes passe de 66 % à 90 %. La patrouille centaure passe aussi de 76 % à 90 % en moyenne. Choix gardé pour l'instant ; à reprendre en freinant la Nature ou en durcissant les adversaires.
+
 Deux autres versions ont été écartées. L'une était trop dure : avec quatre attaques à recharge 0, Exécution et Bouclier, la meilleure équipe ne gagnait que 16 % de ses combats. L'autre était trop facile : avec un Guerrier sans attaque, toutes les équipes gagnaient presque à coup sûr, souvent à la fatigue.

@@ -19,19 +19,25 @@ MonoBehaviour:
   _cooldown: 0
   _trigger: 0
   _effects:
-  - rid: 3690274877296083114
-  - rid: 3690274877296083115
+  - rid: 3690274877296083147
+  - rid: 3690274877296083148
+  - rid: 3690274877296083149
   references:
     version: 2
     RefIds:
-    - rid: 3690274877296083114
+    - rid: 3690274877296083147
       type: {class: DamageEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
         _appliesTo: 0
-        _amount: 5
+        _amount: 20
         _ignoresReductions: 0
-    - rid: 3690274877296083115
+    - rid: 3690274877296083148
       type: {class: DamageGrowthEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
       data:
         _appliesTo: 0
         _amount: 5
+    - rid: 3690274877296083149
+      type: {class: MaxHpGrowthEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
+      data:
+        _appliesTo: 0
+        _amount: 10

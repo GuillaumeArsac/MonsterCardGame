@@ -41,7 +41,8 @@ namespace MonsterCardGame.Gameplay.Combat
 
         public string                   Name   { get; }
         public MonsterRole              Role   { get; }
-        public int                      MaxHp  { get; }
+        /// <summary>PV de départ. Peuvent augmenter pendant le combat (Essence de nature).</summary>
+        public int                      MaxHp  { get; private set; }
         public IReadOnlyList<SkillData> Skills { get; }
         /// <summary>Objet d'origine (OwnedMonster ou MonsterCardData), pour l'interface.</summary>
         public object                   Origin { get; }
@@ -165,6 +166,13 @@ namespace MonsterCardGame.Gameplay.Combat
         internal void AddModifier(CombatModifier modifier) => _modifiers.Add(modifier);
 
         internal void AddDamageGrowth(int skillIndex, int amount) => _damageGrowth[skillIndex] += amount;
+
+        /// <summary>PV gagnés pour le reste du combat : les PV de départ et les PV actuels augmentent d'autant.</summary>
+        internal void GrowMaxHp(int amount)
+        {
+            MaxHp += amount;
+            Hp    += amount;
+        }
 
         /// <summary>Fin de la phase de <paramref name="endingSide"/> : les effets qui comptent ses phases avancent.</summary>
         internal void TickModifiers(Side endingSide)

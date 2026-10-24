@@ -67,8 +67,8 @@ Les Essences sont des esprits fabriqués à la Forge. Chacune est construite aut
 | Essence | Rôle | PV | Attaque de base | Recharge |
 |---|---|---|---|---|
 | **Essence du sang** | Carry | 160 | Entaille sanglante : 10 dégâts et 3 saignements | 2 |
-| **Essence de nature** | Carry | 180 | Croissance sauvage : 5 dégâts, +5 à chaque utilisation | 0 |
-| **Essence de vie** | Support | 160 | Souffle de vie : 20 dégâts, 10 PV à tous les alliés | 1 |
+| **Essence de nature** | Carry | 180 | Croissance sauvage : 20 dégâts, puis +5 dégâts et +10 PV à chaque utilisation | 0 |
+| **Essence de vie** | Support | 160 | Souffle de vie : 15 dégâts, l'allié le plus blessé récupère les PV retirés | 0 |
 | **Essence de pierre** | Tank | 260 | Défi de pierre : 10 dégâts, Provocation jusqu'à sa prochaine phase | 0 |
 | **Essence des profondeurs** | Support | 180 | Marée des abysses : Ralentissement à tous les ennemis | 3 |
 | **Essence d'ombre** | Carry | 100 | Frappe de l'ombre : 40 dégâts, inciblable jusqu'à la fin de la prochaine phase adverse | 1 |
