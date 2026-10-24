@@ -164,7 +164,7 @@ namespace MonsterCardGame.Editor
         {
             Monster("AvantGarde", "Guerrier du clan",  MonsterRole.Tank,    220, 30, "Others/SYL_centaure_guerrier.png", "Provocation", "Griffe"),
             Monster("AvantGarde", "Archer du clan",    MonsterRole.Carry,   140, 30, "Others/SYL_centaure_archer.png",   "Morsure perforante"),
-            Monster("AvantGarde", "Paladin du clan",   MonsterRole.Support, 160, 30, "Others/SLY_centaure_paladin.png",  "Soin"),
+            Monster("AvantGarde", "Paladin du clan",   MonsterRole.Support, 160, 30, "Others/SYL_centaure_paladin.png",  "Soin"),
             Monster("AvantGarde", "Lancier du clan",   MonsterRole.Carry,   180, 30, null,                               "Grand balayage"),
             Monster("AvantGarde", "Éclaireur vétéran", MonsterRole.Carry,   150, 30, null,                               "Griffe"),
         };
