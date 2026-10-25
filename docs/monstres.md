@@ -40,9 +40,9 @@ Une équipe équilibrée : 2 carry, 2 supports, 1 tank.
 | **Svathurim** | Support | 200 | Griffe, Bouclier, Repli |
 | **Paladin centaure** | Tank | 280 | Provocation, Carapace, Coup de bouclier |
 
-### Équipe B — la horde de Thrâk (adversaire des Plaines)
+### Équipe B — l'ancienne horde de Thrâk (tests seulement)
 
-Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralentit tout le terrain.
+Une équipe plus agressive : 2 carry, 1 support, 2 tanks, avec un chef qui ralentit tout le terrain. **Elle n'est plus dans le jeu** depuis le 2026-10-24 : le vrai combat de Thrâk le Perpétuel la remplace (voir [combats-scenario.md](combats-scenario.md), combat 3). Elle reste décrite dans les tests, qui comparent le moteur au simulateur Python.
 
 | Monstre | Rôle | PV | Compétences |
 |---|---|---|---|
@@ -79,6 +79,6 @@ L'Essence d'ombre est volontairement forte au départ : avec sa recharge de 1, e
 L'équipe de début de partie est la meilleure contre la patrouille centaure selon les simulations : Nature, Vie, Pierre, Ombre et Cieux (97 % de victoires, 10,2 tours en moyenne). Les résultats de toutes les équipes sont produits par le menu **MonsterCardGame > Équilibrage > Simuler les équipes de départ**.
 
 - **Les compétences de base sont toutes remplaçables**, contrairement aux compétences uniques des monstres de quête. La Forge pourra redonner son attaque de base à une Essence (voir [progression.md](progression.md)).
-- **Les premiers adversaires doivent avoir 1 ou 2 compétences** et des PV modestes. Face à la horde de Thrâk, aucune équipe d'Essences ne gagne.
+- **Les premiers adversaires doivent avoir 1 ou 2 compétences** et des PV modestes. Face à l'ancienne horde de Thrâk (équipe B), aucune équipe d'Essences ne gagnait.
 
 L'ancienne collection de départ (Loup des cendres, Renard de braise, Ours brun, Chouette guérisseuse, Luciole sacrée, Chien de garde, Sanglier) n'est plus dans le jeu. Elle reste décrite dans les tests, qui comparent le moteur au simulateur Python.

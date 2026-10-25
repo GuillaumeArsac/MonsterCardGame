@@ -123,7 +123,7 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 
 ## Points de conception encore ouverts
 
-- **Les combats suivants des Plaines :** le combat 2, l'avant-garde de Thrâk, est fait (2026-10-24). Thrâk et Vaelisse (boss) restent à concevoir dans `combats-scenario.md`. Ce sont eux qui débloqueront, à terme, les Ruines.
+- **Les combats suivants des Plaines :** le combat 2 (l'avant-garde de Thrâk) et le combat 3 (Thrâk le Perpétuel, semi-boss) sont faits (2026-10-24). Reste Vaelisse, boss de zone, avec les invocations d'insectes. Les Plaines n'ont plus de combat libre. Ce sont eux qui débloqueront, à terme, les Ruines.
 - **Équilibre des deux premiers combats :** trop faciles depuis la refonte de Nature et Vie (2026-10-24) ; voir `combats-scenario.md`.
 
 - **La Forge dans le récit :** elle fabrique les Essences (voir plus bas). La fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore de l'améliorer aux niveaux 2 et 3, une mécanique de l'ancienne version : elle est à réécrire.
@@ -134,5 +134,5 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 
 - **Échelle des valeurs (2026-10-23) :** les PV, dégâts, soins, bonus, réductions, le seuil d'Exécution, les boosts et la fatigue ont été multipliés par 10, pour un équilibrage plus fin. Les temps de recharge, les durées et les points ne changent pas. L'IA divise ces valeurs par 10 dans ses notes (`CombatAI.Unit`) : elle joue comme avant, et les simulations donnent les mêmes résultats. Le simulateur Python (`tools/simulation`) est resté à l'ancienne échelle.
 - **Les Essences (2026-10-23) :** la collection de départ devient 7 Essences, des esprits fabriqués à la Forge (`docs/monstres.md`). Le moteur gère maintenant le saignement, l'inciblable, la Provocation temporaire, les dégâts croissants, et les effets qui touchent ce monstre ou tous ses alliés en plus de la cible (`SkillEffect.AppliesTo`). Un soin retire les saignements au lieu de rendre des PV. La fatigue rapporte maintenant des points ; si les deux camps atteignent 3 points en même temps, le joueur perd.
-  Le menu **MonsterCardGame > Équilibrage > Simuler les équipes de départ** simule les 21 équipes possibles contre la patrouille et la horde, et écrit le rapport dans `Logs/Simulations/equipes-de-depart.md`. Une sauvegarde qui ne contient que les anciens monstres de départ repart des Essences.
+  Le menu **MonsterCardGame > Équilibrage > Simuler les équipes de départ** simule les 21 équipes possibles contre les trois combats des Plaines, et écrit le rapport dans `Logs/Simulations/equipes-de-depart.md`. Une sauvegarde qui ne contient que les anciens monstres de départ repart des Essences.
 - **La Forge, à concevoir :** y redonner son attaque de base à une Essence contre des ressources (à définir), et y obtenir une passive après un palier de l'aventure (par exemple le boss des Plaines). Voir `docs/progression.md`.

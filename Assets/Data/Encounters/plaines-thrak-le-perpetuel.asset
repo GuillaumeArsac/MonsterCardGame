@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b631a7c6f3744a4aaf927339e26a389, type: 3}
-  m_Name: test-horde-de-thrak
+  m_Name: plaines-thrak-le-perpetuel
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Encounters.EncounterData
-  _encounterId: test-horde-de-thrak
-  _displayName: "La horde de Thr\xE2k (\xE9quipe de test B)"
-  _type: 1
+  _encounterId: plaines-thrak-le-perpetuel
+  _displayName: "Thr\xE2k le Perp\xE9tuel"
+  _type: 0
   _monsters:
   - {fileID: 11400000, guid: c3d1e67c235b6ef468d6cbd235b00bb8, type: 2}
-  - {fileID: 11400000, guid: f714772263265b842b2e51a17b06c23f, type: 2}
+  - {fileID: 11400000, guid: 7b0e861a0b747ef49840220b3a75fa0f, type: 2}
+  - {fileID: 11400000, guid: 8b4114aaa598b294e8edffadd488b6b9, type: 2}
+  - {fileID: 11400000, guid: be625473fa6dba1438a9dcd5afcec711, type: 2}
   - {fileID: 11400000, guid: 76beed51cc969214389c25564b4c031a, type: 2}
-  - {fileID: 11400000, guid: f124279f993c1e04a94d05e3a7fc874d, type: 2}
-  - {fileID: 11400000, guid: 65d9dfd94be03ae49b804f9e502237ac, type: 2}
+  _skinnedMonster: {fileID: 11400000, guid: c3d1e67c235b6ef468d6cbd235b00bb8, type: 2}

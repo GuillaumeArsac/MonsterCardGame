@@ -16,11 +16,11 @@ MonoBehaviour:
   _artwork: {fileID: 5529203977801631117, guid: 7029df29f55659d4287e336c919a8a7f, type: 3}
   _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
   _role: 2
-  _maxHp: 260
+  _maxHp: 320
   _skills:
-  - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
+  - {fileID: 11400000, guid: e0f20a090ed8b8744b299c13b383120c, type: 2}
   - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
   - {fileID: 11400000, guid: 7e9f9dfb0ce4c0344a605cf0af8bd085, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 0
+    _hp: 60

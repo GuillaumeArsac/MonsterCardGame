@@ -21,3 +21,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f2ce3bebee98714f9cd6874a9942664, type: 2}
   - {fileID: 11400000, guid: 09a989c479a827748b5e7268cda7ca57, type: 2}
   - {fileID: 11400000, guid: f4bd6e2c9215f874db3df8450c3bcb8e, type: 2}
+  _skinnedMonster: {fileID: 0}

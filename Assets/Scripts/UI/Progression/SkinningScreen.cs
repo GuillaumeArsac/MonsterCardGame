@@ -49,7 +49,9 @@ namespace MonsterCardGame.UI.Progression
         private bool _done;
 
         private bool HasReward => _skill != null || _boost;
-        private bool NeedsReplacement => _skill != null && _target != null && SkinningOffer.NeedsReplacement(_target);
+        private bool NeedsReplacement => _skill != null && _target != null && SkinningOffer.NeedsReplacement(_target, _skill);
+        /// <summary>Vrai si la compétence spéciale choisie ne peut que remplacer celle que porte déjà la cible.</summary>
+        private bool ReplacesSpecial => _skill != null && _target != null && !_target.CanLearn(_skill);
         private bool IsComplete => HasReward && _target != null && (!NeedsReplacement || _replacedIndex >= 0);
 
         private void Start()
@@ -104,14 +106,18 @@ namespace MonsterCardGame.UI.Progression
                 _skill = skill;
                 _boost = skill == null;
                 _replacedIndex = -1;
+                if (_target != null && !CanReceive(_target)) _target = null;
                 Refresh();
             });
             _rewardButtons.Add((button, skill));
         }
 
+        /// <summary>Le boost va à tous ; une compétence spéciale ne va qu'à un monstre qui peut la porter.</summary>
+        private bool CanReceive(OwnedMonster monster) => _skill == null || SkinningOffer.CanReceive(monster, _skill);
+
         private void ChooseTarget(OwnedMonster monster)
         {
-            if (_done || !HasReward) return;
+            if (_done || !HasReward || !CanReceive(monster)) return;
             if (_target != monster) _replacedIndex = -1;
             _target = monster;
             Refresh();
@@ -119,7 +125,7 @@ namespace MonsterCardGame.UI.Progression
 
         private void OnSkillClicked(MonsterCardView view, int skillIndex)
         {
-            if (!_done && NeedsReplacement && view.Owned == _target && !_target.IsLocked(skillIndex))
+            if (!_done && NeedsReplacement && view.Owned == _target && SkinningOffer.CanReplace(_target, _skill, skillIndex))
             {
                 _replacedIndex = skillIndex;
                 Refresh();
@@ -164,9 +170,9 @@ namespace MonsterCardGame.UI.Progression
             {
                 var monster = _collection.Monsters[i];
                 bool isTarget = monster == _target;
-                var highlight = isTarget ? CardHighlight.Selected : HasReward && !_done ? CardHighlight.Target : CardHighlight.None;
+                var highlight = isTarget ? CardHighlight.Selected : HasReward && !_done && CanReceive(monster) ? CardHighlight.Target : CardHighlight.None;
                 _views[i].ShowOwned(monster, highlight,
-                                    s => !_done && isTarget && NeedsReplacement && !monster.IsLocked(s),
+                                    s => !_done && isTarget && NeedsReplacement && SkinningOffer.CanReplace(monster, _skill, s),
                                     isTarget ? _replacedIndex : -1);
             }
 
@@ -184,7 +190,11 @@ namespace MonsterCardGame.UI.Progression
                 return $"Choisissez une récompense : une compétence de {_offer.Monster.MonsterName}, ou son boost de stats.";
             if (_target == null)
                 return _boost ? "Choisissez le monstre qui reçoit le boost. Il remplace le boost qu'il portait."
-                              : $"Choisissez le monstre qui apprend {_skill.SkillName}.";
+                     : _skill.IsSpecial ? $"Choisissez le monstre qui apprend {_skill.SkillName}. Compétence spéciale : un monstre n'en porte qu'une."
+                     : $"Choisissez le monstre qui apprend {_skill.SkillName}.";
+            if (ReplacesSpecial && _replacedIndex < 0)
+                return $"{_target.Name} porte déjà la compétence spéciale {_target.Skills[_target.SpecialSkillIndex].SkillName} : "
+                     + $"cliquez-la pour que {_skill.SkillName} la remplace. Elle sera perdue.";
             if (NeedsReplacement && _replacedIndex < 0)
                 return $"{_target.Name} a déjà 3 compétences : cliquez celle que {_skill.SkillName} remplace. Elle sera perdue.";
             if (NeedsReplacement)

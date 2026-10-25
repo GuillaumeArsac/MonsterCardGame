@@ -185,6 +185,7 @@ namespace MonsterCardGame.UI.Combat
             if (m.DamageReduction > 0) parts.Add($"-{m.DamageReduction} dégât{(m.DamageReduction > 1 ? "s" : "")} subi{(m.DamageReduction > 1 ? "s" : "")}");
             if (m.BleedStacks > 0)     parts.Add($"Saignement ×{m.BleedStacks} (-{m.BleedDamage})");
             if (m.IsUntargetable)      parts.Add("Inciblable");
+            if (m.IgnoresTaunt)        parts.Add("Ignore la Provocation");
             if (m.Modifiers.Any(x => x.Kind == ModifierKind.Taunt)) parts.Add("Provocation");
             return string.Join("  ·  ", parts);
         }

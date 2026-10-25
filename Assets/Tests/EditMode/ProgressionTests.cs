@@ -77,6 +77,48 @@ namespace MonsterCardGame.Tests.EditMode
         }
 
         [Test]
+        public void Depecage_SemiBoss_ThrakToujoursDepece()
+        {
+            var encounter = _catalog.ThrakLePerpetuel();
+            var drawn = Enumerable.Range(0, 50).Select(seed => SkinningOffer.Draw(encounter, new System.Random(seed)).Monster).Distinct().ToList();
+
+            Assert.That(drawn, Is.EqualTo(new[] { encounter.Monsters[0] }));
+            Assert.That(drawn[0].MonsterName, Is.EqualTo("Thrâk le Perpétuel"));
+        }
+
+        [Test]
+        public void Depecage_CompetenceSpeciale_UneSeuleParMonstre()
+        {
+            var special = _catalog.EspritPerpetuel;
+            var autre   = SkillData.CreatePassive("Autre spéciale", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always).SetSpecial();
+            var porteur = new OwnedMonster(_catalog.Monster("Porteur", MonsterRole.Tank, 260, 0, _catalog.Griffe, special));
+            var vierge  = new OwnedMonster(_catalog.Monster("Vierge", MonsterRole.Tank, 260, 0, _catalog.Griffe));
+
+            Assert.That(SkinningOffer.NeedsReplacement(vierge, special), Is.False, "sans spéciale : ajout libre");
+            Assert.That(SkinningOffer.NeedsReplacement(porteur, autre), Is.True, "un emplacement libre ne suffit pas");
+            Assert.That(SkinningOffer.CanReplace(porteur, autre, 0), Is.False, "elle ne remplace pas une compétence ordinaire");
+            Assert.That(SkinningOffer.CanReplace(porteur, autre, 1), Is.True, "elle remplace la spéciale");
+            Assert.That(SkinningOffer.NeedsReplacement(porteur, _catalog.Griffe), Is.False, "une compétence ordinaire s'ajoute toujours");
+            Assert.Throws<InvalidOperationException>(() => porteur.AddSkill(autre));
+
+            new SkinningOffer(_catalog.Monster("Boss", MonsterRole.Tank, 300, 0, autre)).GiveSkill(autre, porteur, replacedIndex: 1);
+
+            Assert.That(porteur.Skills, Is.EqualTo(new[] { _catalog.Griffe, autre }));
+            UnityEngine.Object.DestroyImmediate(autre);
+        }
+
+        [Test]
+        public void Depecage_CompetenceSpeciale_UniqueDeQuete_NePeutPasEtreRemplacee()
+        {
+            var unique  = SkillData.CreatePassive("Spéciale de quête", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always).SetSpecial();
+            var quete   = new OwnedMonster(_catalog.QuestMonster("Héros", MonsterRole.Tank, 260, unique));
+
+            Assert.That(SkinningOffer.CanReceive(quete, _catalog.EspritPerpetuel), Is.False);
+            Assert.That(SkinningOffer.CanReceive(quete, _catalog.Griffe), Is.True);
+            UnityEngine.Object.DestroyImmediate(unique);
+        }
+
+        [Test]
         public void Depecage_CompetenceAjouteeAUnMonstre()
         {
             var collection = NewGame();

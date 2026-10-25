@@ -101,11 +101,25 @@ namespace MonsterCardGame.Gameplay.Combat
 
         /// <summary>Bonus aux dégâts infligés : effets temporaires et passives permanentes.</summary>
         public int DamageBonus => SumModifiers(ModifierKind.DamageBonus)
-                                + SumAlwaysPassives<DamageBonusEffect>(e => e.Amount);
+                                + SumAlwaysPassives<DamageBonusEffect>(e => e.Amount)
+                                + AllegianceDamageBonus;
 
         /// <summary>Réduction des dégâts subis : effets temporaires et passives permanentes (Carapace).</summary>
         public int DamageReduction => SumModifiers(ModifierKind.DamageReduction)
-                                    + SumAlwaysPassives<DamageReductionEffect>(e => e.Amount);
+                                    + SumAlwaysPassives<DamageReductionEffect>(e => e.Amount)
+                                    + AllegianceDamageReduction;
+
+        /// <summary>Chef des clans : reçoit les bonus d'allégeance de ses alliés sur le terrain (Thrâk).</summary>
+        public bool IsLeader => HasAlwaysPassive<LeaderEffect>(_ => true);
+
+        /// <summary>Récupère tous ses PV quand l'adversaire marque un point (Thrâk).</summary>
+        public bool IsPerpetual => HasAlwaysPassive<PerpetualEffect>(_ => true);
+
+        // Bonus d'allégeance reçus par un chef, recalculés par le moteur à chaque changement du terrain
+        public int  AllegianceDamageBonus     { get; internal set; }
+        public int  AllegianceDamageReduction { get; internal set; }
+        /// <summary>Ses compétences ignorent la Provocation adverse (allégeance de l'Archer).</summary>
+        public bool IgnoresTaunt              { get; internal set; }
 
         // ── Changements d'état (appelés par CombatEngine) ─────────────────
 

@@ -91,3 +91,65 @@ Les combats durent de 10 à 14 tours en moyenne. L'Essence de pierre devient ind
 **À rééquilibrer :** depuis la refonte de l'Essence de nature et de l'Essence de vie (2026-10-24), l'équipe de début de partie gagne ce combat presque à coup sûr (100 %), et la moyenne des 21 équipes passe de 66 % à 90 %. La patrouille centaure passe aussi de 76 % à 90 % en moyenne. Choix gardé pour l'instant ; à reprendre en freinant la Nature ou en durcissant les adversaires.
 
 Deux autres versions ont été écartées. L'une était trop dure : avec quatre attaques à recharge 0, Exécution et Bouclier, la meilleure équipe ne gagnait que 16 % de ses combats. L'autre était trop facile : avec un Guerrier sans attaque, toutes les équipes gagnaient presque à coup sûr, souvent à la fatigue.
+
+## Combat 3 — Thrâk le Perpétuel (semi-boss)
+
+| Champ | Valeur |
+|---|---|
+| **Zone** | Les Plaines Libres |
+| **Moment** | Après l'avant-garde. Sa défaite ouvre la suite des Plaines (Vaelisse, boss de zone) |
+| **Type** | Semi-boss : un chef et ses champions d'élite |
+| **Équipe du joueur attendue** | Les Essences, avec les récompenses des deux premiers combats |
+| **Objectif de difficulté** | Un vrai mur : environ une victoire sur deux, et nettement plus avec une équipe pensée contre lui |
+
+**Contexte :** Thrâk, l'esprit réuni des plus grands guerriers centaures, mène lui-même ses champions. Chacun des trois clans lui prête sa force, et il se relève de toutes les pertes de son camp.
+
+### Identité de Thrâk
+
+- **Chef des clans :** Thrâk ne fait rien pour ses alliés. Ce sont ses clans qui le renforcent. Tant qu'un champion est sur le terrain, Thrâk reçoit son bonus d'allégeance :
+
+| Clan | Monture | Allégeance |
+|---|---|---|
+| **Guerrier** | Taureau | Thrâk inflige +10 dégâts |
+| **Paladin** | Élan | Thrâk subit 10 dégâts de moins |
+| **Archer** | Chèvre | Les compétences de Thrâk ignorent la Provocation |
+
+- **Perpétuel :** chaque fois que le joueur marque un point, Thrâk récupère tous ses PV, s'il est sur le terrain. Abattre ses champions affaiblit Thrâk, mais le soigne entièrement.
+
+C'est tout l'enjeu du combat : tuer Thrâk d'un trait, malgré ses 320 PV, avant de toucher à son escorte ; ou affaiblir ses clans d'abord, en acceptant qu'il se relève.
+
+### Équipe adverse
+
+| Monstre | Rôle | PV | Compétences | Boost de stats |
+|---|---|---|---|---|
+| **Thrâk le Perpétuel** | Tank | 320 | Esprit perpétuel, Griffe, Grand balayage | +60 PV |
+| **Champion guerrier** | Tank | 240 | Provocation, Allégeance du Guerrier | +40 PV |
+| **Champion paladin** | Support | 180 | Soin, Allégeance du Paladin | +40 PV |
+| **Champion archer** | Carry | 150 | Morsure perforante, Allégeance de l'Archer | +40 PV |
+| **Guerrier centaure** | Carry | 160 | Morsure perforante, Coup de bouclier | +40 PV |
+
+Thrâk n'a pas de Provocation : c'est le Champion guerrier qui protège le camp. Le joueur doit donc souvent vaincre le Champion guerrier en premier, ce qui régénère Thrâk.
+
+**Dépeçage :** c'est toujours Thrâk qui est dépecé, pas un monstre tiré au hasard. Le joueur choisit entre Esprit perpétuel (compétence spéciale), la Griffe, le Grand balayage et le boost de +60 PV.
+
+### Ce que le combat apprend au joueur
+
+- **Choisir l'ordre des cibles :** chaque monstre vaincu régénère Thrâk.
+- **Les dégâts concentrés et le saignement** pour l'abattre d'un trait. L'Essence du sang devient précieuse, même si la régénération retire ses saignements.
+- **La Provocation ne protège plus tout :** avec l'Archer sur le terrain, Thrâk frappe qui il veut.
+
+### Résultats des simulations
+
+1 000 combats par équipe (2026-10-24), sans les récompenses de dépeçage :
+
+| Équipe du joueur | Victoires | Durée moyenne |
+|---|---|---|
+| Nature, Vie, Pierre, Sang, Profondeurs (la meilleure) | 79 % | 13 tours |
+| Nature, Vie, Pierre, Ombre, Cieux (l'équipe de début de partie) | 54 % | 10 tours |
+| Vie, Pierre, Ombre, Cieux, Profondeurs (la pire) | 11 % | 12 tours |
+| Moyenne des 21 équipes | 51 % | |
+
+- **L'Essence du sang** compte beaucoup : 54 % de victoires en moyenne avec elle, 41 % sans.
+- **L'Essence de pierre** n'apporte presque plus rien (51 % avec, 50 % sans), car l'Archer permet à Thrâk d'ignorer sa Provocation.
+
+Ce combat remplace la « horde de Thrâk » (équipe de test B), qui servait de combat libre provisoire et que personne ne battait.

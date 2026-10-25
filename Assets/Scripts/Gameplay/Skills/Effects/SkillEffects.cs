@@ -207,6 +207,55 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
     }
 
     /// <summary>
+    /// Chef des clans (Thrâk le Perpétuel) : ce monstre reçoit les bonus d'allégeance des alliés sur le terrain.
+    /// </summary>
+    [Serializable]
+    public class LeaderEffect : SkillEffect
+    {
+    }
+
+    /// <summary>
+    /// Perpétuel (Thrâk) : chaque fois que l'adversaire marque un point, ce monstre, s'il est sur le terrain,
+    /// récupère tous ses PV et perd ses saignements. Ce n'est pas un soin.
+    /// </summary>
+    [Serializable]
+    public class PerpetualEffect : SkillEffect
+    {
+    }
+
+    public enum AllegianceBonus
+    {
+        /// <summary>Le chef inflige plus de dégâts.</summary>
+        DamageBonus,
+        /// <summary>Le chef subit moins de dégâts.</summary>
+        DamageReduction,
+        /// <summary>Les compétences du chef ignorent la Provocation.</summary>
+        IgnoresTaunt
+    }
+
+    /// <summary>
+    /// Allégeance (clans de Thrâk) : tant que ce monstre est sur le terrain, le chef allié (LeaderEffect) reçoit ce bonus.
+    /// Les bonus de plusieurs alliés se cumulent.
+    /// </summary>
+    [Serializable]
+    public class AllegianceEffect : SkillEffect
+    {
+        [SerializeField] private AllegianceBonus _bonus;
+        [SerializeField, Min(0), Tooltip("Valeur du bonus. Sans effet pour IgnoresTaunt")]
+        private int _amount = 10;
+
+        public AllegianceBonus Bonus  => _bonus;
+        public int             Amount => _amount;
+
+        public AllegianceEffect() { }
+        public AllegianceEffect(AllegianceBonus bonus, int amount = 0)
+        {
+            _bonus  = bonus;
+            _amount = amount;
+        }
+    }
+
+    /// <summary>
     /// Marque un emplacement adverse tiré au hasard (Chasseur de trophées) : un monstre adverse vaincu
     /// sur cet emplacement rapporte des points en plus, fatigue comprise.
     /// </summary>

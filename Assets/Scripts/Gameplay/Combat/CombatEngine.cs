@@ -181,6 +181,7 @@ namespace MonsterCardGame.Gameplay.Combat
             _hand[monster.Side].Remove(monster);
             _field[monster.Side][slot] = monster;
             monster.EnterField(slot);
+            RefreshAllegiances(monster.Side);
             MonsterPlaced?.Invoke(new MonsterPlacedEvent(monster, slot, duringSetup));
         }
 
@@ -212,18 +213,22 @@ namespace MonsterCardGame.Gameplay.Combat
 
             return target switch
             {
-                SkillTarget.AnyMonster => allies.Concat(EnemyTargets(monster.Side)).ToList(),
-                SkillTarget.Enemy      => EnemyTargets(monster.Side),
+                SkillTarget.AnyMonster => allies.Concat(EnemyTargets(monster)).ToList(),
+                SkillTarget.Enemy      => EnemyTargets(monster),
                 SkillTarget.Ally       => allies,
                 SkillTarget.OtherAlly  => allies.Where(m => m != monster).ToList(),
                 _                      => Array.Empty<CombatMonster>()
             };
         }
 
-        /// <summary>Ennemis ciblables, sauf les inciblables : ceux qui ont Provocation s'il y en a, sinon tous.</summary>
-        private List<CombatMonster> EnemyTargets(Side side)
+        /// <summary>
+        /// Ennemis ciblables par <paramref name="attacker"/>, sauf les inciblables : ceux qui ont Provocation s'il y en a,
+        /// sinon tous. Un attaquant qui ignore la Provocation (allégeance de l'Archer) peut viser tous les ennemis.
+        /// </summary>
+        private List<CombatMonster> EnemyTargets(CombatMonster attacker)
         {
-            var enemies  = GetField(side.Opponent()).Where(m => !m.IsUntargetable).ToList();
+            var enemies  = GetField(attacker.Side.Opponent()).Where(m => !m.IsUntargetable).ToList();
+            if (attacker.IgnoresTaunt) return enemies;
             var taunters = enemies.Where(m => m.HasTaunt).ToList();
             return taunters.Count > 0 ? taunters : enemies;
         }
@@ -364,8 +369,11 @@ namespace MonsterCardGame.Gameplay.Combat
                     SendToHand(target);
                     break;
 
-                // Passive traitée au début du combat
+                // Passives traitées ailleurs : emplacement marqué (début du combat), chef et allégeances (terrain)
                 case MarkedSlotEffect:
+                case LeaderEffect:
+                case PerpetualEffect:
+                case AllegianceEffect:
                     break;
 
                 default:
@@ -414,6 +422,7 @@ namespace MonsterCardGame.Gameplay.Combat
             _field[monster.Side][monster.Slot] = null;
             monster.ReturnToHand();
             _hand[monster.Side].Add(monster);
+            RefreshAllegiances(monster.Side);
             ReturnedToHand?.Invoke(monster);
         }
 
@@ -428,8 +437,67 @@ namespace MonsterCardGame.Gameplay.Combat
 
             int points = PointsForDefeatAt(side, slot);
             _points[side.Opponent()] += points;
+            RefreshAllegiances(side);
 
             MonsterDefeated?.Invoke(new MonsterDefeatedEvent(monster, slot, points, byFatigue));
+
+            // Perpétuel (Thrâk) : quand l'adversaire marque, les monstres perpétuels de ce camp se régénèrent
+            if (points > 0)
+                foreach (var perpetual in GetField(side).Where(m => m.IsPerpetual).ToList())
+                    RestoreFully(perpetual);
+        }
+
+        /// <summary>Tous les PV et plus de saignement. Ce n'est pas un soin : la règle du saignement ne s'applique pas.</summary>
+        private void RestoreFully(CombatMonster monster)
+        {
+            if (monster.BleedStacks > 0)
+            {
+                monster.BleedStacks = 0;
+                BleedChanged?.Invoke(new BleedEvent(monster, null, 0, 0));
+            }
+
+            int restored = monster.MaxHp - monster.Hp;
+            if (restored <= 0) return;
+            monster.Hp = monster.MaxHp;
+            Healed?.Invoke(new HealEvent(monster, null, restored, monster.Hp));
+        }
+
+        /// <summary>
+        /// Allégeance : chaque chef sur le terrain reçoit les bonus des passives d'allégeance de ses alliés sur le terrain.
+        /// Recalculé à chaque arrivée ou départ d'un monstre de ce camp.
+        /// </summary>
+        private void RefreshAllegiances(Side side)
+        {
+            var field = GetField(side).ToList();
+            foreach (var monster in _team[side])
+            {
+                int damage = 0, reduction = 0;
+                bool ignoresTaunt = false;
+                if (monster.IsOnField && monster.IsLeader)
+                {
+                    foreach (var ally in field)
+                    {
+                        if (ally == monster) continue;
+                        foreach (var skill in ally.Skills)
+                        {
+                            if (!skill.IsPassive || skill.Trigger != PassiveTrigger.Always) continue;
+                            foreach (var effect in skill.Effects)
+                            {
+                                if (effect is not AllegianceEffect allegiance) continue;
+                                switch (allegiance.Bonus)
+                                {
+                                    case AllegianceBonus.DamageBonus:     damage    += allegiance.Amount; break;
+                                    case AllegianceBonus.DamageReduction: reduction += allegiance.Amount; break;
+                                    case AllegianceBonus.IgnoresTaunt:    ignoresTaunt = true;            break;
+                                }
+                            }
+                        }
+                    }
+                }
+                monster.AllegianceDamageBonus     = damage;
+                monster.AllegianceDamageReduction = reduction;
+                monster.IgnoresTaunt              = ignoresTaunt;
+            }
         }
 
         // ── Déroulement ───────────────────────────────────────────────────

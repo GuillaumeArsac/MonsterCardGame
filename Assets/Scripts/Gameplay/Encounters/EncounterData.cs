@@ -31,20 +31,28 @@ namespace MonsterCardGame.Gameplay.Encounters
         [SerializeField, Tooltip("Exactement 5 monstres")]
         private List<MonsterCardData> _monsters = new();
 
-        public string                         EncounterId => _encounterId;
-        public string                         DisplayName => _displayName;
-        public EncounterType                  Type        => _type;
-        public IReadOnlyList<MonsterCardData> Monsters    => _monsters;
+        [Header("Dépeçage")]
+        [SerializeField, Tooltip("Monstre toujours dépecé après une victoire (le chef d'un boss ou d'un semi-boss). Vide : tiré au hasard dans l'équipe")]
+        private MonsterCardData _skinnedMonster;
+
+        public string                         EncounterId    => _encounterId;
+        public string                         DisplayName    => _displayName;
+        public EncounterType                  Type           => _type;
+        public IReadOnlyList<MonsterCardData> Monsters       => _monsters;
+        /// <summary>Monstre toujours dépecé, ou null pour un tirage au hasard.</summary>
+        public MonsterCardData                SkinnedMonster => _skinnedMonster;
 
         public bool IsRepeatable => _type == EncounterType.Free;
 
         /// <summary>Remplit le combat. Pour les scripts d'éditeur et les tests.</summary>
-        public void Init(string encounterId, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters)
+        public void Init(string encounterId, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters,
+                         MonsterCardData skinnedMonster = null)
         {
-            _encounterId = encounterId;
-            _displayName = displayName;
-            _type        = type;
-            _monsters    = new List<MonsterCardData>(monsters);
+            _encounterId    = encounterId;
+            _displayName    = displayName;
+            _type           = type;
+            _monsters       = new List<MonsterCardData>(monsters);
+            _skinnedMonster = skinnedMonster;
             Validate();
         }
 
@@ -57,6 +65,9 @@ namespace MonsterCardGame.Gameplay.Encounters
 
             if (_monsters.Count != GameRules.TeamSize)
                 GameLog.Warning("EncounterData", $"{name} : {_monsters.Count} monstres, il en faut {GameRules.TeamSize}");
+
+            if (_skinnedMonster != null && !_monsters.Contains(_skinnedMonster))
+                GameLog.Warning("EncounterData", $"{name} : le monstre dépecé {_skinnedMonster.MonsterName} n'est pas dans l'équipe");
         }
     }
 }

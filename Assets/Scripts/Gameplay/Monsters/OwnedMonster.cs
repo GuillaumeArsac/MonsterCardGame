@@ -49,12 +49,28 @@ namespace MonsterCardGame.Gameplay.Monsters
 
         public bool IsLocked(int skillIndex) => skillIndex == LockedSkillIndex;
 
-        /// <summary>Ajoute une compétence dans un emplacement libre. Un doublon est permis.</summary>
+        /// <summary>Index de la compétence spéciale du monstre, ou -1. Il n'en porte qu'une.</summary>
+        public int SpecialSkillIndex => _skills.FindIndex(s => s != null && s.IsSpecial);
+
+        /// <summary>
+        /// Vrai si le monstre peut apprendre <paramref name="skill"/> en remplaçant <paramref name="replacedIndex"/> (-1 : en ajout).
+        /// Une compétence spéciale ne peut que remplacer celle qu'il porte déjà.
+        /// </summary>
+        public bool CanLearn(SkillData skill, int replacedIndex = -1)
+        {
+            if (skill == null || !skill.IsSpecial) return true;
+            int special = SpecialSkillIndex;
+            return special < 0 || special == replacedIndex;
+        }
+
+        /// <summary>Ajoute une compétence dans un emplacement libre. Un doublon est permis, sauf pour une compétence spéciale.</summary>
         public void AddSkill(SkillData skill)
         {
             if (skill == null) throw new ArgumentNullException(nameof(skill));
             if (!HasFreeSkillSlot)
                 throw new InvalidOperationException($"{Name} a déjà {GameRules.MaxSkillsPerMonster} compétences : il faut en remplacer une");
+            if (!CanLearn(skill))
+                throw new InvalidOperationException($"{Name} porte déjà une compétence spéciale : {skill.SkillName} ne peut que la remplacer");
 
             _skills.Add(skill);
         }
@@ -66,6 +82,8 @@ namespace MonsterCardGame.Gameplay.Monsters
             if (skillIndex < 0 || skillIndex >= _skills.Count) throw new ArgumentOutOfRangeException(nameof(skillIndex));
             if (IsLocked(skillIndex))
                 throw new InvalidOperationException($"La compétence unique {_skills[skillIndex].SkillName} de {Name} ne peut pas être remplacée");
+            if (!CanLearn(skill, skillIndex))
+                throw new InvalidOperationException($"{Name} porte déjà une compétence spéciale : {skill.SkillName} ne peut que la remplacer");
 
             _skills[skillIndex] = skill;
         }

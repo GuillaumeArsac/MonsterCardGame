@@ -31,6 +31,10 @@ namespace MonsterCardGame.Gameplay.Skills
         [SerializeReference, Tooltip("Appliqués dans l'ordre, à chaque cible")]
         private List<SkillEffect> _effects = new();
 
+        [Header("Dépeçage")]
+        [SerializeField, Tooltip("Compétence spéciale (celle d'un boss ou d'un semi-boss) : un monstre du joueur n'en porte qu'une")]
+        private bool _isSpecial;
+
         public string                     SkillName => _skillName;
         public SkillType                  Type      => _type;
         public MonsterRole                Role      => _role;
@@ -41,6 +45,15 @@ namespace MonsterCardGame.Gameplay.Skills
 
         public bool IsActive  => _type == SkillType.Active;
         public bool IsPassive => _type == SkillType.Passive;
+        /// <summary>Compétence spéciale : un monstre du joueur n'en porte qu'une. Référence : docs/progression.md (Dépeçage).</summary>
+        public bool IsSpecial => _isSpecial;
+
+        /// <summary>Marque la compétence comme spéciale. Pour les scripts d'éditeur et les tests.</summary>
+        public SkillData SetSpecial(bool special = true)
+        {
+            _isSpecial = special;
+            return this;
+        }
 
         /// <summary>Remplit la fiche. Pour les scripts d'éditeur et les tests.</summary>
         public void Init(string skillName, SkillType type, MonsterRole role, SkillTarget target,

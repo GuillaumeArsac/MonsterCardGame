@@ -347,3 +347,37 @@ Soumise à la Provocation. Avec la recharge de 2 et une durée de 3 tours, deux 
 | **Durée** | Provocation pendant 1 tour : jusqu'à la fin de la prochaine phase adverse |
 
 Soumise à la Provocation. Ralentie ou renvoyée en main, l'Essence ne peut pas renouveler son Défi et perd sa Provocation.
+
+## Compétences de Thrâk le Perpétuel
+
+Le semi-boss des Plaines et ses clans (voir [combats-scenario.md](combats-scenario.md), combat 3).
+
+### Esprit perpétuel
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Tank |
+| **Cible** | Ce monstre |
+| **Effet** | Ce monstre est le chef des clans : il reçoit les bonus d'allégeance de ses alliés sur le terrain. Chaque fois que l'adversaire marque un point, il récupère tous ses PV et perd ses saignements |
+| **Durée** | Permanente |
+| **Déclencheur** | Toujours (allégeances) ; quand l'adversaire marque un point (régénération) |
+
+- La régénération n'a lieu que si ce monstre est sur le terrain. En main, il ne se régénère pas.
+- Ce n'est pas un soin : la règle du saignement ne s'applique pas, il récupère ses PV ET perd ses saignements.
+- Elle se déclenche pour tout point marqué, y compris par la fatigue, mais pas quand ce monstre est lui-même vaincu.
+- **Compétence spéciale :** le joueur peut l'obtenir en dépeçant Thrâk, mais un monstre ne porte qu'une compétence spéciale (voir [progression.md](progression.md), Dépeçage). Chez le joueur, elle marche de la même façon : son monstre se régénère quand l'adversaire marque.
+
+### Allégeance du Guerrier, du Paladin, de l'Archer
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Passive |
+| **Rôle visé** | Tank (Guerrier), Support (Paladin), Carry (Archer) |
+| **Cible** | Le chef des clans allié (un monstre avec Esprit perpétuel) |
+| **Effet** | Guerrier : le chef inflige 10 dégâts de plus. Paladin : le chef subit 10 dégâts de moins. Archer : les compétences du chef ignorent la Provocation |
+| **Durée** | Tant que ce monstre et le chef sont sur le terrain |
+| **Déclencheur** | Toujours |
+
+- Les allégeances de plusieurs alliés se cumulent.
+- Elles disparaissent dès que le monstre qui les donne quitte le terrain (vaincu ou renvoyé en main).

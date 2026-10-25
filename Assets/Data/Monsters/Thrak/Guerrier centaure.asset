@@ -10,17 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
-  m_Name: Chaman centaure
+  m_Name: Guerrier centaure
   m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
-  _monsterName: Chaman centaure
-  _artwork: {fileID: 0}
+  _monsterName: Guerrier centaure
+  _artwork: {fileID: 7638427743125376143, guid: 3a46077efc618b24a8311059a73c7e7f, type: 3}
   _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
-  _role: 1
+  _role: 0
   _maxHp: 160
   _skills:
-  - {fileID: 11400000, guid: 5fb36ead7bec4184b9d17902ee326e84, type: 2}
-  - {fileID: 11400000, guid: ef8133ff4420c5742959a123717152cf, type: 2}
-  - {fileID: 11400000, guid: fdc02d82b2100db4a83d8550b32d65f2, type: 2}
+  - {fileID: 11400000, guid: 0602d296c30033143908ef8cee0f2aae, type: 2}
+  - {fileID: 11400000, guid: b646b7c59f03bb248be753c6eadefa45, type: 2}
   _uniqueSkill: {fileID: 0}
   _statBoost:
-    _hp: 0
+    _hp: 40

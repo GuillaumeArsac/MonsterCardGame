@@ -33,26 +33,27 @@ namespace MonsterCardGame.Editor
 
             var starters = GenerateStarters();
             var teamA    = GenerateTeamA();
-            var teamB    = GenerateTeamB();
             var patrol   = GeneratePatrol();
             var vanguard = GenerateVanguard();
+            var thrak    = GenerateThrak();
 
             var encounters = new List<EncounterData>
             {
                 Encounter("plaines-patrouille-centaure", "La patrouille centaure", EncounterType.Scenario, patrol),
                 Encounter("plaines-avant-garde-de-thrak", "L'avant-garde de Thrâk", EncounterType.Scenario, vanguard),
-                Encounter("test-horde-de-thrak", "La horde de Thrâk (équipe de test B)", EncounterType.Free, teamB),
+                // Semi-boss : Thrâk est toujours dépecé
+                Encounter("plaines-thrak-le-perpetuel", "Thrâk le Perpétuel", EncounterType.Scenario, thrak, skinnedMonster: thrak[0]),
             };
 
-            GenerateZones(scenario: new[] { encounters[0], encounters[1] }, horde: encounters[2]);
+            GenerateZones(scenario: encounters);
 
             var database = GetOrCreate<ContentDatabase>("Assets/Resources", ContentDatabase.ResourcePath);
-            database.Init(Skills.Values, starters.Concat(teamA).Concat(teamB).Concat(patrol).Concat(vanguard), starters, encounters);
+            database.Init(Skills.Values, starters.Concat(teamA).Concat(patrol).Concat(vanguard).Concat(thrak), starters, encounters);
             Save(database);
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[ContentGenerator] {Skills.Count} compétences, {starters.Count} monstres de départ, " +
-                      $"équipes A et B, patrouille centaure et avant-garde de Thrâk générées dans {Root}");
+                      $"équipe de test A et combats des Plaines générés dans {Root}");
         }
 
         public static IReadOnlyList<MonsterCardData> LoadTeam(string folder)
@@ -85,6 +86,13 @@ namespace MonsterCardGame.Editor
             Active("Souffle de vie", MonsterRole.Support, SkillTarget.Enemy, 0, new DamageEffect(15), new LifeStealEffect());
             Active("Faveur céleste", MonsterRole.Support, SkillTarget.Enemy, 2, new DamageEffect(10), new DamageBonusEffect(10, 3).On(EffectTarget.AllAllies));
             Active("Défi de pierre", MonsterRole.Tank, SkillTarget.Enemy, 0, new DamageEffect(10), new TauntEffect(1).On(EffectTarget.Self));
+
+            // Thrâk le Perpétuel et les allégeances de ses clans
+            Passive("Esprit perpétuel", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new LeaderEffect(), new PerpetualEffect());
+            Special("Esprit perpétuel");
+            Passive("Allégeance du Guerrier", MonsterRole.Tank, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.DamageBonus, 10));
+            Passive("Allégeance du Paladin", MonsterRole.Support, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.DamageReduction, 10));
+            Passive("Allégeance de l'Archer", MonsterRole.Carry, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.IgnoresTaunt));
             Passive("Carapace", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new DamageReductionEffect(10, 0));
             Active("Coup de bouclier", MonsterRole.Tank, SkillTarget.AnyMonster, 3, new DamageEffect(10), new SlowEffect());
         }
@@ -111,6 +119,15 @@ namespace MonsterCardGame.Editor
             Object.DestroyImmediate(expected);
 
             Skills[name] = skill;
+        }
+
+        /// <summary>Compétence spéciale d'un boss ou d'un semi-boss : un monstre du joueur n'en porte qu'une (docs/progression.md).</summary>
+        private static void Special(string name)
+        {
+            var skill = Skills[name];
+            if (skill.IsSpecial) return;
+            skill.SetSpecial();
+            Save(skill);
         }
 
         private static string Signature(SkillData skill)
@@ -141,13 +158,14 @@ namespace MonsterCardGame.Editor
             Monster("EquipeA", "Paladin centaure", MonsterRole.Tank,    280, 0, "Centaur Paladin", "Provocation", "Carapace", "Coup de bouclier"),
         };
 
-        private static List<MonsterCardData> GenerateTeamB() => new()
+        // Combat 3, semi-boss des Plaines (docs/combats-scenario.md). Thrâk reçoit un bonus de chaque clan présent sur le terrain
+        private static List<MonsterCardData> GenerateThrak() => new()
         {
-            Monster("EquipeB", "Thrâk le Perpétuel",  MonsterRole.Tank,    260, 0, null,               "Provocation", "Griffe", "Grand balayage"),
-            Monster("EquipeB", "Aigle Runique Géant", MonsterRole.Carry,   180, 0, "Giant Rune Eagle", "Griffe", "Exécution", "Chasseur de trophées"),
-            Monster("EquipeB", "Guerrier centaure",   MonsterRole.Carry,   160, 0, "CentaurWarrior",   "Morsure perforante", "Coup de bouclier"),
-            Monster("EquipeB", "Chaman centaure",     MonsterRole.Support, 160, 0, null,               "Griffe", "Soin", "Bénédiction"),
-            Monster("EquipeB", "Taureau de guerre",   MonsterRole.Tank,    300, 0, null,               "Carapace", "Griffe", "Coup de bouclier"),
+            Monster("Thrak", "Thrâk le Perpétuel", MonsterRole.Tank,    320, 60, null,                               "Esprit perpétuel", "Griffe", "Grand balayage"),
+            Monster("Thrak", "Champion guerrier",  MonsterRole.Tank,    240, 40, "Others/SYL_centaure_guerrier.png", "Provocation", "Allégeance du Guerrier"),
+            Monster("Thrak", "Champion paladin",   MonsterRole.Support, 180, 40, "Others/SYL_centaure_paladin.png",  "Soin", "Allégeance du Paladin"),
+            Monster("Thrak", "Champion archer",    MonsterRole.Carry,   150, 40, "Others/SYL_centaure_archer.png",   "Morsure perforante", "Allégeance de l'Archer"),
+            Monster("Thrak", "Guerrier centaure",  MonsterRole.Carry,   160, 40, "CentaurWarrior",                   "Morsure perforante", "Coup de bouclier"),
         };
 
         private static List<MonsterCardData> GeneratePatrol() => new()
@@ -194,10 +212,11 @@ namespace MonsterCardGame.Editor
             return sprite;
         }
 
-        private static EncounterData Encounter(string id, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters)
+        private static EncounterData Encounter(string id, string displayName, EncounterType type, IEnumerable<MonsterCardData> monsters,
+                                               MonsterCardData skinnedMonster = null)
         {
             var encounter = GetOrCreate<EncounterData>($"{Root}/Encounters", id);
-            encounter.Init(id, displayName, type, monsters);
+            encounter.Init(id, displayName, type, monsters, skinnedMonster);
             Save(encounter);
             return encounter;
         }
@@ -211,7 +230,7 @@ namespace MonsterCardGame.Editor
         /// Combats des zones. L'identité des zones (nom, illustration, position) se règle à la main dans leurs assets :
         /// seules les Ruines sont créées si elles manquent.
         /// </summary>
-        private static void GenerateZones(IEnumerable<EncounterData> scenario, EncounterData horde)
+        private static void GenerateZones(IEnumerable<EncounterData> scenario)
         {
             var plains = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Plains.asset");
             if (plains == null)
@@ -221,8 +240,8 @@ namespace MonsterCardGame.Editor
             }
 
             // Vaelisse, boss des Plaines, n'est pas encore conçue : sans boss, les Ruines restent verrouillées.
-            // La horde de Thrâk (équipe de test B) sert de combat libre en attendant les vrais combats libres.
-            plains.SetEncounters(scenario, new[] { horde }, null);
+            // Pas encore de combat libre dans les Plaines.
+            plains.SetEncounters(scenario, System.Array.Empty<EncounterData>(), null);
             Save(plains);
 
             var ruins = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Ruins.asset");

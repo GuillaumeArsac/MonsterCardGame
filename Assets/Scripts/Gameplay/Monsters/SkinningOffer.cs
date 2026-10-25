@@ -27,8 +27,11 @@ namespace MonsterCardGame.Gameplay.Monsters
             Skills  = monster.Skills.Where(s => s != null).Distinct().ToList();
         }
 
+        /// <summary>Le chef d'un boss ou d'un semi-boss est toujours dépecé ; sinon, un monstre tiré au hasard.</summary>
         public static SkinningOffer Draw(EncounterData encounter, Random random)
         {
+            if (encounter.SkinnedMonster != null) return new SkinningOffer(encounter.SkinnedMonster);
+
             var candidates = encounter.Monsters.Where(m => m != null).ToList();
             if (candidates.Count == 0) throw new ArgumentException($"{encounter.name} n'a aucun monstre");
             return new SkinningOffer(candidates[random.Next(candidates.Count)]);
@@ -38,7 +41,24 @@ namespace MonsterCardGame.Gameplay.Monsters
         public static bool NeedsReplacement(OwnedMonster target) => !target.HasFreeSkillSlot;
 
         /// <summary>
-        /// Donne une compétence du monstre dépecé. Si <paramref name="target"/> a déjà 3 compétences,
+        /// Vrai si <paramref name="skill"/> doit remplacer une compétence : 3 compétences déjà,
+        /// ou une compétence spéciale alors que <paramref name="target"/> en porte déjà une.
+        /// </summary>
+        public static bool NeedsReplacement(OwnedMonster target, SkillData skill)
+            => !target.HasFreeSkillSlot || !target.CanLearn(skill);
+
+        /// <summary>Vrai si <paramref name="skill"/> peut prendre la place de la compétence <paramref name="replacedIndex"/>.</summary>
+        public static bool CanReplace(OwnedMonster target, SkillData skill, int replacedIndex)
+            => replacedIndex >= 0 && replacedIndex < target.Skills.Count
+            && !target.IsLocked(replacedIndex) && target.CanLearn(skill, replacedIndex);
+
+        /// <summary>Vrai si <paramref name="target"/> peut apprendre <paramref name="skill"/>, en ajout ou en remplacement.</summary>
+        public static bool CanReceive(OwnedMonster target, SkillData skill)
+            => !NeedsReplacement(target, skill)
+            || Enumerable.Range(0, target.Skills.Count).Any(i => CanReplace(target, skill, i));
+
+        /// <summary>
+        /// Donne une compétence du monstre dépecé. S'il faut en remplacer une (voir <see cref="NeedsReplacement(OwnedMonster, SkillData)"/>),
         /// <paramref name="replacedIndex"/> désigne celle qui est remplacée (et perdue).
         /// </summary>
         public void GiveSkill(SkillData skill, OwnedMonster target, int replacedIndex = -1)
@@ -46,8 +66,8 @@ namespace MonsterCardGame.Gameplay.Monsters
             EnsureNotClaimed();
             if (!Skills.Contains(skill)) throw new ArgumentException($"{skill?.SkillName} n'est pas une compétence de {Monster.MonsterName}");
 
-            if (target.HasFreeSkillSlot) target.AddSkill(skill);
-            else target.ReplaceSkill(replacedIndex, skill);
+            if (NeedsReplacement(target, skill)) target.ReplaceSkill(replacedIndex, skill);
+            else target.AddSkill(skill);
 
             IsClaimed = true;
         }

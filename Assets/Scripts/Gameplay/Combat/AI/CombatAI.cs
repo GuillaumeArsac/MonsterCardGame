@@ -152,7 +152,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 {
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount + m.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
-                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + ExtraValue(engine, m, skill, null, d) + noise;
+                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) - PerpetualPenalty(engine, t) + ExtraValue(engine, m, skill, null, d) + noise;
                     return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + ExtraValue(engine, m, skill, t, d) + noise;
                 }
 
@@ -162,7 +162,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 case SkillKind.Execute:
                 {
                     var execute = skill.GetEffect<ExecuteEffect>();
-                    if (t.Hp <= execute.HpThreshold) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) + noise;
+                    if (t.Hp <= execute.HpThreshold) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) - PerpetualPenalty(engine, t) + noise;
                     return CombatEngine.ComputeDamage(m, t, execute.FallbackDamage, false) / Unit * 0.8 + noise;
                 }
 
@@ -211,6 +211,12 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     return -5;
             }
         }
+
+        /// <summary>
+        /// Vaincre un monstre régénère les monstres perpétuels de son camp (Thrâk) : on perd les dégâts déjà infligés.
+        /// </summary>
+        private static double PerpetualPenalty(CombatEngine engine, CombatMonster defeated)
+            => engine.GetField(defeated.Side).Where(p => p != defeated && p.IsPerpetual).Sum(p => (p.MaxHp - p.Hp) / Unit * 0.8);
 
         /// <summary>Saignement évité ou infligé : environ deux déclenchements avant un soin ou la défaite.</summary>
         private static double BleedValue(CombatMonster monster, int stacks)

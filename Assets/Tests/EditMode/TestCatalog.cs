@@ -82,6 +82,20 @@ namespace MonsterCardGame.Tests.EditMode
         public SkillData DefiDePierre => Skill("Défi de pierre", () => SkillData.CreateActive(
             "Défi de pierre", MonsterRole.Tank, SkillTarget.Enemy, 0, new DamageEffect(10), new TauntEffect(1).On(EffectTarget.Self)));
 
+        // ── Thrâk le Perpétuel et ses clans ──────────────────────────────
+
+        public SkillData EspritPerpetuel => Skill("Esprit perpétuel", () => SkillData.CreatePassive(
+            "Esprit perpétuel", MonsterRole.Tank, SkillTarget.Self, PassiveTrigger.Always, new LeaderEffect(), new PerpetualEffect()).SetSpecial());
+
+        public SkillData AllegianceDuGuerrier => Skill("Allégeance du Guerrier", () => SkillData.CreatePassive(
+            "Allégeance du Guerrier", MonsterRole.Tank, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.DamageBonus, 10)));
+
+        public SkillData AllegianceDuPaladin => Skill("Allégeance du Paladin", () => SkillData.CreatePassive(
+            "Allégeance du Paladin", MonsterRole.Support, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.DamageReduction, 10)));
+
+        public SkillData AllegianceDeLArcher => Skill("Allégeance de l'Archer", () => SkillData.CreatePassive(
+            "Allégeance de l'Archer", MonsterRole.Carry, SkillTarget.None, PassiveTrigger.Always, new AllegianceEffect(AllegianceBonus.IgnoresTaunt)));
+
         public IEnumerable<SkillData> AllSkills => new[]
         {
             GrandBalayage, Griffe, Soin, Benediction, MorsurePerforante, Execution, ChasseurDeTrophees,
@@ -116,6 +130,22 @@ namespace MonsterCardGame.Tests.EditMode
             return encounter;
         }
 
+        /// <summary>Combat 3, Thrâk le Perpétuel, semi-boss des Plaines (docs/combats-scenario.md).</summary>
+        public EncounterData ThrakLePerpetuel()
+        {
+            var encounter = Track(ScriptableObject.CreateInstance<EncounterData>());
+            var thrak = Monster("Thrâk le Perpétuel", MonsterRole.Tank, 320, 60, EspritPerpetuel, Griffe, GrandBalayage);
+            encounter.Init("plaines-thrak-le-perpetuel", "Thrâk le Perpétuel", EncounterType.Scenario, new[]
+            {
+                thrak,
+                Monster("Champion guerrier",  MonsterRole.Tank,    240, 40, Provocation, AllegianceDuGuerrier),
+                Monster("Champion paladin",   MonsterRole.Support, 180, 40, Soin, AllegianceDuPaladin),
+                Monster("Champion archer",    MonsterRole.Carry,   150, 40, MorsurePerforante, AllegianceDeLArcher),
+                Monster("Guerrier centaure",  MonsterRole.Carry,   160, 40, MorsurePerforante, CoupDeBouclier),
+            }, skinnedMonster: thrak);
+            return encounter;
+        }
+
         /// <summary>Combat 2, l'avant-garde de Thrâk (docs/combats-scenario.md).</summary>
         public EncounterData AvantGardeDeThrak()
         {
@@ -143,7 +173,10 @@ namespace MonsterCardGame.Tests.EditMode
             Monster("Paladin centaure", MonsterRole.Tank,    280, 0, Provocation, Carapace, CoupDeBouclier),
         };
 
-        /// <summary>Équipe B, la horde de Thrâk.</summary>
+        /// <summary>
+        /// Équipe B, l'ancienne horde de Thrâk. Elle n'est plus dans le jeu (remplacée par le combat de Thrâk le Perpétuel) :
+        /// elle sert seulement à comparer le moteur au simulateur Python.
+        /// </summary>
         public MonsterCardData[] TeamB() => new[]
         {
             Monster("Thrâk le Perpétuel",  MonsterRole.Tank,    260, 0, Provocation, Griffe, GrandBalayage),

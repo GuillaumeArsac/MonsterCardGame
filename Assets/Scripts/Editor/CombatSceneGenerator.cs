@@ -22,7 +22,7 @@ namespace MonsterCardGame.Editor
     {
         private const string ScenePath      = "Assets/Scenes/Combat.unity";
         private const string CardPrefabPath = "Assets/Prefabs/Combat/MonsterCard.prefab";
-        private const string EncounterPath  = "Assets/Data/Encounters/test-horde-de-thrak.asset";
+        private const string EncounterPath  = "Assets/Data/Encounters/plaines-thrak-le-perpetuel.asset";
 
         private const string CardBackgroundPath = "Assets/Images/Others/SYL_fond_carte.png";
         private const string CardBorderPath     = "Assets/Images/Others/SYL_contour_plus_bande_forge.png";

@@ -11,11 +11,14 @@ namespace MonsterCardGame.Gameplay.Skills
     /// </summary>
     public static class SkillDescriber
     {
-        /// <summary>Type et rythme : « Active · recharge 3 » ou « Passive · au début du combat ».</summary>
+        /// <summary>Type et rythme : « Active · recharge 3 », « Passive · au début du combat » ou « Passive spéciale · toujours ».</summary>
         public static string Summary(SkillData skill)
-            => skill.IsActive
-                ? $"Active · {CooldownText(skill.Cooldown)}"
-                : $"Passive · {TriggerText(skill.Trigger)}";
+        {
+            string special = skill.IsSpecial ? " spéciale" : "";
+            return skill.IsActive
+                ? $"Active{special} · {CooldownText(skill.Cooldown)}"
+                : $"Passive{special} · {TriggerText(skill.Trigger)}";
+        }
 
         public static string TargetText(SkillTarget target) => target switch
         {
@@ -94,6 +97,14 @@ namespace MonsterCardGame.Gameplay.Skills
                                          + "(les compétences sans cible le touchent quand même)",
                 DamageGrowthEffect g    => $"les dégâts de cette compétence augmentent ensuite de {g.Amount} pour le reste du combat",
                 MaxHpGrowthEffect p     => $"ce monstre gagne ensuite {p.Amount} PV pour le reste du combat, PV de départ compris",
+                LeaderEffect            => "ce monstre est le chef des clans : il reçoit les bonus d'allégeance de ses alliés sur le terrain",
+                PerpetualEffect         => "chaque fois que l'adversaire marque un point, ce monstre, s'il est sur le terrain, récupère tous ses PV et perd ses saignements",
+                AllegianceEffect a      => "tant que ce monstre est sur le terrain, le chef des clans allié " + a.Bonus switch
+                {
+                    AllegianceBonus.DamageBonus     => $"inflige {a.Amount} dégâts de plus",
+                    AllegianceBonus.DamageReduction => $"subit {a.Amount} dégâts de moins",
+                    _                               => "ignore la Provocation"
+                },
                 LifeStealEffect         => "l'allié le plus blessé sur le terrain récupère autant de PV que les dégâts infligés (s'il saigne, ses saignements sont retirés à la place)",
                 MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus",
                 _                       => ""
