@@ -18,6 +18,8 @@ namespace MonsterCardGame.UI.Combat
         {
             engine.PhaseStarted    += e => Add($"<b>Tour {e.Turn} — {(e.Side == Side.Player ? "votre phase" : "phase adverse")}</b>");
             engine.MonsterPlaced   += e => { if (!e.DuringSetup) Add($"{Name(e.Monster)} est posé."); };
+            engine.MonsterSummoned += e => Add($"{Name(e.Summoner)} invoque {Name(e.Monster)}.");
+            engine.Reinforced      += e => Add($"{Name(e.Monster)} est renforcé : +{e.Hp} PV, +{e.Damage} dégâts infligés.");
             engine.SkillUsed       += e => Add(SkillText(e));
             engine.Damaged         += e => Add(e.IsFatigue ? $"{Name(e.Target)} subit {e.Amount} de fatigue ({e.HpAfter} PV)."
                                              : e.IsBleed   ? $"{Name(e.Target)} saigne : {e.Amount} dégât{(e.Amount > 1 ? "s" : "")} ({e.HpAfter} PV)."
@@ -33,7 +35,9 @@ namespace MonsterCardGame.UI.Combat
             };
             engine.Slowed          += m => Add($"{Name(m)} est ralenti.");
             engine.ReturnedToHand  += m => Add($"{Name(m)} retourne dans la main.");
-            engine.MonsterDefeated += e => Add($"{Name(e.Monster)} est vaincu{(e.ByFatigue ? " par la fatigue" : "")} : "
+            engine.MonsterDefeated += e => Add(e.PointsAwarded == 0
+                                             ? $"{Name(e.Monster)} est vaincu{(e.ByFatigue ? " par la fatigue" : "")}, sans point marqué."
+                                             : $"{Name(e.Monster)} est vaincu{(e.ByFatigue ? " par la fatigue" : "")} : "
                                              + $"+{e.PointsAwarded} point{(e.PointsAwarded > 1 ? "s" : "")} pour {(e.Monster.Side == Side.Player ? "l'adversaire" : "vous")}.");
             engine.CombatEnded     += e => Add($"<b>{(e.Winner == Side.Player ? "Victoire !" : "Défaite.")}</b>");
         }

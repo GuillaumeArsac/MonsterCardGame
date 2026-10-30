@@ -31,6 +31,38 @@ namespace MonsterCardGame.Gameplay.Combat
         }
     }
 
+    /// <summary>Monstre invoqué sur le terrain par une compétence (insectes de Vaelisse).</summary>
+    public readonly struct MonsterSummonedEvent
+    {
+        public readonly CombatMonster Monster;
+        public readonly CombatMonster Summoner;
+        public readonly int           Slot;
+
+        public MonsterSummonedEvent(CombatMonster monster, CombatMonster summoner, int slot)
+        {
+            Monster  = monster;
+            Summoner = summoner;
+            Slot     = slot;
+        }
+    }
+
+    /// <summary>Monstre invoqué renforcé, faute d'emplacement libre pour une nouvelle invocation.</summary>
+    public readonly struct ReinforcedEvent
+    {
+        public readonly CombatMonster Monster;
+        public readonly CombatMonster Summoner;
+        public readonly int           Hp;
+        public readonly int           Damage;
+
+        public ReinforcedEvent(CombatMonster monster, CombatMonster summoner, int hp, int damage)
+        {
+            Monster  = monster;
+            Summoner = summoner;
+            Hp       = hp;
+            Damage   = damage;
+        }
+    }
+
     /// <summary>Compétence active utilisée, ou passive déclenchée (Aura apaisante).</summary>
     public readonly struct SkillUsedEvent
     {

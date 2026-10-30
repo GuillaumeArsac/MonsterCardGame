@@ -146,6 +146,48 @@ namespace MonsterCardGame.Tests.EditMode
             return encounter;
         }
 
+        // ── Vaelisse, la Mère-Nuée, et ses insectes ──────────────────────
+
+        public SkillData NourrirLaReine => Skill("Nourrir la Reine", () => SkillData.CreateActive(
+            "Nourrir la Reine", MonsterRole.Support, SkillTarget.Ally, 1, new HealEffect(30)));
+
+        public SkillData PiqureEnVol => Skill("Piqûre en vol", () => SkillData.CreateActive(
+            "Piqûre en vol", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(20), new UntargetableEffect(1).On(EffectTarget.Self)));
+
+        public SkillData CrachatAcide => Skill("Crachat acide", () => SkillData.CreateActive(
+            "Crachat acide", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(10), new BleedEffect(2)));
+
+        public SkillData Ponte => Skill("Ponte", () => SkillData.CreateActive(
+            "Ponte", MonsterRole.Support, SkillTarget.None, 0, new SummonEffect(Insects(), 1, 20, 10)).SetSpecial());
+
+        public SkillData Essaim => Skill("Essaim", () => SkillData.CreateActive(
+            "Essaim", MonsterRole.Support, SkillTarget.None, 3, new SummonEffect(Insects(), 2, 20, 10)).SetSpecial());
+
+        public SkillData DardDeLaReine => Skill("Dard de la Reine", () => SkillData.CreateActive(
+            "Dard de la Reine", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(20)));
+
+        private MonsterCardData[] _insects;
+
+        /// <summary>Les insectes que les invocations de Vaelisse tirent au hasard.</summary>
+        public MonsterCardData[] Insects() => _insects ??= new[]
+        {
+            Monster("Ouvrière de la nuée", MonsterRole.Support,  60, 0, NourrirLaReine),
+            Monster("Soldat de chitine",   MonsterRole.Tank,    120, 0, Provocation),
+            Monster("Dard volant",         MonsterRole.Carry,    50, 0, PiqureEnVol),
+            Monster("Cracheur acide",      MonsterRole.Carry,    70, 0, CrachatAcide),
+        };
+
+        /// <summary>Combat 4, Vaelisse, boss des Plaines : seule carte adverse, sa défaite rapporte 3 points (docs/combats-scenario.md).</summary>
+        public EncounterData VaelisseMereNuee()
+        {
+            var vaelisse = Track(ScriptableObject.CreateInstance<MonsterCardData>());
+            vaelisse.Init("Vaelisse, la Mère-Nuée", MonsterRole.Tank, 650, new[] { Ponte, Essaim, DardDeLaReine },
+                          new StatBoost(80), defeatPoints: 3);
+            var encounter = Track(ScriptableObject.CreateInstance<EncounterData>());
+            encounter.Init("plaines-vaelisse-mere-nuee", "Vaelisse, la Mère-Nuée", EncounterType.Scenario, new[] { vaelisse }, skinnedMonster: vaelisse);
+            return encounter;
+        }
+
         /// <summary>Combat 2, l'avant-garde de Thrâk (docs/combats-scenario.md).</summary>
         public EncounterData AvantGardeDeThrak()
         {

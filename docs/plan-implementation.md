@@ -123,7 +123,7 @@ Le générateur de contenu donne leurs combats aux zones et crée les Ruines si 
 
 ## Points de conception encore ouverts
 
-- **Les combats suivants des Plaines :** le combat 2 (l'avant-garde de Thrâk) et le combat 3 (Thrâk le Perpétuel, semi-boss) sont faits (2026-10-24). Reste Vaelisse, boss de zone, avec les invocations d'insectes. Les Plaines n'ont plus de combat libre. Ce sont eux qui débloqueront, à terme, les Ruines.
+- **Les combats suivants des Plaines :** le combat 2 (l'avant-garde de Thrâk) et le combat 3 (Thrâk le Perpétuel, semi-boss) sont faits (2026-10-24). Le combat 4, Vaelisse, boss de zone avec ses invocations d'insectes, est en place (2026-10-29) et reste à équilibrer : à 650 PV, elle est battue une fois sur deux en moyenne, mais presque jamais sans l'Essence du sang. Sa défaite compte pour l'ouverture des Ruines. Les Plaines n'ont plus de combat libre.
 - **Équilibre des deux premiers combats :** trop faciles depuis la refonte de Nature et Vie (2026-10-24) ; voir `combats-scenario.md`.
 
 - **La Forge dans le récit :** elle fabrique les Essences (voir plus bas). La fiche de la Cité du Foyer (`docs/scenario/zones/00-cite-du-foyer.md`) parle encore de l'améliorer aux niveaux 2 et 3, une mécanique de l'ancienne version : elle est à réécrire.

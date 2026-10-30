@@ -36,6 +36,7 @@ namespace MonsterCardGame.Editor
             var patrol   = GeneratePatrol();
             var vanguard = GenerateVanguard();
             var thrak    = GenerateThrak();
+            var vaelisse = GenerateVaelisse();
 
             var encounters = new List<EncounterData>
             {
@@ -43,12 +44,14 @@ namespace MonsterCardGame.Editor
                 Encounter("plaines-avant-garde-de-thrak", "L'avant-garde de Thrâk", EncounterType.Scenario, vanguard),
                 // Semi-boss : Thrâk est toujours dépecé
                 Encounter("plaines-thrak-le-perpetuel", "Thrâk le Perpétuel", EncounterType.Scenario, thrak, skinnedMonster: thrak[0]),
+                // Boss de zone : Vaelisse seule, toujours dépecée
+                Encounter("plaines-vaelisse-mere-nuee", "Vaelisse, la Mère-Nuée", EncounterType.Scenario, vaelisse.Take(1), skinnedMonster: vaelisse[0]),
             };
 
-            GenerateZones(scenario: encounters);
+            GenerateZones(scenario: encounters, boss: encounters[^1]);
 
             var database = GetOrCreate<ContentDatabase>("Assets/Resources", ContentDatabase.ResourcePath);
-            database.Init(Skills.Values, starters.Concat(teamA).Concat(patrol).Concat(vanguard).Concat(thrak), starters, encounters);
+            database.Init(Skills.Values, starters.Concat(teamA).Concat(patrol).Concat(vanguard).Concat(thrak).Concat(vaelisse), starters, encounters);
             Save(database);
 
             AssetDatabase.SaveAssets();
@@ -168,6 +171,36 @@ namespace MonsterCardGame.Editor
             Monster("Thrak", "Guerrier centaure",  MonsterRole.Carry,   160, 40, "CentaurWarrior",                   "Morsure perforante", "Coup de bouclier"),
         };
 
+        /// <summary>
+        /// Combat 4, boss des Plaines (docs/combats-scenario.md) : Vaelisse est la seule carte adverse, et sa défaite rapporte 3 points.
+        /// Ses invocations tirent au hasard l'un des quatre insectes. Retourne Vaelisse en premier, puis ses insectes.
+        /// </summary>
+        private static List<MonsterCardData> GenerateVaelisse()
+        {
+            // Les insectes d'abord : les invocations les référencent
+            Active("Nourrir la Reine", MonsterRole.Support, SkillTarget.Ally, 1, new HealEffect(30));
+            Active("Piqûre en vol", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(20), new UntargetableEffect(1).On(EffectTarget.Self));
+            Active("Crachat acide", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(10), new BleedEffect(2));
+
+            var insects = new List<MonsterCardData>
+            {
+                Monster("Vaelisse", "Ouvrière de la nuée", MonsterRole.Support,  60, 0, null, "Nourrir la Reine"),
+                Monster("Vaelisse", "Soldat de chitine",   MonsterRole.Tank,    120, 0, null, "Provocation"),
+                Monster("Vaelisse", "Dard volant",         MonsterRole.Carry,    50, 0, null, "Piqûre en vol"),
+                Monster("Vaelisse", "Cracheur acide",      MonsterRole.Carry,    70, 0, null, "Crachat acide"),
+            };
+
+            Active("Ponte", MonsterRole.Support, SkillTarget.None, 0, new SummonEffect(insects, 1, 20, 10));
+            Special("Ponte");
+            Active("Essaim", MonsterRole.Support, SkillTarget.None, 3, new SummonEffect(insects, 2, 20, 10));
+            Special("Essaim");
+            Active("Dard de la Reine", MonsterRole.Carry, SkillTarget.Enemy, 1, new DamageEffect(20));
+
+            var vaelisse = Monster("Vaelisse", "Vaelisse, la Mère-Nuée", MonsterRole.Tank, 650, 80, null, defeatPoints: 3,
+                                   "Ponte", "Essaim", "Dard de la Reine");
+            return new[] { vaelisse }.Concat(insects).ToList();
+        }
+
         private static List<MonsterCardData> GeneratePatrol() => new()
         {
             Monster("Patrouille", "Éclaireur centaure", MonsterRole.Carry,   140, 20, null, "Griffe"),
@@ -189,6 +222,10 @@ namespace MonsterCardGame.Editor
 
         private static MonsterCardData Monster(string folder, string name, MonsterRole role, int hp, int boostHp,
                                                string artwork, params string[] skills)
+            => Monster(folder, name, role, hp, boostHp, artwork, defeatPoints: 1, skills);
+
+        private static MonsterCardData Monster(string folder, string name, MonsterRole role, int hp, int boostHp,
+                                               string artwork, int defeatPoints, params string[] skills)
         {
             var card = GetOrCreate<MonsterCardData>($"{Root}/Monsters/{folder}", name);
             // L'illustration et le cadre réglés à la main dans l'asset sont gardés : le générateur ne donne
@@ -197,7 +234,7 @@ namespace MonsterCardGame.Editor
             var frame = card.CardFrame != null ? card.CardFrame
                       : folder == "Essences" ? null
                       : AssetDatabase.LoadAllAssetsAtPath(PlainsCardFramePath).OfType<Sprite>().FirstOrDefault();
-            card.Init(name, role, hp, skills.Select(s => Skills[s]), new StatBoost(boostHp), artwork: art, cardFrame: frame);
+            card.Init(name, role, hp, skills.Select(s => Skills[s]), new StatBoost(boostHp), artwork: art, cardFrame: frame, defeatPoints: defeatPoints);
             Save(card);
             return card;
         }
@@ -230,7 +267,7 @@ namespace MonsterCardGame.Editor
         /// Combats des zones. L'identité des zones (nom, illustration, position) se règle à la main dans leurs assets :
         /// seules les Ruines sont créées si elles manquent.
         /// </summary>
-        private static void GenerateZones(IEnumerable<EncounterData> scenario)
+        private static void GenerateZones(IEnumerable<EncounterData> scenario, EncounterData boss)
         {
             var plains = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Plains.asset");
             if (plains == null)
@@ -239,9 +276,8 @@ namespace MonsterCardGame.Editor
                 return;
             }
 
-            // Vaelisse, boss des Plaines, n'est pas encore conçue : sans boss, les Ruines restent verrouillées.
-            // Pas encore de combat libre dans les Plaines.
-            plains.SetEncounters(scenario, System.Array.Empty<EncounterData>(), null);
+            // Vaelisse, boss des Plaines : sa défaite compte pour les Ruines. Pas encore de combat libre dans les Plaines.
+            plains.SetEncounters(scenario, System.Array.Empty<EncounterData>(), boss);
             Save(plains);
 
             var ruins = AssetDatabase.LoadAssetAtPath<ZoneData>($"{ZoneFolder}/Ruins.asset");

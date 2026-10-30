@@ -34,6 +34,10 @@ namespace MonsterCardGame.Gameplay.Combat
         private bool _skillUsedThisPhase;
 
         public event Action<MonsterPlacedEvent>   MonsterPlaced;
+        /// <summary>Monstre invoqué pendant le combat : il rejoint l'équipe de son camp (GetTeam).</summary>
+        public event Action<MonsterSummonedEvent> MonsterSummoned;
+        /// <summary>Monstre invoqué renforcé par une invocation, faute d'emplacement libre.</summary>
+        public event Action<ReinforcedEvent>      Reinforced;
         public event Action<SkillUsedEvent>       SkillUsed;
         public event Action<DamageEvent>          Damaged;
         public event Action<HealEvent>            Healed;
@@ -109,6 +113,13 @@ namespace MonsterCardGame.Gameplay.Combat
 
         /// <summary>Points que rapporte à l'adversaire un monstre de ce camp vaincu sur cet emplacement.</summary>
         public int PointsForDefeatAt(Side side, int slot) => 1 + _markedSlots[side].Count(s => s == slot);
+
+        /// <summary>
+        /// Points que rapporterait à l'adversaire la défaite de ce monstre sur le terrain : les siens (1, 3 pour Vaelisse),
+        /// plus les marques de son emplacement. Un monstre invoqué ne rapporte rien.
+        /// </summary>
+        public int PointsForDefeat(CombatMonster monster)
+            => monster.DefeatPoints <= 0 ? 0 : monster.DefeatPoints + _markedSlots[monster.Side].Count(s => s == monster.Slot);
 
         /// <summary>Dégâts de fatigue au début du tour : 0 avant le tour 16, puis 10, 20, 30...</summary>
         public static int FatigueDamage(int turn)
@@ -306,6 +317,13 @@ namespace MonsterCardGame.Gameplay.Combat
                     continue;
                 }
 
+                // Invocation (Vaelisse) : sur les emplacements libres de ce camp, sinon renfort d'un monstre invoqué
+                if (effect is SummonEffect summon)
+                {
+                    for (int n = 0; n < summon.Count; n++) Summon(source, summon);
+                    continue;
+                }
+
                 // Une cible vaincue ou renvoyée en main ne subit pas la suite des effets
                 foreach (var target in EffectTargets(source, effect, targets).ToList())
                     if (target.IsOnField) dealt += ApplyEffect(source, skillIndex, effect, target);
@@ -371,6 +389,7 @@ namespace MonsterCardGame.Gameplay.Combat
 
                 // Passives traitées ailleurs : emplacement marqué (début du combat), chef et allégeances (terrain)
                 case MarkedSlotEffect:
+                case SummonEffect:
                 case LeaderEffect:
                 case PerpetualEffect:
                 case AllegianceEffect:
@@ -411,6 +430,43 @@ namespace MonsterCardGame.Gameplay.Combat
             Healed?.Invoke(new HealEvent(target, source, healed, target.Hp));
         }
 
+        /// <summary>
+        /// Une invocation : un monstre tiré au hasard dans la liste, sur un emplacement libre tiré au hasard. Il ne rapporte
+        /// aucun point et n'agit qu'à la phase suivante. Terrain plein : un monstre invoqué allié est renforcé à la place.
+        /// </summary>
+        private void Summon(CombatMonster source, SummonEffect summon)
+        {
+            var side = source.Side;
+            var cards = summon.Pool.Where(c => c != null).ToList();
+            if (cards.Count == 0) return;
+
+            var free = Enumerable.Range(0, GameRules.FieldSlots).Where(i => _field[side][i] == null).ToList();
+            if (free.Count > 0)
+            {
+                var monster = CombatMonster.From(cards[_random.Next(cards.Count)]);
+                monster.Side         = side;
+                monster.IsSummoned   = true;
+                monster.DefeatPoints = 0;
+                _team[side].Add(monster);
+
+                int slot = free[_random.Next(free.Count)];
+                _field[side][slot] = monster;
+                monster.EnterField(slot);
+                monster.MarkAllUsed();
+                RefreshAllegiances(side);
+                MonsterSummoned?.Invoke(new MonsterSummonedEvent(monster, source, slot));
+                return;
+            }
+
+            var summoned = GetField(side).Where(m => m.IsSummoned).ToList();
+            if (summoned.Count == 0) return;
+
+            var reinforced = summoned[_random.Next(summoned.Count)];
+            reinforced.GrowMaxHp(summon.ReinforceHp);
+            reinforced.ReinforcementDamageBonus += summon.ReinforceDamage;
+            Reinforced?.Invoke(new ReinforcedEvent(reinforced, source, summon.ReinforceHp, summon.ReinforceDamage));
+        }
+
         private void AddModifier(CombatMonster source, CombatMonster target, CombatModifier modifier)
         {
             target.AddModifier(modifier);
@@ -426,16 +482,19 @@ namespace MonsterCardGame.Gameplay.Combat
             ReturnedToHand?.Invoke(monster);
         }
 
-        /// <summary>Monstre vaincu : retiré du combat, 1 point pour l'adversaire (plus l'emplacement marqué), fatigue et saignement compris.</summary>
+        /// <summary>
+        /// Monstre vaincu : retiré du combat, ses points pour l'adversaire (plus l'emplacement marqué), fatigue et saignement compris.
+        /// Un monstre invoqué ne rapporte rien.
+        /// </summary>
         private void Defeat(CombatMonster monster, bool byFatigue)
         {
             var side = monster.Side;
             int slot = monster.Slot;
+            int points = PointsForDefeat(monster);
 
             _field[side][slot] = null;
             monster.Defeat();
 
-            int points = PointsForDefeatAt(side, slot);
             _points[side.Opponent()] += points;
             RefreshAllegiances(side);
 

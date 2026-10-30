@@ -20,5 +20,6 @@ MonoBehaviour:
   _skills:
   - {fileID: 11400000, guid: 633cde97fafc5d04faebc61a05a12553, type: 2}
   _uniqueSkill: {fileID: 0}
+  _defeatPoints: 1
   _statBoost:
     _hp: 0

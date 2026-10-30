@@ -10,7 +10,7 @@
 | **Zone** | Les Plaines Libres |
 | **Type** | Boss de zone |
 | **Difficulté** | ★★★ |
-| **Mécanique associée** | Submersion — pontes de larves qui mûrissent en insectes de plus en plus puissants |
+| **Mécanique associée** | Invocations — Vaelisse, seule carte adverse, pond des insectes tirés au hasard (voir docs/combats-scenario.md, combat 4) |
 | **Rareté des matériaux** | Rare + Légendaire (Œuf de Reine) |
 
 ## Rôle narratif

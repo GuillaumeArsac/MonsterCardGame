@@ -32,7 +32,7 @@ Après chaque **victoire** :
 - Si le monstre qui reçoit la compétence en a déjà 3, le joueur choisit l'une d'elles à remplacer. La compétence remplacée est perdue.
 - Une compétence unique, obtenue par une quête secondaire, ne peut jamais être remplacée.
 - Un monstre peut recevoir une compétence qu'il possède déjà. Les deux exemplaires se cumulent selon la règle de cumul.
-- **Compétences spéciales :** les compétences propres aux boss et semi-boss (par exemple Esprit perpétuel) sont spéciales. Un monstre n'en porte qu'**une** : s'il en a déjà une, la nouvelle ne peut que la remplacer, même s'il a un emplacement libre. Elles s'affichent « Active spéciale » ou « Passive spéciale ».
+- **Compétences spéciales :** les compétences propres aux boss et semi-boss (Esprit perpétuel, Ponte, Essaim) sont spéciales. Un monstre n'en porte qu'**une** : s'il en a déjà une, la nouvelle ne peut que la remplacer, même s'il a un emplacement libre. Elles s'affichent « Active spéciale » ou « Passive spéciale ».
 
 **Boost de stats**
 - Chaque monstre adverse a un **boost de stats** défini à l'avance, indépendant de ses propres statistiques (par exemple : +40 PV).

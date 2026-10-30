@@ -35,7 +35,7 @@ namespace MonsterCardGame.Editor
             }
 
             var starters = content.StarterMonsters.ToList();
-            var opponents = new[] { "plaines-patrouille-centaure", "plaines-avant-garde-de-thrak", "plaines-thrak-le-perpetuel" }
+            var opponents = new[] { "plaines-patrouille-centaure", "plaines-avant-garde-de-thrak", "plaines-thrak-le-perpetuel", "plaines-vaelisse-mere-nuee" }
                             .Select(content.FindEncounter).Where(e => e != null).ToList();
             var teams = Combinations(starters, GameRules.TeamSize).ToList();
 

@@ -21,6 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 04579b07dce74f54ab424eff5df91338, type: 2}
   - {fileID: 11400000, guid: 5b629b25425976044a3dbe8dfe593c83, type: 2}
   - {fileID: 11400000, guid: c91317da067cdb949bb5f2d7f59af4d0, type: 2}
+  - {fileID: 11400000, guid: 8eef98baf5eb22e45b390791c7bc1fcc, type: 2}
   _freeEncounters: []
-  _bossEncounter: {fileID: 0}
+  _bossEncounter: {fileID: 11400000, guid: 8eef98baf5eb22e45b390791c7bc1fcc, type: 2}
   _requiresAllOtherBossesDefeated: 0

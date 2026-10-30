@@ -97,14 +97,9 @@ namespace MonsterCardGame.UI.Combat
             _engine.CombatEnded += OnCombatEnded;
 
             foreach (var monster in player.Concat(enemy))
-            {
-                var view = Instantiate(_cardPrefab, _hiddenCards);
-                view.name = monster.Name;
-                view.Bind(monster);
-                view.Clicked += OnCardClicked;
-                view.SkillClicked += OnSkillClicked;
-                _views[monster] = view;
-            }
+                CreateView(monster);
+            // Les insectes de Vaelisse arrivent en cours de combat
+            _engine.MonsterSummoned += e => CreateView(e.Monster);
 
             foreach (var slot in _playerSlots.Concat(_enemySlots))
                 slot.Clicked += OnSlotClicked;
@@ -115,6 +110,16 @@ namespace MonsterCardGame.UI.Combat
             _endPanel.SetActive(false);
 
             Refresh();
+        }
+
+        private void CreateView(CombatMonster monster)
+        {
+            var view = Instantiate(_cardPrefab, _hiddenCards);
+            view.name = monster.Name;
+            view.Bind(monster);
+            view.Clicked += OnCardClicked;
+            view.SkillClicked += OnSkillClicked;
+            _views[monster] = view;
         }
 
         private void Update()

@@ -32,6 +32,10 @@ namespace MonsterCardGame.Gameplay.Monsters
         [SerializeField, Tooltip("Monstres de quête : compétence unique, qui ne peut jamais être remplacée. Doit faire partie des compétences")]
         private SkillData _uniqueSkill;
 
+        [Header("Combat")]
+        [SerializeField, Min(0), Tooltip("Points marqués par l'adversaire quand ce monstre est vaincu (3 pour Vaelisse : sa défaite fait gagner)")]
+        private int _defeatPoints = 1;
+
         [Header("Dépeçage")]
         [SerializeField, Tooltip("Boost donné au joueur s'il choisit le boost lors du dépeçage de ce monstre")]
         private StatBoost _statBoost;
@@ -44,12 +48,14 @@ namespace MonsterCardGame.Gameplay.Monsters
         public IReadOnlyList<SkillData> Skills      => _skills;
         public SkillData                UniqueSkill => _uniqueSkill;
         public StatBoost                StatBoost   => _statBoost;
+        public int                      DefeatPoints => _defeatPoints;
 
         /// <summary>Remplit la carte. Pour les scripts d'éditeur et les tests.</summary>
         public void Init(string monsterName, MonsterRole role, int maxHp, IEnumerable<SkillData> skills,
                          StatBoost statBoost = default, SkillData uniqueSkill = null, Sprite artwork = null,
-                         Sprite cardFrame = null)
+                         Sprite cardFrame = null, int defeatPoints = 1)
         {
+            _defeatPoints = defeatPoints;
             _monsterName = monsterName;
             _role        = role;
             _maxHp       = maxHp;

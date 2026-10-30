@@ -381,3 +381,40 @@ Le semi-boss des Plaines et ses clans (voir [combats-scenario.md](combats-scenar
 
 - Les allégeances de plusieurs alliés se cumulent.
 - Elles disparaissent dès que le monstre qui les donne quitte le terrain (vaincu ou renvoyé en main).
+
+## Compétences de Vaelisse, la Mère-Nuée
+
+Ponte et Essaim sont des **compétences spéciales** : le joueur peut les obtenir en dépeçant Vaelisse, mais un monstre n'en porte qu'une (voir [progression.md](progression.md), Dépeçage).
+
+### Ponte, Essaim
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Support |
+| **Cible** | Aucune |
+| **Effet** | Invoque un insecte (Ponte) ou deux (Essaim) tirés au hasard parmi l'Ouvrière de la nuée, le Soldat de chitine, le Dard volant et le Cracheur acide, sur un emplacement libre tiré au hasard |
+| **Temps de recharge** | 0 (Ponte), 3 (Essaim) |
+
+- **Un monstre invoqué ne rapporte aucun point** quand il est vaincu, et n'agit qu'à partir de la phase suivante de son camp.
+- **Terrain plein :** chaque invocation renforce à la place un monstre invoqué allié tiré au hasard : +20 PV (PV de départ et actuels) et +10 dégâts infligés, pour le reste du combat. Sans monstre invoqué sur le terrain, elle ne fait rien.
+
+### Dard de la Reine
+
+| Champ | Valeur |
+|---|---|
+| **Type** | Active |
+| **Rôle visé** | Carry |
+| **Cible** | Un ennemi sur le terrain |
+| **Effet** | Inflige 20 dégâts |
+| **Temps de recharge** | 1 |
+
+### Compétences des insectes
+
+| Compétence | Insecte | Cible | Effet | Recharge |
+|---|---|---|---|---|
+| **Nourrir la Reine** | Ouvrière de la nuée | Un allié | Rend 30 PV (à un monstre qui saigne, retire ses saignements) | 1 |
+| **Piqûre en vol** | Dard volant | Un ennemi | 20 dégâts, puis ce monstre est inciblable jusqu'à la fin de la prochaine phase adverse | 1 |
+| **Crachat acide** | Cracheur acide | Un ennemi | 10 dégâts et 2 saignements | 1 |
+
+Le Soldat de chitine a la Provocation du catalogue.

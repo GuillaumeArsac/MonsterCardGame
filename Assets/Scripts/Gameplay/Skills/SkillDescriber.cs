@@ -106,9 +106,21 @@ namespace MonsterCardGame.Gameplay.Skills
                     _                               => "ignore la Provocation"
                 },
                 LifeStealEffect         => "l'allié le plus blessé sur le terrain récupère autant de PV que les dégâts infligés (s'il saigne, ses saignements sont retirés à la place)",
+                SummonEffect s          => SummonText(s),
                 MarkedSlotEffect m      => $"marque un emplacement adverse tiré au hasard : un monstre adverse vaincu sur cet emplacement rapporte {Plural(m.BonusPoints, "point")} de plus",
                 _                       => ""
             };
+        }
+
+        /// <summary>« invoque 2 insectes tirés au hasard (Ouvrière, Soldat de chitine) ... »</summary>
+        private static string SummonText(SummonEffect s)
+        {
+            var names = s.Pool.Where(c => c != null).Select(c => c.MonsterName).Distinct().ToList();
+            string what = s.Count > 1 ? $"{s.Count} monstres tirés" : "un monstre tiré";
+            string pool = names.Count > 0 ? $" parmi : {string.Join(", ", names)}" : "";
+            return $"invoque {what} au hasard{pool}, sur un emplacement libre. Un monstre invoqué ne rapporte aucun point "
+                 + $"et n'agit qu'à partir de la phase suivante. Terrain plein : un monstre invoqué allié gagne à la place "
+                 + $"{s.ReinforceHp} PV et {Plural(s.ReinforceDamage, "dégât")} infligés en plus, pour le reste du combat";
         }
 
         private static string DurationText(int turns) => turns <= 0 ? "en permanence" : $"pendant {Plural(turns, "tour")}";

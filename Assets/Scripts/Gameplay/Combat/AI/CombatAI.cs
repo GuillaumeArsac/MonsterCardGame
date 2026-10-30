@@ -152,7 +152,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 {
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount + m.GetDamageGrowth(skillIndex), damage.IgnoresReductions);
-                    if (d >= t.Hp) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) - PerpetualPenalty(engine, t) + ExtraValue(engine, m, skill, null, d) + noise;
+                    if (d >= t.Hp) return KillScore * engine.PointsForDefeat(t) + Threat(t) - PerpetualPenalty(engine, t) + ExtraValue(engine, m, skill, null, d) + noise;
                     return d / Unit + 0.15 * Threat(t) + 2.0 * d / Math.Max(t.Hp, 1) + ExtraValue(engine, m, skill, t, d) + noise;
                 }
 
@@ -162,7 +162,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 case SkillKind.Execute:
                 {
                     var execute = skill.GetEffect<ExecuteEffect>();
-                    if (t.Hp <= execute.HpThreshold) return KillScore * engine.PointsForDefeatAt(t.Side, t.Slot) + Threat(t) - PerpetualPenalty(engine, t) + noise;
+                    if (t.Hp <= execute.HpThreshold) return KillScore * engine.PointsForDefeat(t) + Threat(t) - PerpetualPenalty(engine, t) + noise;
                     return CombatEngine.ComputeDamage(m, t, execute.FallbackDamage, false) / Unit * 0.8 + noise;
                 }
 
@@ -170,7 +170,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 {
                     var damage = skill.GetEffect<DamageEffect>();
                     int d = CombatEngine.ComputeDamage(m, t, damage.Amount, damage.IgnoresReductions);
-                    if (d >= t.Hp) return KillScore + Threat(t) + noise;
+                    if (d >= t.Hp) return KillScore * engine.PointsForDefeat(t) + Threat(t) + noise;
                     return d / Unit + 0.4 * Threat(t) + noise;
                 }
 
@@ -181,7 +181,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                     foreach (var enemy in engine.GetField(m.Side.Opponent()))
                     {
                         int d = CombatEngine.ComputeDamage(m, enemy, damage.Amount, damage.IgnoresReductions);
-                        value += d / Unit + 0.4 * Threat(enemy) + (d >= enemy.Hp ? KillScore : 0);
+                        value += d / Unit + 0.4 * Threat(enemy) + (d >= enemy.Hp ? KillScore * enemy.DefeatPoints : 0);
                     }
                     return value + noise;
                 }
@@ -202,6 +202,15 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 {
                     int dealers = engine.GetField(m.Side).Count(a => a.Skills.Any(s => s.IsActive && s.GetEffect<DamageEffect>() != null));
                     return 1.6 * dealers + noise;
+                }
+
+                case SkillKind.Summon:
+                {
+                    // Une invocation sur un emplacement libre vaut un monstre de plus ; un renfort, un peu moins
+                    var summon = skill.GetEffect<SummonEffect>();
+                    int free = GameRules.FieldSlots - engine.GetField(m.Side).Count();
+                    int placed = Math.Min(free, summon.Count);
+                    return 3.0 * placed + 1.5 * (summon.Count - placed) + noise;
                 }
 
                 case SkillKind.Retreat:
@@ -307,6 +316,7 @@ namespace MonsterCardGame.Gameplay.Combat.AI
                 case SkillKind.Protect: return skill.GetEffect<DamageReductionEffect>().Amount / Unit / 2.0;
                 case SkillKind.Bless:   return 2.5 * skill.GetEffect<DamageBonusEffect>().Amount / Unit;
                 case SkillKind.Retreat: return 0.5;
+                case SkillKind.Summon:  return 2.0 * skill.GetEffect<SummonEffect>().Count;
                 default:                return 0;
             }
         }
@@ -331,13 +341,16 @@ namespace MonsterCardGame.Gameplay.Combat.AI
             /// <summary>Bonus de dégâts à tous les alliés (Bénédiction).</summary>
             Bless,
             /// <summary>Retour en main d'un allié (Repli).</summary>
-            Retreat
+            Retreat,
+            /// <summary>Invocation de monstres (Vaelisse).</summary>
+            Summon
         }
 
         internal static SkillKind Classify(SkillData skill)
         {
             if (!skill.IsActive) return SkillKind.Unknown;
 
+            if (skill.GetEffect<SummonEffect>() != null)       return SkillKind.Summon;
             if (skill.GetEffect<ExecuteEffect>() != null)      return SkillKind.Execute;
             if (skill.GetEffect<DamageEffect>() != null)
             {

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f5e1f7827483242b8b596efb51fbd0, type: 3}
+  m_Name: Ponte
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Skills.SkillData
+  _skillName: Ponte
+  _type: 0
+  _role: 1
+  _target: 7
+  _cooldown: 0
+  _trigger: 0
+  _effects:
+  - rid: 3690275062059106308
+  _isSpecial: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 3690275062059106308
+      type: {class: SummonEffect, ns: MonsterCardGame.Gameplay.Skills.Effects, asm: MonsterCardGame.Gameplay}
+      data:
+        _appliesTo: 0
+        _pool:
+        - {fileID: 11400000, guid: 76ec3d217f732fd4289cb3e300fc40bd, type: 2}
+        - {fileID: 11400000, guid: 1b615e4daa1549b46b10bf8d4b573b5b, type: 2}
+        - {fileID: 11400000, guid: 8bea4ca947c8831458f1855d4603bae1, type: 2}
+        - {fileID: 11400000, guid: 47692153eda5c0b498c117a48be324f2, type: 2}
+        _count: 1
+        _reinforceHp: 20
+        _reinforceDamage: 10

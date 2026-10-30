@@ -21,5 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5da6794283b1e4342b929c946fbadfb2, type: 2}
   - {fileID: 11400000, guid: eb26f64e50cec8b48bd0ba1b8a3752d5, type: 2}
   _uniqueSkill: {fileID: 0}
+  _defeatPoints: 1
   _statBoost:
     _hp: 40

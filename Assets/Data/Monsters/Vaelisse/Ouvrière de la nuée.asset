@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5912bd33a040246bce2066e1c4d60e, type: 3}
+  m_Name: "Ouvri\xE8re de la nu\xE9e"
+  m_EditorClassIdentifier: MonsterCardGame.Gameplay::MonsterCardGame.Gameplay.Monsters.MonsterCardData
+  _monsterName: "Ouvri\xE8re de la nu\xE9e"
+  _artwork: {fileID: 0}
+  _cardFrame: {fileID: -2614554286251728933, guid: 41b02ca8b92aad54188aa23693c8fc02, type: 3}
+  _role: 1
+  _maxHp: 60
+  _skills:
+  - {fileID: 11400000, guid: abecfb1fa909a03479c3f0d4b81438d9, type: 2}
+  _uniqueSkill: {fileID: 0}
+  _defeatPoints: 1
+  _statBoost:
+    _hp: 0

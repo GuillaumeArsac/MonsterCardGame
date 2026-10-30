@@ -153,3 +153,55 @@ Thrâk n'a pas de Provocation : c'est le Champion guerrier qui protège le camp.
 - **L'Essence de pierre** n'apporte presque plus rien (51 % avec, 50 % sans), car l'Archer permet à Thrâk d'ignorer sa Provocation.
 
 Ce combat remplace la « horde de Thrâk » (équipe de test B), qui servait de combat libre provisoire et que personne ne battait.
+
+## Combat 4 — Vaelisse, la Mère-Nuée (boss de zone, proposition à équilibrer)
+
+| Champ | Valeur |
+|---|---|
+| **Zone** | Les Plaines Libres |
+| **Moment** | Après Thrâk le Perpétuel. Sa défaite compte pour l'ouverture des Ruines |
+| **Type** | Boss de zone : une seule carte adverse, qui invoque des insectes |
+| **Équipe du joueur attendue** | Les Essences, avec les récompenses des trois premiers combats |
+
+**Contexte :** Vaelisse, reine d'essaim pervertie par l'Entité, ne se bat pas seule : elle pond sans cesse des insectes tirés au hasard (voir [la fiche de scénario](scenario/monstres/plaines/vaelisse-mere-nuee.md)).
+
+### Identité de Vaelisse
+
+- **Seule carte adverse :** elle est posée seule au début du combat. L'adversaire n'a aucun monstre en main.
+- **Sa défaite rapporte 3 points :** la vaincre fait gagner le combat. Ses insectes ne rapportent **aucun** point.
+- **Les invocations :** chaque invocation pose un insecte tiré au hasard sur un emplacement libre. Un insecte invoqué n'agit qu'à partir de la phase suivante de son camp.
+- **Terrain plein :** l'invocation renforce à la place un insecte tiré au hasard : +20 PV (PV de départ et actuels) et +10 dégâts infligés, pour le reste du combat.
+
+Le joueur doit choisir : frapper la Reine, ou nettoyer des insectes qui ne rapportent rien mais grossissent à chaque ponte quand le terrain est plein.
+
+### Équipe adverse
+
+| Monstre | Rôle | PV | Compétences | Boost de stats |
+|---|---|---|---|---|
+| **Vaelisse, la Mère-Nuée** | Tank | 650 | Ponte, Essaim, Dard de la Reine | +80 PV |
+
+### Les insectes
+
+| Insecte | Rôle | PV | Compétence |
+|---|---|---|---|
+| **Ouvrière de la nuée** | Support | 60 | Nourrir la Reine : rend 30 PV à un allié (recharge 1) |
+| **Soldat de chitine** | Tank | 120 | Provocation : protège la Reine |
+| **Dard volant** | Carry | 50 | Piqûre en vol : 20 dégâts, puis inciblable jusqu'à la fin de la prochaine phase adverse (recharge 1) |
+| **Cracheur acide** | Carry | 70 | Crachat acide : 10 dégâts et 2 saignements (recharge 1) |
+
+**Dépeçage :** c'est toujours Vaelisse qui est dépecée. Ponte et Essaim sont des compétences spéciales : le joueur peut les prendre, mais un monstre n'en porte qu'une.
+
+### Résultats des simulations
+
+1 000 combats par équipe (2026-10-31), sans les récompenses de dépeçage, avec Vaelisse à 650 PV et Essaim en recharge 3 :
+
+| Équipe du joueur | Victoires | Durée moyenne |
+|---|---|---|
+| Nature, Vie, Cieux, Sang, Profondeurs (la meilleure) | 83 % | 10 tours |
+| Nature, Vie, Pierre, Ombre, Cieux (l'équipe de début de partie) | 14 % | 12 tours |
+| Vie, Pierre, Ombre, Cieux, Profondeurs (la pire) | 0 % | 13 tours |
+| Moyenne des 21 équipes | 49 % | 11 tours |
+
+- **L'Essence du sang reste presque indispensable** (64 % de victoires avec elle, 11 % sans). Le saignement retire 5 % des PV max par cumul : 32 PV par cumul sur les 650 PV de Vaelisse.
+- **L'Essence d'ombre** est la plus faible ici (43 % avec, 64 % sans) : ses 100 PV ne résistent pas aux insectes.
+- Premier réglage (2026-10-29) : avec 900 PV et Essaim en recharge 2, 35 % de victoires en moyenne, et aucune sans le Sang.

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using MonsterCardGame.Gameplay.Monsters;
 
 namespace MonsterCardGame.Gameplay.Skills.Effects
 {
@@ -252,6 +254,42 @@ namespace MonsterCardGame.Gameplay.Skills.Effects
         {
             _bonus  = bonus;
             _amount = amount;
+        }
+    }
+
+    /// <summary>
+    /// Invocation (Vaelisse) : pose des monstres tirés au hasard dans la liste, sur les emplacements libres de ce camp.
+    /// Un monstre invoqué ne rapporte aucun point quand il est vaincu, et n'agit qu'à partir de la phase suivante de son camp.
+    /// Sans emplacement libre, chaque invocation renforce à la place un monstre invoqué allié tiré au hasard
+    /// (PV de départ et PV actuels, et dégâts infligés, pour le reste du combat).
+    /// </summary>
+    [Serializable]
+    public class SummonEffect : SkillEffect
+    {
+        [SerializeField, Tooltip("Monstres possibles, tirés au hasard à chaque invocation")]
+        private List<MonsterCardData> _pool = new();
+
+        [SerializeField, Min(1), Tooltip("Nombre d'invocations")]
+        private int _count = 1;
+
+        [SerializeField, Min(0), Tooltip("Terrain plein : PV gagnés par le monstre invoqué renforcé")]
+        private int _reinforceHp = 20;
+
+        [SerializeField, Min(0), Tooltip("Terrain plein : dégâts infligés en plus par le monstre invoqué renforcé")]
+        private int _reinforceDamage = 10;
+
+        public IReadOnlyList<MonsterCardData> Pool            => _pool;
+        public int                            Count           => _count;
+        public int                            ReinforceHp     => _reinforceHp;
+        public int                            ReinforceDamage => _reinforceDamage;
+
+        public SummonEffect() { }
+        public SummonEffect(IEnumerable<MonsterCardData> pool, int count, int reinforceHp, int reinforceDamage)
+        {
+            _pool            = new List<MonsterCardData>(pool);
+            _count           = count;
+            _reinforceHp     = reinforceHp;
+            _reinforceDamage = reinforceDamage;
         }
     }
 

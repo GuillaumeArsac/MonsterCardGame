@@ -28,7 +28,7 @@ namespace MonsterCardGame.Gameplay.Encounters
         [SerializeField] private EncounterType _type;
 
         [Header("Équipe adverse")]
-        [SerializeField, Tooltip("Exactement 5 monstres")]
+        [SerializeField, Tooltip("5 monstres en général ; de 1 à 5 (Vaelisse combat seule)")]
         private List<MonsterCardData> _monsters = new();
 
         [Header("Dépeçage")]
@@ -63,8 +63,8 @@ namespace MonsterCardGame.Gameplay.Encounters
             if (string.IsNullOrEmpty(_encounterId))
                 GameLog.Warning("EncounterData", $"{name} : identifiant manquant");
 
-            if (_monsters.Count != GameRules.TeamSize)
-                GameLog.Warning("EncounterData", $"{name} : {_monsters.Count} monstres, il en faut {GameRules.TeamSize}");
+            if (_monsters.Count < 1 || _monsters.Count > GameRules.TeamSize)
+                GameLog.Warning("EncounterData", $"{name} : {_monsters.Count} monstres, il en faut de 1 à {GameRules.TeamSize}");
 
             if (_skinnedMonster != null && !_monsters.Contains(_skinnedMonster))
                 GameLog.Warning("EncounterData", $"{name} : le monstre dépecé {_skinnedMonster.MonsterName} n'est pas dans l'équipe");

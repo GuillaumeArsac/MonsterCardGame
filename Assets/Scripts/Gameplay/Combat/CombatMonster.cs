@@ -63,6 +63,12 @@ namespace MonsterCardGame.Gameplay.Combat
         /// <summary>Effets temporaires en cours (bonus, réductions).</summary>
         public IReadOnlyList<CombatModifier> Modifiers => _modifiers;
 
+        /// <summary>Points marqués par l'adversaire quand ce monstre est vaincu : 1, 3 pour Vaelisse, 0 pour un monstre invoqué.</summary>
+        public int  DefeatPoints { get; internal set; } = 1;
+
+        /// <summary>Invoqué pendant le combat (insectes de Vaelisse) : ne rapporte aucun point.</summary>
+        public bool IsSummoned   { get; internal set; }
+
         public CombatMonster(string name, MonsterRole role, int maxHp, IEnumerable<SkillData> skills, object origin = null)
         {
             Name   = name;
@@ -83,7 +89,7 @@ namespace MonsterCardGame.Gameplay.Combat
 
         /// <summary>Monstre adverse : sa carte telle quelle (son boost est une récompense du dépeçage).</summary>
         public static CombatMonster From(MonsterCardData card)
-            => new(card.MonsterName, card.Role, card.MaxHp, card.Skills, card);
+            => new(card.MonsterName, card.Role, card.MaxHp, card.Skills, card) { DefeatPoints = card.DefeatPoints };
 
         // ── Compétences ───────────────────────────────────────────────────
 
@@ -102,7 +108,8 @@ namespace MonsterCardGame.Gameplay.Combat
         /// <summary>Bonus aux dégâts infligés : effets temporaires et passives permanentes.</summary>
         public int DamageBonus => SumModifiers(ModifierKind.DamageBonus)
                                 + SumAlwaysPassives<DamageBonusEffect>(e => e.Amount)
-                                + AllegianceDamageBonus;
+                                + AllegianceDamageBonus
+                                + ReinforcementDamageBonus;
 
         /// <summary>Réduction des dégâts subis : effets temporaires et passives permanentes (Carapace).</summary>
         public int DamageReduction => SumModifiers(ModifierKind.DamageReduction)
@@ -120,6 +127,9 @@ namespace MonsterCardGame.Gameplay.Combat
         public int  AllegianceDamageReduction { get; internal set; }
         /// <summary>Ses compétences ignorent la Provocation adverse (allégeance de l'Archer).</summary>
         public bool IgnoresTaunt              { get; internal set; }
+
+        /// <summary>Dégâts infligés en plus, gagnés par les renforts de Vaelisse quand son terrain est plein.</summary>
+        public int  ReinforcementDamageBonus  { get; internal set; }
 
         // ── Changements d'état (appelés par CombatEngine) ─────────────────
 
@@ -162,6 +172,12 @@ namespace MonsterCardGame.Gameplay.Combat
         }
 
         internal void ResetPhaseUsage() => Array.Clear(_usedThisPhase, 0, _usedThisPhase.Length);
+
+        /// <summary>Monstre invoqué : il n'agit qu'à partir de la phase suivante de son camp.</summary>
+        internal void MarkAllUsed()
+        {
+            for (int i = 0; i < _usedThisPhase.Length; i++) _usedThisPhase[i] = true;
+        }
 
         /// <summary>Ralentissement : +1 au compteur de toutes les compétences actives, même disponibles.</summary>
         internal void Slow()
