@@ -8,7 +8,7 @@ indications nécessaires à la production des illustrations.
 > gigantesques, survit dans une dernière cité grâce à la **Forge**. Le joueur, forgeron,
 > récolte l'essence des créatures pour raviver la Forge — sans savoir qu'il libère ainsi
 > une entité ancienne scellée dans les Ruines. Voir `00-direction-artistique.md` et
-> `_bmad-output/gdd.md` / `_bmad-output/narrative-design.md` pour le détail.
+> `docs/gdd.md` / `docs/scenario/histoire.md` pour le détail.
 
 ---
 

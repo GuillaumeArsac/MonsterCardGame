@@ -6,6 +6,9 @@ Index central de la documentation narrative. Chaque zone, monstre, PNJ et carte 
 
 ## Structure narrative
 
+L'histoire complète (prémisse, thèmes, actes, les 15 grands beats et le protagoniste) est dans [histoire.md](histoire.md).
+La façon dont le joueur parcourt le monde est dans [exploration.md](../exploration.md).
+
 **Acte 1 — L'Urgence**
 Prologue (La Cité) → Les Plaines Libres → premier boss
 

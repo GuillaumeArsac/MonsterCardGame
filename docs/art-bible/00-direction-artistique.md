@@ -1,7 +1,7 @@
 # Direction Artistique — Monster Card Game
 
 > À lire en premier par l'artiste. Synthèse de la vision visuelle globale.
-> Source : `_bmad-output/gdd.md` (section Art & Audio) et `_bmad-output/narrative-design.md`.
+> Source : `docs/gdd.md` (section Direction artistique et sonore) et `docs/scenario/histoire.md`.
 
 ---
 
